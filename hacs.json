@@ -1,6 +1,6 @@
 {
   "name": "AT LCARS Strategy",
-  "filename": "at-lcars-dashboard-strategy.js",
+  "filename": "at_lcars.js",
   "content_in_root": false,
   "render_readme": true,
   "homeassistant": "2021.12.0"
