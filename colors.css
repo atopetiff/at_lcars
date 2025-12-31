@@ -1,0 +1,96 @@
+.colors{
+  --lcars-intrepid-ui-primary: #c9c;;
+  --lcars-intrepid-ui-secondary: #646;
+  --lcars-intrepid-ui-tertiary: #fc6;
+  --lcars-intrepid-ui-quaternary: #9a6799;
+
+  --lcars-anthelope-ui-primary: #683367;
+  --lcars-anthelope-ui-secondary: #ccf;
+  --lcars-anthelope-ui-tertiary: #feccff;
+  --lcars-anthelope-ui-quaternary: #9a6799;
+
+  --lcars-green-ui-primary: #288855;
+  --lcars-green-ui-secondary: #229a6c;
+  --lcars-green-ui-tertiary: #88de90;
+  --lcars-green-ui-quaternary: #738c75ff;
+
+  --lcars-voyager-ui-primary: #cc6699;
+  --lcars-voyager-ui-secondary: #cc99cc;
+  --lcars-voyager-ui-tertiary: #9999ff;
+  --lcars-voyager-ui-quaternary: #9999cc;
+
+  --lcars-lower-decks-1-ui-primary: #ff8800;
+  --lcars-lower-decks-1-ui-secondary: #ffaa44;
+  --lcars-lower-decks-1-ui-tertiary: #ffaa44;
+  --lcars-lower-decks-1-ui-quaternary: #ffcc99;
+
+  --lcars-lower-decks-2-ui-primary: #ffaa00;
+  --lcars-lower-decks-2-ui-secondary: #ff7700;
+  --lcars-lower-decks-2-ui-tertiary: #ffcc66;
+  --lcars-lower-decks-2-ui-quaternary: #d0b0a0;
+
+  --lcars-zeldar2-ui-primary: #7788ff;
+  --lcars-zeldar2-ui-secondary: #ffcc99;
+  --lcars-zeldar2-ui-tertiary: #cc88ff;
+  --lcars-zeldar2-ui-quaternary: #774477;
+
+  --lcars-uss1-ui-primary: #0c9;
+  --lcars-uss1-ui-secondary: #099;
+  --lcars-uss1-ui-tertiary: #069;
+  --lcars-uss1-ui-quaternary: #066;
+
+  --lcars-y2369-ui-primary: #fc6;
+  --lcars-y2369-ui-secondary: #f96;
+  --lcars-y2369-ui-tertiary: #c69;
+  --lcars-y2369-ui-quaternary: #c9c;
+
+  --lcars-cardassia-ui-primary: #88ffff;
+  --lcars-cardassia-ui-secondary: #66ccff;
+  --lcars-cardassia-ui-tertiary: #996699;
+  --lcars-cardassia-ui-quaternary: #b8a8d9;
+
+  --lcars-theme4-ui-primary: #cc99ff;
+  --lcars-theme4-ui-secondary: #ddbbff;
+  --lcars-theme4-ui-tertiary: #cc4499;
+  --lcars-theme4-ui-quaternary: #9966ff;
+
+  --lcars-theme9-ui-primary: #2266ff;
+  --lcars-theme9-ui-secondary: #99ccff;
+  --lcars-theme9-ui-tertiary: #ddeeff;
+  --lcars-theme9-ui-quaternary: #ccdeff;
+
+  --lcars-theme11-ui-primary: #ffff99;
+  --lcars-theme11-ui-secondary: #ffeecc;
+  --lcars-theme11-ui-tertiary: #ccaa88;
+  --lcars-theme11-ui-quaternary: #cccc66;
+
+  --lcars-theme13-ui-primary: #99ccff;
+  --lcars-theme13-ui-secondary: #ddeeff;
+  --lcars-theme13-ui-tertiary: #ccdeff;
+  --lcars-theme13-ui-quaternary: #88bbff;
+
+  --lcars-theme14-ui-primary: #ffcc99;
+  --lcars-theme14-ui-secondary: #ffa07a;
+  --lcars-theme14-ui-tertiary: #ffaa90;
+  --lcars-theme14-ui-quaternary: #ffeecc;
+
+  --lcars-theme15-ui-primary: #cc4499;
+  --lcars-theme15-ui-secondary: #ddbbff;
+  --lcars-theme15-ui-tertiary: #cc88ff;
+  --lcars-theme15-ui-quaternary: #cc99ff;
+
+  --lcars-theme17-ui-primary: #9966ff;
+  --lcars-theme17-ui-secondary: #cc99ff;
+  --lcars-theme17-ui-tertiary: #ddbbff;
+  --lcars-theme17-ui-quaternary: #cc55ff;
+
+  --lcars-theme18-ui-primary: #2255ff;
+  --lcars-theme18-ui-secondary: #344470;
+  --lcars-theme18-ui-tertiary: #7799dd;
+  --lcars-theme18-ui-quaternary: #5588ee;
+
+  --lcars-theme20-ui-primary: #33cc99;
+  --lcars-theme20-ui-secondary: #88bbff;
+  --lcars-theme20-ui-tertiary: #99ccff;
+  --lcars-theme20-ui-quaternary: #ddeeff;
+}
