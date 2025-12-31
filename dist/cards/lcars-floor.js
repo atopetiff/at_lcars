@@ -457,17 +457,9 @@ class AtLcarsFloor extends Card {
 
     console.log("config", this._config);
 
-
-    // this._addCard(".hl", "cb-lcars-elbow-card", "hl", lcars_top_left_alert('input_boolean.red_alert', "goldenrod"), 'input_boolean.red_alert');
-    // this._addCard(".hr", "cb-lcars-elbow-card", "hr", lcars_top_right_alert('input_boolean.red_alert', "goldenrod"),'input_boolean.red_alert');
-    // this._addCard(".fr", "cb-lcars-elbow-card", "fr", lcars_footer_right_alert('input_boolean.red_alert', "goldenrod"),'input_boolean.red_alert');
-    // this._addCard(".fle", "cb-lcars-elbow-card", "fle", lcars_footer_left_alert('input_boolean.red_alert', "goldenrod"),'input_boolean.red_alert');
-    // this._addCard(".flbar", "cb-lcars-elbow-card", "flbar", lcars_footer_alert('input_boolean.red_alert', "goldenrod"),'input_boolean.red_alert');
-    // this._addCard(".actions", "at-lcars-protocols", "actions", {type: "custom:at-lcars-protocols", protocols: this._config.protocols},'input_boolean.yellow_alert');
-    // this._addCard(".topleft", "cb-lcars-elbow-card", "hl", lcars_cb_alert_omni("cb-lcars-header-right", { top_left: 0, top_right: 30, bottom_right: 0, bottom_left: 0 }, { top: 20, right: 8, bottom: 0, left: 0 }, 'input_boolean.red_alert', "goldenrod"), 'input_boolean.red_alert');
-    this._addCard(".topleft", "cb-lcars-elbow-card", "hl", lcars_cb_alert_omni("cb-lcars-header-right", { top_left: 0, top_right: 30, bottom_right: 0, bottom_left: 0 }, { top: 20, right: 31, bottom: 0, left: 0 }, 'input_boolean.red_alert', this.em.color2), 'input_boolean.red_alert');
-    // this._addCard(".topright", "cb-lcars-elbow-card", "hr", lcars_top_right_alert('input_boolean.red_alert', "goldenrod"),'input_boolean.red_alert');
-    this._addCard(".topright", "cb-lcars-elbow-card", "hr", lcars_cb_alert_omni("cb-lcars-header", { top_left: 30, top_right: 0, bottom_right: 0, bottom_left: 0 }, { top: 20, right: 0, bottom: 0, left: 63 }, 'input_boolean.red_alert', this.em.color2), 'input_boolean.red_alert');
+    this._addCard(".topleft", "cb-lcars-elbow-card", "hl", lcars_cb_alert_omni("cb-lcars-header-right", { top_left: 0, top_right: 30, bottom_right: 0, bottom_left: 0 }, { top: 20, right: 31, bottom: 0, left: 0 }, this.em.redAlert, this.em.color2), this.em.redAlert);
+    // this._addCard(".topright", "cb-lcars-elbow-card", "hr", lcars_top_right_alert(this.em.redAlert, "goldenrod"),this.em.redAlert);
+    this._addCard(".topright", "cb-lcars-elbow-card", "hr", lcars_cb_alert_omni("cb-lcars-header", { top_left: 30, top_right: 0, bottom_right: 0, bottom_left: 0 }, { top: 20, right: 0, bottom: 0, left: 63 }, this.em.redAlert, this.em.color2), this.em.redAlert);
 
     this._areasWithEntities.forEach(a => {
       // this._addCard(".content","at-lcars-room-row",`${a.area_id}`,{type: "custom:at-lcars-room-row",area: a.area_id},'*');
@@ -508,9 +500,9 @@ class AtLcarsFloor extends Card {
           e);
       });
     });
-    this._addCard(".bottomright", "cb-lcars-elbow-card", "fr", lcars_cb_alert_omni("cb-lcars-footer", { top_left: 0, top_right: 0, bottom_right: 0, bottom_left: 30 }, { top: 0, right: 0, bottom: 8, left: 63 }, 'input_boolean.red_alert', this.em.color2), 'input_boolean.red_alert');
-    this._addCard(".bottomleft", "cb-lcars-elbow-card", "fle", lcars_cb_alert_omni("cb-lcars-footer-right", { top_left: 0, top_right: 0, bottom_right: 30, bottom_left: 0 }, { top: 0, right: 31, bottom: 8, left: 0 }, 'input_boolean.red_alert', this.em.color2), 'input_boolean.red_alert');
-    // this._addCard(".topleft", "cb-lcars-elbow-card", "left", lcars_cb_alert_omni("cb-lcars-header-right", { top_left: 0, top_right: 30, bottom_right: 30, bottom_left: 0 }, { top: 20, right: 60, bottom: 20, left: 0 }, 'input_boolean.red_alert', "goldenrod"), 'input_boolean.red_alert');
+    this._addCard(".bottomright", "cb-lcars-elbow-card", "fr", lcars_cb_alert_omni("cb-lcars-footer", { top_left: 0, top_right: 0, bottom_right: 0, bottom_left: 30 }, { top: 0, right: 0, bottom: 8, left: 63 }, this.em.redAlert, this.em.color2), this.em.redAlert);
+    this._addCard(".bottomleft", "cb-lcars-elbow-card", "fle", lcars_cb_alert_omni("cb-lcars-footer-right", { top_left: 0, top_right: 0, bottom_right: 30, bottom_left: 0 }, { top: 0, right: 31, bottom: 8, left: 0 }, this.em.redAlert, this.em.color2), this.em.redAlert);
+    // this._addCard(".topleft", "cb-lcars-elbow-card", "left", lcars_cb_alert_omni("cb-lcars-header-right", { top_left: 0, top_right: 30, bottom_right: 30, bottom_left: 0 }, { top: 20, right: 60, bottom: 20, left: 0 }, this.em.redAlert, "goldenrod"), this.em.redAlert);
 
 
     const ausentemp = this.em.entities.filter(e => e.labels.includes("aussentemperatur"));
