@@ -3,12 +3,17 @@
 // ====================================================================
 class AtLcarsRoomView {
   static async generate(config, hass) {
-    const { area, devices, entities } = config;
+    const { area, devices, entities, basepath } = config;
+
+ 
+  
 
     const card = {
       type: "custom:at-lcars-room",
       room: `${area.name}`,
-      area_id: area.area_id
+      area_id: area.area_id,
+      floor_id: area.floor_id,
+      basepath: basepath
     };
 
     return {

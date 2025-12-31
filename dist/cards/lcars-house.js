@@ -1,5 +1,6 @@
 import { lcars_footer_alert, lcars_footer_left_alert,  lcars_cb_alert_omni, lcars_footer_right_alert, lcars_top_left_alert, lcars_top_right_alert } from "../utils/lcars-borders.js";
 import { lcars_floor_plan_tempnav } from "../utils/lcars-buttons.js";
+import { font } from "../utils/scrollbar.js";
 
 //import { lcars_switch, lcars_button, lcars_climate, lcars_cover_open, lcars_cover_slider, lcars_cover_close, lcars_cover_summer } from "./lcars.js";
 class AtLcarsHouse extends HTMLElement {
@@ -12,7 +13,7 @@ class AtLcarsHouse extends HTMLElement {
     // if (!config.entity) {
     //   throw new Error("You need to define an entity");
     // }
-    console.log(config);
+    //console.log(config);
     this._config = config;
     this.config = config;
     this._hass = null;
@@ -41,7 +42,7 @@ class AtLcarsHouse extends HTMLElement {
   _elementHasRelevantChange(newHass, id) {
     const oldState = this._lastStates[id];
     const newState = newHass.states[id];
-    console.log("states", { old: oldState, new: newState });
+    //console.log("states", { old: oldState, new: newState });
     if (!oldState && newState) return true;
     if (oldState && !newState) return true;
 
@@ -69,7 +70,7 @@ class AtLcarsHouse extends HTMLElement {
     for (const id of ids) {
       const oldState = this._lastStates[id];
       const newState = newHass.states[id];
-      console.log("states", { old: oldState, new: newState });
+      //console.log("states", { old: oldState, new: newState });
       if (!oldState && newState) return true;
       if (oldState && !newState) return true;
       if (!oldState && !newState) continue;
@@ -89,18 +90,18 @@ class AtLcarsHouse extends HTMLElement {
 
   set hass(hass) {
     // Erstes Mal: nur speichern und initial rendern
-    // console.log("needs render", { has: !this._hass, config: !this._config });
+    // //console.log("needs render", { has: !this._hass, config: !this._config });
     if (!this._hass && !!this._config) {
       this._hass = hass;
       this._updateTrackedStates();
       this._render();
       return;
     }
-    // console.log("hass",hass.entities["switch.office_media"]);
+    // //console.log("hass",hass.entities["switch.office_media"]);
     const needsRender = this._hasRelevantChange(hass);
     this.changeDetection(hass);
     this._hass = hass;
-    // console.log("needs render", { needsRender: needsRender, config: !this._config });
+    // //console.log("needs render", { needsRender: needsRender, config: !this._config });
     if (needsRender && !this._config == false) {
       this._updateTrackedStates();
       
@@ -275,7 +276,7 @@ class AtLcarsHouse extends HTMLElement {
       }`
       }).join("")}
       `;
-        console.log("css", `${inside}${others}`);
+        //console.log("css", `${inside}${others}`);
     
     return `${inside}
     ${others}`
@@ -319,15 +320,16 @@ class AtLcarsHouse extends HTMLElement {
   }
 
   _render() {
-    console.log("lcars house rerender");
+    //console.log("lcars house rerender");
     this.innerHTML = `
         <style>
+            ${font()}
             ${this._styles()}
         </style>
         ${this._html()}
       `;
 
-    console.log(this._config.areas);
+    //console.log(this._config.areas);
 
 
     // this._addCard(".hl", "cb-lcars-elbow-card", "hl", lcars_top_left_alert('input_boolean.red_alert', "goldenrod"), 'input_boolean.red_alert');
@@ -342,7 +344,7 @@ class AtLcarsHouse extends HTMLElement {
     
     this._config.areas.inside.forEach(f=>{
     
-          this._addCard(`.${f.floor_id}`,"cb-lcars-button-card",f.floor_id,lcars_floor_plan_tempnav(null,f.name,"/at-lcars/"+f.floor_id+"?kiosk"),null);
+          this._addCard(`.${f.floor_id}`,"cb-lcars-button-card",f.floor_id,lcars_floor_plan_tempnav(null,f.name,this._config.basepath+"/"+f.floor_id+"?kiosk"),null);
         });
     // this._addCard(".bottomleft", "cb-lcars-elbow-card", "fle", lcars_footer_left_alert('input_boolean.red_alert', "goldenrod"),'input_boolean.red_alert');
     

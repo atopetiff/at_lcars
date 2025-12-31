@@ -1,6 +1,7 @@
 import { EntityManager } from "../utils/entity-manager.js";
 import { lcars_footer_alert, lcars_footer_left_alert, lcars_cb_alert_omni, lcars_footer_right_alert, lcars_top_left_alert, lcars_top_right_alert } from "../utils/lcars-borders.js";
 import { lcars_floor_plan_tempnav, lcars_floor_plan_window, lcars_floor_plan_humidity, lcars_floor_row_window_left, lcars_floor_row_windownav, lcars_floor_row_window_right, lcars_room_row_info_temp, lcars_room_row_info_humidity, lcars_switch, lcars_climate, lcars_climate_bubble, lcars_cover_bubble } from "../utils/lcars-buttons.js";
+import { font } from "../utils/scrollbar.js";
 
 //import { lcars_switch, lcars_button, lcars_climate, lcars_cover_open, lcars_cover_slider, lcars_cover_close, lcars_cover_summer } from "./lcars.js";
 class AtLcarsRoomRow extends HTMLElement {
@@ -18,7 +19,7 @@ class AtLcarsRoomRow extends HTMLElement {
 
   set hass(hass) {
     // Erstes Mal: nur speichern und initial rendern
-    // console.log("needs render", { has: !this._hass, config: !this._config });
+    // //console.log("needs render", { has: !this._hass, config: !this._config });
     if (!this.em && !!this._config) {
       this.em = new EntityManager(hass);
       this.em.fillRoom(this._config.area);
@@ -143,17 +144,18 @@ class AtLcarsRoomRow extends HTMLElement {
     card.appendChild(this.em._addCard(type, name, config, id, track));
   }
   _render() {
-    console.log("lcars house rerender");
+    //console.log("lcars house rerender");
     const tag = 'at-lcars-room-row';
     const style_class = 'lcars_room_row';
     this.innerHTML = `
         <style>
+            ${font()}
             ${this._styles()}
         </style>
         ${this._html(tag, style_class)}
       `;
 
-    console.log("config", this.em.roomWindow);
+    //console.log("config", this.em.roomWindow);
 
 
     this._addCard(".window_left", "cb-lcars-button-card", "wl", lcars_floor_row_window_left(this.em.roomWindow, "fuchsia", "#cc0000"), this.em.roomWindow);

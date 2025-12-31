@@ -1,5 +1,6 @@
 import { lcars_footer_alert, lcars_footer_left_alert, lcars_cb_alert_omni, lcars_footer_right_alert, lcars_top_left_alert, lcars_top_right_alert } from "../utils/lcars-borders.js";
 import { lcars_floor_plan_tempnav,lcars_floor_plan_window,lcars_floor_plan_humidity } from "../utils/lcars-buttons.js";
+import { font } from "../utils/scrollbar.js";
 
 //import { lcars_switch, lcars_button, lcars_climate, lcars_cover_open, lcars_cover_slider, lcars_cover_close, lcars_cover_summer } from "./lcars.js";
 class AtLcarsFloorPlan extends HTMLElement {
@@ -7,7 +8,7 @@ class AtLcarsFloorPlan extends HTMLElement {
     super();
     this.old = null;
     this.changeTracker = [];
-    console.log("lcars floor")
+    //console.log("lcars floor")
     this._devices = [];
     this._areasWithEntities=[];
     this._entities = [];
@@ -16,7 +17,7 @@ class AtLcarsFloorPlan extends HTMLElement {
     // if (!config.entity) {
     //   throw new Error("You need to define an entity");
     // }
-    console.log(config);
+    //console.log(config);
     this._config = config;
     this.config = config;
     this._hass = null;
@@ -39,7 +40,7 @@ class AtLcarsFloorPlan extends HTMLElement {
     const ids = this._trackedEntityIds();
     this._devices = Object.values(this._hass.devices || {});
     this._entities = Object.values(this._hass.entities || {});
-    console.log("set devices and entities",{devices: this._devices, entities: this._entities});
+    //console.log("set devices and entities",{devices: this._devices, entities: this._entities});
     for (const id of ids) {
       this._lastStates[id] = this._hass.states[id];
     }
@@ -48,7 +49,7 @@ class AtLcarsFloorPlan extends HTMLElement {
   _elementHasRelevantChange(newHass, id) {
     const oldState = this._lastStates[id];
     const newState = newHass.states[id];
-    console.log("states", { old: oldState, new: newState });
+    //console.log("states", { old: oldState, new: newState });
     if (!oldState && newState) return true;
     if (oldState && !newState) return true;
 
@@ -76,7 +77,7 @@ class AtLcarsFloorPlan extends HTMLElement {
     for (const id of ids) {
       const oldState = this._lastStates[id];
       const newState = newHass.states[id];
-      console.log("states", { old: oldState, new: newState });
+      //console.log("states", { old: oldState, new: newState });
       if (!oldState && newState) return true;
       if (oldState && !newState) return true;
       if (!oldState && !newState) continue;
@@ -99,7 +100,7 @@ class AtLcarsFloorPlan extends HTMLElement {
     //     (e.area_id&&e.area_id === a.area_id)
     //     ||(e.device_id && this._devices.filter(d=>d.area_id===a.area_id).some(d=>d.id === e.device_id))
     //   );
-    //   console.log(`${a.area_id}:windows`,windows);
+    //   //console.log(`${a.area_id}:windows`,windows);
     const addArea = this._entities.map(e=>{
       if(!!e.area_id || e.device_id===null){
         return e;
@@ -107,7 +108,7 @@ class AtLcarsFloorPlan extends HTMLElement {
       const device = this._devices.find(d=>d.id===e.device_id);
       return {...e, area_id: device?.area_id};
     });
-    console.log("mit Area",addArea.filter(a=>!!a.area_id))
+    //console.log("mit Area",addArea.filter(a=>!!a.area_id))
     this._areasWithEntities = this._config.areas.map(a=>{
       const entities =  addArea.filter(e=>e.area_id===a.area_id);
       
@@ -117,12 +118,12 @@ class AtLcarsFloorPlan extends HTMLElement {
         entities: entities
       }
     });
-    console.log("grouped", this._aresWithEntities);
+    //console.log("grouped", this._aresWithEntities);
   }
 
   set hass(hass) {
     // Erstes Mal: nur speichern und initial rendern
-    // console.log("needs render", { has: !this._hass, config: !this._config });
+    // //console.log("needs render", { has: !this._hass, config: !this._config });
     if (!this._hass && !!this._config) {
       this._hass = hass;
       this._updateTrackedStates();
@@ -131,11 +132,11 @@ class AtLcarsFloorPlan extends HTMLElement {
       
       return;
     }
-    // console.log("hass",hass.entities["switch.office_media"]);
+    // //console.log("hass",hass.entities["switch.office_media"]);
     const needsRender = this._hasRelevantChange(hass);
     this.changeDetection(hass);
     this._hass = hass;
-    // console.log("needs render", { needsRender: needsRender, config: !this._config });
+    // //console.log("needs render", { needsRender: needsRender, config: !this._config });
     if (needsRender && !this._config == false) {
       this._updateTrackedStates();
       
@@ -321,11 +322,11 @@ class AtLcarsFloorPlan extends HTMLElement {
       //   (e.area_id&&e.area_id === a.area_id)
       //   ||(e.device_id && this._devices.filter(d=>d.area_id===a.area_id).some(d=>d.id === e.device_id))
       // );
-      // console.log(`${a.area_id}:windows`,windows);
+      // //console.log(`${a.area_id}:windows`,windows);
         return `<div class="${a.area_id}"><div id="${a.area_id}_temp" style="z-index:1;"></div><div id="${a.area_id}_window" style="z-index:0;"></div><div id="${a.area_id}_humidity" style="z-index:0;"></div></div>`;
     }
     ).join("");
-    // console.log("html",rooms);
+    // //console.log("html",rooms);
     return `${rooms}`
 
   }
@@ -333,7 +334,7 @@ class AtLcarsFloorPlan extends HTMLElement {
 
     var rooms = this._config?.areas.map(a=>`${basepath}>.${a.area_id}{grid-area: ${a.area_id};}`).join(" ");
     
-        // console.log("css", `${rooms}`);
+        // //console.log("css", `${rooms}`);
         return rooms;
   }
 
@@ -375,15 +376,16 @@ class AtLcarsFloorPlan extends HTMLElement {
   }
 
   _render() {
-    console.log("lcars house rerender");
+    //console.log("lcars house rerender");
     this.innerHTML = `
         <style>
+        ${font()}
             ${this._styles()}
         </style>
         ${this._html()}
       `;
 
-    console.log("config",this._config);
+    //console.log("config",this._config);
 
 
     // this._addCard(".hl", "cb-lcars-elbow-card", "hl", lcars_top_left_alert('input_boolean.red_alert', "goldenrod"), 'input_boolean.red_alert');

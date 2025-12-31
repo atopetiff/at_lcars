@@ -40,11 +40,11 @@ class AtLcarsDashboardStrategy {
     const floors = Object.values(hass.floors || {});
 
     const protocols =entities.filter(e=>e.labels.includes("protokoll")).map(e=>{return e.entity_id});
-    console.log(protocols);
+    //console.log(protocols);
 
     const notHiddenAreas = areas.filter(a=>a.labels.includes("hidden")===false);
     const noLevelFloor = floors.filter(f=>f.level===null).map(f=>f.floor_id);
-    console.log({noLevelFloor});
+    //console.log({noLevelFloor});
     const area_struct = {
       other: [
         ...notHiddenAreas.filter(a=>a.floor_id===null || noLevelFloor.includes(a.floor_id)),
@@ -58,9 +58,9 @@ class AtLcarsDashboardStrategy {
     
 
 
-    // console.log("areas",{areas:areas, floors:floors,struct: area_struct})
+    // //console.log("areas",{areas:areas, floors:floors,struct: area_struct})
 
-    // console.log("RE",{"areas": areas});
+    // //console.log("RE",{"areas": areas});
 
     // Labels für Filterung von Entitäten
     const excludeLabels = entities
@@ -80,7 +80,7 @@ class AtLcarsDashboardStrategy {
     const someSensorId = findDummySensor(hass, excludeLabels, config);
 
 
-    console.log("RE", coversOpen);
+    //console.log("RE", coversOpen);
     // Erstelle Person-Badges (KORRIGIERT: mit hass Parameter)
     const personBadges = createPersonBadges(persons, hass);
 
@@ -102,13 +102,22 @@ class AtLcarsDashboardStrategy {
     // Prüfe ob Bereiche nach Etagen gruppiert werden sollen (Standard: false)
     const groupByFloors = config.group_by_floors === true;
 
+     const pathname = document.location.pathname;
+    const split = pathname.split("/");
+    console.log(split);
+    var base ="/"
+    if(split.length>=2){
+       base = `/${split[1]}`
+    }
+    console.log(base);
 
     // Erstelle Sections für den Haupt-View
     const overviewSections = [
       {
         type: "custom:at-lcars-house",
         protocols: protocols,
-        areas: area_struct
+        areas: area_struct,
+        basepath: base
       }
       // createOverviewSection({
       //   lightsOn,
@@ -130,6 +139,8 @@ class AtLcarsDashboardStrategy {
       //   : [])
     ];
 
+   
+
     const floorViews = area_struct.inside.map(f=>{
       return createFloorView([{
         type: "custom:at-lcars-floor",
@@ -142,11 +153,11 @@ class AtLcarsDashboardStrategy {
     const roomViews =  createAreaViews([
       ...area_struct.other,
       ...area_struct.inside.map(f=>f.areas).flat()
-    ], devices, entities, showRoomViews, config.areas_options || {}, config);
+    ], devices, entities, showRoomViews, config.areas_options || {}, config, base);
     const roomConfigViews =  createAreaConfigViews([
       ...area_struct.other,
       ...area_struct.inside.map(f=>f.areas).flat()
-    ], devices, entities, showRoomViews, config.areas_options || {}, config);
+    ], devices, entities, showRoomViews, config.areas_options || {}, config, base);
     
     // Erstelle alle Views mit areas_options und config
     const views = [

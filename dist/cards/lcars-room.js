@@ -1,7 +1,7 @@
 import { entitiesIn } from "../utils/entity-filter.js";
 import { Card, EntityManager } from "../utils/entity-manager.js";
 import { lcars_switch, lcars_button, lcars_climate, lcars_cb_alert_elbow, lcars_cb_alert_side, lcars_cb_alert_btn, lcars_nav_btn, lcars_mini_graph, lcars_climate_bubble, lcars_info } from "../utils/lcars-buttons.js";
-import { scrollbar } from "../utils/scrollbar.js";
+import { font, scrollbar } from "../utils/scrollbar.js";
 class AtLcarsRoom extends Card {
   constructor() {
     super();
@@ -14,9 +14,9 @@ class AtLcarsRoom extends Card {
   set hass(hass) {
 
     // Erstes Mal: nur speichern und initial rendern
-    // console.log("needs render", { has: !this._hass, config: !this._config });
+    // //console.log("needs render", { has: !this._hass, config: !this._config });
     if (!this.em && !!this._config) {
-      console.log("inital render room");
+      //console.log("inital render room");
       this.em = new EntityManager(hass);
       this.em.fillRoom(this._config.area_id)
 
@@ -399,10 +399,11 @@ class AtLcarsRoom extends Card {
   }
 
   _render() {
-    console.log("lcars room rerender");
-
+    //console.log("lcars room rerender");
+    
     this.innerHTML = `
         <style>
+            ${font()}
             ${scrollbar(this.em.color1, this.em.color2, this.em.color3, this.em.color4)}
             ${this.css_mobile_new}
             ${this.css_tablet}
@@ -414,7 +415,7 @@ class AtLcarsRoom extends Card {
     //rooms
     this._addCard(".rooms", 'cb-lcars-button-card',
       "rooms",
-      lcars_nav_btn("/at-lcars/eg", "Räume", this.em.color3),
+      lcars_nav_btn(this._config.basepath+"/"+this._config.floor_id, "Räume", this.em.color3),
       null,
       false
     );
@@ -499,7 +500,7 @@ class AtLcarsRoom extends Card {
       },
       {
         label: "Config",
-        target: "/at-lcars/" + this._config.area_id + "-config"
+        target: this._config.basepath+"/" + this._config.area_id + "-config"
       },
     ].forEach(e => {
       this._addCard(".actionborder", 'cb-lcars-button-card', `actionborder${e.label}`, lcars_nav_btn(e.target, e.label, this.em.color3), null, false);

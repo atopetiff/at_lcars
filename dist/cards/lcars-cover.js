@@ -1,5 +1,6 @@
 import { Card, EntityManager } from "../utils/entity-manager.js";
 import { lcars_switch, lcars_button, lcars_climate, lcars_cover_open, lcars_cover_slider, lcars_cover_close, lcars_cover_summer } from "../utils/lcars-buttons.js";
+import { font } from "../utils/scrollbar.js";
 class AtLcarsCover extends Card {
   constructor() {
     super();
@@ -8,9 +9,9 @@ class AtLcarsCover extends Card {
   set hass(hass) {
 
     // Erstes Mal: nur speichern und initial rendern
-    // console.log("needs render", { has: !this._hass, config: !this._config });
+    // //console.log("needs render", { has: !this._hass, config: !this._config });
     if (!this.em && !!this._config) {
-      console.log("inital render floor");
+      //console.log("inital render floor");
       this.em = new EntityManager(hass);
 
       this._render();
@@ -26,6 +27,7 @@ class AtLcarsCover extends Card {
 
     this.innerHTML = `
         <style>
+        ${font()}
             .cover_root{
                 height: 100px;
                 margin: 0px 0px 0px 0px;

@@ -54,7 +54,7 @@ export class EntityManager {
       } 
     }
 
-    console.log({color4});
+    //console.log({color4});
     if(!color1 || !color2 || !color3 || !color4){
       //abbrechen wenn kein komplettes Design vorliegt
       return {color1: this.color1, color2: this.color2, color3: this.color3, color4: this.color4};
@@ -73,7 +73,7 @@ export class EntityManager {
   }
   setColors(area_id=undefined){
     const colors = this.getColors(area_id);
-    console.log({colors});
+    //console.log({colors});
     this.color1 = colors.color1;
     this.color2 = colors.color2;
     this.color3 = colors.color3;
@@ -106,7 +106,7 @@ export class EntityManager {
       this.changeDetection();
       this.lastStates = {};
       const ids = this._trackedEntityIds();
-      console.log(ids, hass);
+      //console.log(ids, hass);
       for (const id of ids) {
         this.lastStates[id] = this.hass.states[id];
       }
@@ -114,14 +114,14 @@ export class EntityManager {
   }
   hasRelevantChange(newHass) {
     const ids = this._trackedEntityIds();
-    console.log("ids", ids)
+    //console.log("ids", ids)
     if(ids.includes('*')){
       return true;
     }
     for (const id of ids) {
       const oldState = this.lastStates[id];
       const newState = newHass.states[id];
-      //console.log("states", { old: oldState, new: newState });
+      ////console.log("states", { old: oldState, new: newState });
       if (!oldState && newState) return true;
       if (oldState && !newState) return true;
       if (!oldState && !newState) continue;
@@ -143,7 +143,7 @@ export class EntityManager {
   updateHass(hass) {
     const needsRender = this.hasRelevantChange(hass);
 
-    console.log("needs render", { needsRender: needsRender, config: !this._config });
+    //console.log("needs render", { needsRender: needsRender, config: !this._config });
     if (needsRender) {
 
       this.updateTrackedStates(hass);
@@ -192,7 +192,7 @@ export class EntityManager {
 
     // // this.area = this.areas.find(a=>a.area_id===area_id);
     // this.area = this.hass.areas[area_id];
-    // console.log(this.area, this.areas);
+    // //console.log(this.area, this.areas);
     // this.roomTemperature = this.area.temperature_entity_id;
     // this.roomHumidity = this.area.humidity_entity_id;
     // this.roomDevices = this.devices.filter(d => d.area_id === area_id).map(d => d.id);
@@ -205,7 +205,7 @@ export class EntityManager {
     // this.roomCover = this.roomEntities.filter(e => e.labels.includes("cover")).map(e => e.entity_id);
     // this.everyRoom = this.entities.filter(e => e.labels.includes("everyroom"));
     // this.roomLights = this.roomEntities.filter(e => e.labels.includes("licht")).map(e => e.entity_id);
-    // console.log("target room", area_id, this.roomEntities, this.area);
+    // //console.log("target room", area_id, this.roomEntities, this.area);
 
     const filtered = this.filterForArea(area_id);
     this.area = filtered.area;
@@ -277,7 +277,7 @@ export class Card extends HTMLElement {
     // if (!config.entity) {
     //   throw new Error("You need to define an entity");
     // }
-    console.log(config);
+    //console.log(config);
     this._config = config;
     this.config = config;
     // this._hass = null;

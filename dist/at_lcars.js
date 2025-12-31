@@ -44,4 +44,4 @@ import './views/lcars-view-room.js';
 import './views/lcars-view-room-config.js';
 
 
-console.log('AT LCARS loaded successfully');
+//console.log('AT LCARS loaded successfully');

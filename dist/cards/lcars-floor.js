@@ -2,7 +2,7 @@ import { entitiesIn } from "../utils/entity-filter.js";
 import { Card, EntityManager } from "../utils/entity-manager.js";
 import { lcars_footer_alert, lcars_footer_left_alert, lcars_cb_alert_omni, lcars_footer_right_alert, lcars_top_left_alert, lcars_top_right_alert } from "../utils/lcars-borders.js";
 import { lcars_floor_plan_tempnav, lcars_floor_plan_window, lcars_floor_plan_humidity, lcars_floor_row_windownav, lcars_room_row_info_temp, lcars_room_row_info_humidity, lcars_floor_row_window_left, lcars_floor_row_window_right, lcars_switch, lcars_climate_bubble, lcars_cover_bubble, lcars_nav_btn, lcars_cb_alert_btn } from "../utils/lcars-buttons.js";
-import { scrollbar } from "../utils/scrollbar.js";
+import { font, scrollbar } from "../utils/scrollbar.js";
 
 //import { lcars_switch, lcars_button, lcars_climate, lcars_cover_open, lcars_cover_slider, lcars_cover_close, lcars_cover_summer } from "./lcars.js";
 class AtLcarsFloor extends Card {
@@ -10,7 +10,7 @@ class AtLcarsFloor extends Card {
     super();
     this.old = null;
     this.changeTracker = [];
-    console.log("lcars floor")
+    //console.log("lcars floor")
     this._devices = [];
     this._areasWithEntities = [];
     this._entities = [];
@@ -22,9 +22,9 @@ class AtLcarsFloor extends Card {
   set hass(hass) {
 
     // Erstes Mal: nur speichern und initial rendern
-    // console.log("needs render", { has: !this._hass, config: !this._config });
+    // //console.log("needs render", { has: !this._hass, config: !this._config });
     if (!this.em && !!this._config) {
-      console.log("inital render floor");
+      //console.log("inital render floor");
       this.em = new EntityManager(hass);
 
       this.groupEntities();
@@ -53,7 +53,7 @@ class AtLcarsFloor extends Card {
         powerToggles: all.powerToggles
       }
     });
-    console.log("grouped", this._aresWithEntities);
+    //console.log("grouped", this._aresWithEntities);
   }
 
   row(style_class, prefix) {
@@ -404,7 +404,7 @@ class AtLcarsFloor extends Card {
       return this.row("room_row", a.area_id);
     }
     ).join("");
-    // console.log("html",rooms);
+    // //console.log("html",rooms);
     return `${rooms}`
 
   }
@@ -412,7 +412,7 @@ class AtLcarsFloor extends Card {
 
     var rooms = this._config?.areas.map(a => `${basepath}>.${a.area_id}{grid-area: ${a.area_id};}`).join(" ");
 
-    // console.log("css", `${rooms}`);
+    // //console.log("css", `${rooms}`);
     return rooms;
   }
 
@@ -447,15 +447,16 @@ class AtLcarsFloor extends Card {
 
 
   _render() {
-    console.log("lcars house rerender");
+    //console.log("lcars house rerender");
     this.innerHTML = `
         <style>
+            ${font()}
             ${this._styles()}
         </style>
         ${this._html()}
       `;
 
-    console.log("config", this._config);
+    //console.log("config", this._config);
 
     this._addCard(".topleft", "cb-lcars-elbow-card", "hl", lcars_cb_alert_omni("cb-lcars-header-right", { top_left: 0, top_right: 30, bottom_right: 0, bottom_left: 0 }, { top: 20, right: 31, bottom: 0, left: 0 }, this.em.redAlert, this.em.color2), this.em.redAlert);
     // this._addCard(".topright", "cb-lcars-elbow-card", "hr", lcars_top_right_alert(this.em.redAlert, "goldenrod"),this.em.redAlert);

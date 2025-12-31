@@ -92,7 +92,7 @@ export function createUtilityViews(entities, showSummaryViews = false, config = 
 /**
  * Erstellt Views für jeden sichtbaren Bereich
  */
-export function createAreaViews(visibleAreas, devices, entities, showRoomViews = false, areasOptions = {}, dashboardConfig = {}) {
+export function createAreaViews(visibleAreas, devices, entities, showRoomViews = false, areasOptions = {}, dashboardConfig = {},basepath="/") {
   return visibleAreas.map(area => {
     const areaOptions = areasOptions[area.area_id] || {};
     
@@ -108,12 +108,13 @@ export function createAreaViews(visibleAreas, devices, entities, showRoomViews =
         devices,
         entities,
         groups_options: areaOptions.groups_options || {},
-        dashboardConfig // Übergebe vollständige Dashboard-Config für Raum-Pins
+        dashboardConfig, // Übergebe vollständige Dashboard-Config für Raum-Pins
+        basepath: basepath
       }
     };
   });
 }
-export function createAreaConfigViews(visibleAreas, devices, entities, showRoomViews = false, areasOptions = {}, dashboardConfig = {}) {
+export function createAreaConfigViews(visibleAreas, devices, entities, showRoomViews = false, areasOptions = {}, dashboardConfig = {}, basepath="") {
   return visibleAreas.map(area => {
     const areaOptions = areasOptions[area.area_id] || {};
     
@@ -129,7 +130,8 @@ export function createAreaConfigViews(visibleAreas, devices, entities, showRoomV
         devices,
         entities,
         groups_options: areaOptions.groups_options || {},
-        dashboardConfig // Übergebe vollständige Dashboard-Config für Raum-Pins
+        dashboardConfig, // Übergebe vollständige Dashboard-Config für Raum-Pins
+        basepath: basepath
       }
     };
   });

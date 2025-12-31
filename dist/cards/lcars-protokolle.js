@@ -1,5 +1,6 @@
 import { lcars_cb_alert_omni, lcars_footer_alert, lcars_footer_left_alert, lcars_footer_right_alert, lcars_top_left_alert, lcars_top_right_alert } from "../utils/lcars-borders.js";
 import { lcars_button } from "../utils/lcars-buttons.js";
+import { font } from "../utils/scrollbar.js";
 //import { lcars_switch, lcars_button, lcars_climate, lcars_cover_open, lcars_cover_slider, lcars_cover_close, lcars_cover_summer } from "./lcars.js";
 class AtLcarsProtocols extends HTMLElement {
   constructor() {
@@ -11,7 +12,7 @@ class AtLcarsProtocols extends HTMLElement {
     // if (!config.entity) {
     //   throw new Error("You need to define an entity");
     // }
-    console.log(config);
+    //console.log(config);
     this._config = config;
     this.config = config;
     this._hass = null;
@@ -40,7 +41,7 @@ class AtLcarsProtocols extends HTMLElement {
   _elementHasRelevantChange(newHass, id) {
     const oldState = this._lastStates[id];
     const newState = newHass.states[id];
-    console.log("states", { old: oldState, new: newState });
+    //console.log("states", { old: oldState, new: newState });
     if (!oldState && newState) return true;
     if (oldState && !newState) return true;
 
@@ -68,7 +69,7 @@ class AtLcarsProtocols extends HTMLElement {
     for (const id of ids) {
       const oldState = this._lastStates[id];
       const newState = newHass.states[id];
-      console.log("states", { old: oldState, new: newState });
+      //console.log("states", { old: oldState, new: newState });
       if (!oldState && newState) return true;
       if (oldState && !newState) return true;
       if (!oldState && !newState) continue;
@@ -88,18 +89,18 @@ class AtLcarsProtocols extends HTMLElement {
 
   set hass(hass) {
     // Erstes Mal: nur speichern und initial rendern
-    // console.log("needs render", { has: !this._hass, config: !this._config });
+    // //console.log("needs render", { has: !this._hass, config: !this._config });
     if (!this._hass && !!this._config) {
       this._hass = hass;
       this._updateTrackedStates();
       this._render();
       return;
     }
-    // console.log("hass",hass.entities["switch.office_media"]);
+    // //console.log("hass",hass.entities["switch.office_media"]);
     const needsRender = this._hasRelevantChange(hass);
     this.changeDetection(hass);
     this._hass = hass;
-    // console.log("needs render", { needsRender: needsRender, config: !this._config });
+    // //console.log("needs render", { needsRender: needsRender, config: !this._config });
     if (needsRender && !this._config == false) {
       this._updateTrackedStates();
 
@@ -190,15 +191,16 @@ class AtLcarsProtocols extends HTMLElement {
   }
 
   _render() {
-    console.log("lcars protocols rerender");
+    //console.log("lcars protocols rerender");
     this.innerHTML = `
         <style>
+            ${font()}
             ${this._styles()}
         </style>
         ${this._html()}
       `;
 
-    console.log(this._config.protocols);
+    //console.log(this._config.protocols);
 
     this._addCard(".header", "cb-lcars-elbow-card", "header", lcars_cb_alert_omni("cb-lcars-header-right", { top_left: 0, top_right: 30, bottom_right: 0, bottom_left: 0 }, { top: 8, right: 30, bottom: 0, left: 0 }, 'input_boolean.red_alert', "goldenrod"), 'input_boolean.red_alert');
     this._addCard(".border", "cb-lcars-elbow-card", "border", lcars_cb_alert_omni("cb-lcars-header-right", { top_left: 0, top_right: 0, bottom_right: 0, bottom_left: 0 }, { top: 0, right: 30, bottom: 0, left: 0 }, 'input_boolean.red_alert', "goldenrod"), 'input_boolean.red_alert');

@@ -186,7 +186,7 @@ class at_lcarsDashboardStrategyEditor extends HTMLElement {
         this._favoriteEntitiesChanged(e.detail.value);
       });
       
-      console.log('Favorites picker created:', picker);
+      //console.log('Favorites picker created:', picker);
     });
   }
 
@@ -559,7 +559,7 @@ class at_lcarsDashboardStrategyEditor extends HTMLElement {
       return;
     }
 
-    console.log('Favorites changed:', entities);
+    //console.log('Favorites changed:', entities);
 
     const newConfig = {
       ...this._config,

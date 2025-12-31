@@ -26,3 +26,12 @@ export function scrollbar(color1,color2,color3,color4){
     }
     `;
 }
+
+export function font(){
+    return `
+    @font-face {
+  font-family: "Antonio";
+  src: url("/Antonio.woff2");
+}
+    `;
+}

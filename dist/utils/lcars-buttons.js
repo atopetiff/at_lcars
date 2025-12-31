@@ -124,7 +124,7 @@ function lcars_bubble(entity, color_active = "#00e1ff", color_inactive = "#00667
     border-right: 4px solid black;
   }
   `;
-  // console.log("styles",styles);
+  // //console.log("styles",styles);
   return {
     type: "custom:bubble-card",
     card_type: "button",
