@@ -12,19 +12,10 @@ Todo: configuration beschreiben
 
 Nach der Installation über HACS:
 
-1. Füge in deiner `configuration.yaml` hinzu:
-   ```yaml
-   lovelace:
-     mode: storage
-     resources:
-       - url: /local/at-lcars-strategy/simon42-strategies-loader.js
-         type: module
-   ```
-
-2. Erstelle ein neues Dashboard mit der Strategy:
+1. Erstelle ein neues Dashboard mit der Strategy:
    ```yaml
    strategy:
-     type: custom:at-lcars-dashboard
+     type: custom:at-lcars-strategy
    ```
 
 Für detaillierte Anweisungen siehe das README.
