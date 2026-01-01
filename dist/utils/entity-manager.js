@@ -159,16 +159,30 @@ export class EntityManager {
     const fullname = `${name}${id}`;
     if (track) {
       this.changeTracker.push({ id: id, name: fullname, element: document.createElement(type, name) });
-      const newElement = this.changeTracker.find(e => e.name == fullname)
-      newElement.element.setConfig(config);
-
-      newElement.element.hass = this.hass;
-      return newElement.element;
+      const newElement = this.changeTracker.find(e => e.name == fullname);
+      try {
+        
+        newElement.element.setConfig(config);
+  
+        newElement.element.hass = this.hass;
+        return newElement.element;
+      } catch (e) {
+        console.error("error adding tracked card create set config",{type: type, name: name, config: config, id: id, changeTracker: this.changeTracker })
+        throw new Error("error adding tracked card create set config");
+        
+      }
     } else {
       const newElement = document.createElement(type, name);
-      newElement.setConfig(config);
-      newElement.hass = this.hass;
-      return newElement;
+      try {
+        newElement.setConfig(config);
+        newElement.hass = this.hass;
+        return newElement;
+        
+      } catch (e) {
+        console.error("error adding NON tracked card create set config",{type: type, name: name, config: config, id: id, changeTracker: this.changeTracker })
+        throw new Error("error adding NON tracked card create set config");
+        
+      }
     }
 
   }
@@ -277,7 +291,7 @@ export class Card extends HTMLElement {
         
       }, 0);
     } catch (e) {
-      console.error("Error adding Card to selector", {selector:selector, id:id})
+      console.error("Error adding Card to selector", {selector:selector, id:id, msg:e})
     }
   }
 

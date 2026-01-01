@@ -448,7 +448,7 @@ class AtLcarsRoom extends Card {
     [
       ...this.em.roomTrvs
     ].forEach(e => {
-      this._addCard(".climate", 'bubble-card', `climate${e}`,
+      this._addCard(".climate", 'bubble-card', `trv${e}`,
         lcars_climate_bubble(e, this.em.color1, this.em.color3,),
         e
       );

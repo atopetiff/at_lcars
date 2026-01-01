@@ -470,8 +470,8 @@ class AtLcarsFloor extends Card {
       this._addCard(`#${a.area_id}window_left`, "cb-lcars-button-card", `#${a.area_id}window_left`, lcars_floor_row_window_left(a.window_entity_id, "black", "#cc0000"), a.window_entity_id);
       this._addCard(`#${a.area_id}window_right`, "cb-lcars-button-card", `#${a.area_id}window_right`, lcars_floor_row_window_right(a.window_entity_id, "black", "#cc0000"), a.window_entity_id);
       this._addCard(`#${a.area_id}link`, "cb-lcars-button-card", `#${a.area_id}link`, lcars_floor_row_windownav(a.window_entity_id, a.name, a.area_id, a.icon, "/at-lcars/" + a.area_id, a.color3, "#cc0000"), a.window_entity_id);
-      this._addCard(`#${a.area_id}info`, "cb-lcars-button-card", `#${a.area_id}info`, lcars_room_row_info_temp(a.temperature_entity_id), a.temperature_entity_id);
-      this._addCard(`#${a.area_id}info`, "cb-lcars-button-card", `#${a.area_id}info`, lcars_room_row_info_humidity(a.humidity_entity_id), a.humidity_entity_id);
+      this._addCard(`#${a.area_id}info`, "cb-lcars-button-card", `#${a.area_id}info_temp`, lcars_room_row_info_temp(a.temperature_entity_id), a.temperature_entity_id);
+      this._addCard(`#${a.area_id}info`, "cb-lcars-button-card", `#${a.area_id}info_temp`, lcars_room_row_info_humidity(a.humidity_entity_id), a.humidity_entity_id);
       [
         ...a.lights,
         ...a.powerToggles
