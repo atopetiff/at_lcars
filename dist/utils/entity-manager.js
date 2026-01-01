@@ -268,9 +268,14 @@ export class Card extends HTMLElement {
     super();
   }
   _addCard(selector, type, name, config, id, track = true) {
-    const card = this.querySelector(selector);
-    const fullname = `${name}${id}`;
-    card.appendChild(this.em._addCard(type, name, config, id, track));
+    try {
+      
+      const card = this.querySelector(selector);
+      const fullname = `${name}${id}`;
+      card.appendChild(this.em._addCard(type, name, config, id, track));
+    } catch (e) {
+      console.error("Error adding Card to selector", {selector:selector, id:id})
+    }
   }
 
   setConfig(config) {
