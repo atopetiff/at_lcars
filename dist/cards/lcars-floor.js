@@ -1,6 +1,7 @@
 import { entitiesIn } from "../utils/entity-filter.js";
 import { Card, EntityManager } from "../utils/entity-manager.js";
 import { lcars_footer_alert, lcars_footer_left_alert, lcars_cb_alert_omni, lcars_footer_right_alert, lcars_top_left_alert, lcars_top_right_alert } from "../utils/lcars-borders.js";
+import { lcars_bubble_lozenge } from "../utils/lcars-buttons-bubble.js";
 import { lcars_floor_plan_tempnav, lcars_floor_plan_window, lcars_floor_plan_humidity, lcars_floor_row_windownav, lcars_room_row_info_temp, lcars_room_row_info_humidity, lcars_floor_row_window_left, lcars_floor_row_window_right, lcars_switch, lcars_climate_bubble, lcars_cover_bubble, lcars_nav_btn, lcars_cb_alert_btn } from "../utils/lcars-buttons.js";
 import { font, scrollbar } from "../utils/scrollbar.js";
 
@@ -478,9 +479,9 @@ class AtLcarsFloor extends Card {
       ].forEach(e => {
         this._addCard(
           `#${a.area_id}btns`,
-          "cb-lcars-button-card",
+          "bubble-card",
           `${a.area_id}lights${e}`,
-          lcars_switch(e, a.color3, a.color1, false, "45px"),
+          lcars_bubble_lozenge(e, a.color3, a.color1, false, "45px","14px"),
           e);
 
       });
@@ -523,9 +524,9 @@ class AtLcarsFloor extends Card {
     ].forEach(e => {
       this._addCard(
         `.quick`,
-        "cb-lcars-button-card",
+        "bubble-card",
         `quick${e.entity_id}`,
-        lcars_switch(e.entity_id, this.em.color3, this.em.color1, false, "35px"),
+        lcars_bubble_lozenge(e.entity_id, this.em.color3, this.em.color1, false, "35px"),
         e.entity_id);
 
     });

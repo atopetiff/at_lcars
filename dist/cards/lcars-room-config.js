@@ -1,6 +1,7 @@
 import { scheduler } from "../utils/configs.js";
 import { entitiesIn } from "../utils/entity-filter.js";
 import { Card, EntityManager } from "../utils/entity-manager.js";
+import { lcars_bubble_lozenge, lcars_bubble_lozenge_button } from "../utils/lcars-buttons-bubble.js";
 import { lcars_switch, lcars_button, lcars_climate, lcars_cb_alert_elbow, lcars_cb_alert_side, lcars_cb_alert_btn, lcars_nav_btn, lcars_mini_graph, lcars_climate_bubble, lcars_info } from "../utils/lcars-buttons.js";
 import { font, scrollbar } from "../utils/scrollbar.js";
 class AtLcarsRoomConfig extends Card {
@@ -437,8 +438,8 @@ class AtLcarsRoomConfig extends Card {
     [
       ...this.em.roomEntities.filter(e=>e.labels.includes("config")).map(e=>e.entity_id)
     ].forEach(e => {
-      this._addCard(".power", 'cb-lcars-button-card', `power${e}`,
-        lcars_button(e, this.em.color3, this.em.color1, false, "45px"),
+      this._addCard(".power", 'bubble-card', `power${e}`,
+        lcars_bubble_lozenge_button(e, this.em.color3, this.em.color1, false, "45px"),
         e
       );
     });
