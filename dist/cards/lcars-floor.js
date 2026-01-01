@@ -456,6 +456,8 @@ class AtLcarsFloor extends Card {
         ${this._html()}
       `;
 
+
+    
     //console.log("config", this._config);
 
     this._addCard(".topleft", "cb-lcars-elbow-card", "hl", lcars_cb_alert_omni("cb-lcars-header-right", { top_left: 0, top_right: 30, bottom_right: 0, bottom_left: 0 }, { top: 20, right: 31, bottom: 0, left: 0 }, this.em.redAlert, this.em.color2), this.em.redAlert);
