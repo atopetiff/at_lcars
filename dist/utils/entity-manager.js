@@ -172,14 +172,15 @@ export class EntityManager {
         
       }
     } else {
-      const newElement = document.createElement(type, name);
+      const newElement = document.createElement(type);
+      
       try {
         newElement.setConfig(config);
         newElement.hass = this.hass;
         return newElement;
         
       } catch (e) {
-        console.error("error adding NON tracked card create set config",{type: type, name: name, config: config, id: id, changeTracker: this.changeTracker })
+        console.error("error adding NON tracked card create set config",{newElement: newElement,type: type, name: name, config: config, id: id, changeTracker: this.changeTracker, error: e })
         throw new Error("error adding NON tracked card create set config");
         
       }

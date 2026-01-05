@@ -34,7 +34,9 @@ import './cards/lcars-house.js';
 import './cards/lcars-floor.js'; 
 import './cards/lcars-room.js'; 
 import './cards/lcars-room-config.js'; 
+import './cards/lcars-room-all.js'; 
 import './cards/lcars-room-row.js'; 
+import './cards/lcars-room-stats.js'; 
 
 // Lade Core-Module
 import './core/at_lcars-dashboard-strategy.js';
@@ -42,6 +44,7 @@ import './core/at_lcars-dashboard-strategy.js';
 // // Lade View-Module
 import './views/lcars-view-room.js';
 import './views/lcars-view-room-config.js';
+import './views/lcars-view-room-all.js';
 
 
 //console.log('AT LCARS loaded successfully');

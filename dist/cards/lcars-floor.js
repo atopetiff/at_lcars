@@ -526,7 +526,7 @@ class AtLcarsFloor extends Card {
         `.quick`,
         "bubble-card",
         `quick${e.entity_id}`,
-        lcars_bubble_lozenge(e.entity_id, this.em.color3, this.em.color1, false, "35px"),
+        lcars_bubble_lozenge(e.entity_id, this.em.color3, this.em.color1, false, "35px", "13px"),
         e.entity_id);
 
     });

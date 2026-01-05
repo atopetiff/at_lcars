@@ -5,7 +5,8 @@ import { lcars_bubble_lozenge, lcars_bubble_lozenge_button } from "../utils/lcar
 import { lcars_switch, lcars_button, lcars_climate, lcars_cb_alert_elbow, lcars_cb_alert_side, lcars_cb_alert_btn, lcars_nav_btn, lcars_mini_graph, lcars_climate_bubble, lcars_info } from "../utils/lcars-buttons.js";
 import { RoomCard } from "../utils/room.js";
 import { font, scrollbar } from "../utils/scrollbar.js";
-class AtLcarsRoomConfig extends RoomCard {
+import { stats_batteries, stats_climate } from "../utils/stats.js";
+class AtLcarsRoomStats extends RoomCard {
   constructor() {
     super();
     this.old = null;
@@ -34,18 +35,36 @@ class AtLcarsRoomConfig extends RoomCard {
 
   get css_addon(){
     return `
-    .scheduler{
-      --ha-card-background: black;
-      --switch-checked-color: ${this.em.color1};
-      --switch-checked-button-color: ${this.em.color1};
-      --switch-checked-track-color: ${this.em.color1};
-      --icon-primary-color:  ${this.em.color1};
-      --wa-color-on-normal:  ${this.em.color1} !important;
-      --wa-color-brand-on-normal:  ${this.em.color1} !important;
+   
+      @media (width > 550px){
+      .room {
+        grid-template-columns:
+       0px 30px    4px      46px         4px    1fr     1fr     8px     24px    20px   4px     10px;
+       
+  }
+       .grid{
+       display: none;}
+        }
+    .content{
+          --card-background-color: black;
+    --ha-card-border-radius: 0px;
+    --ha-card-border-width: 0;
+    flex-basis: 100%;
+      display: flex;
+      flex-direction: column;
+      scroll-snap-type: y mandatory;
+      scroll-snap-align: center;
     }
+    .content>*{
+      flex-basis: 100%;
+      height: 100%;
+      scroll-snap-align: start;
+    }
+
     .content>.power>*{
       flex-basis: 300px;
     }
+
     `;
   }
 
@@ -58,11 +77,6 @@ class AtLcarsRoomConfig extends RoomCard {
       <div class="actionborder"></div>
       <div class="content">
 
-          <div class="power"></div>
-          <div class="climate"></div>
-          <div class="trv"></div>
-          <div class="covers"></div>
-          <div class="scheduler"></div>
       </div>
       <div class="infoborder"></div>
       <div class="footer"></div>
@@ -97,26 +111,43 @@ class AtLcarsRoomConfig extends RoomCard {
         ${this.html_new}
       `;
 
-    this.setupLayout('config');
+    this.setupLayout('stats');
 
     
 
-    //------------------------------------------------------------------
-    //Buttons
-    [
-      ...this.em.roomEntities.filter(e=>e.labels.includes("config")).map(e=>e.entity_id)
-    ].forEach(e => {
-      this._addCard(".power", 'bubble-card', `power${e}`,
-        lcars_bubble_lozenge_button(e, this.em.color3, this.em.color1, false, "45px", "14px"),
-        e
-      );
-    });
+    // //------------------------------------------------------------------
+    // //Buttons
+    // [
+    //   ...this.em.roomEntities.filter(e=>e.labels.includes("showstats")).map(e=>e.entity_id)
+    // ].forEach(e => {
+    //   this._addCard(".power", 'bubble-card', `power${e}`,
+    //     lcars_bubble_lozenge_button(e, this.em.color3, this.em.color1, false, "45px", "14px"),
+    //     e
+    //   );
+    // });
     
 
+    // var config = {
+    //   // type: "history-graph",
+    //   entities: [{entity: "climate.b_dining_trv"}]
 
+    // };
 
     
-    this._addCard(".scheduler", 'scheduler-card', `scheduler`, scheduler([...this.em.roomEntities.map(e=>e.entity_id), ...this.em.everyRoom]), "*");
+    // this._addCard(".scheduler", 'hui-history-graph-card', `scheduler`, config,"",false);
+    
+    this._addCard(".content","plotly-graph","climate",
+      stats_climate(this.em.roomClimate,this.em.roomTemperature, this.em.roomHumidity,this.em.roomTrvs, this.em.outsideSun, this.em.outsideShadow),
+      this.em.roomTemperature,
+      true
+    );
+
+    const batteries = this.em.roomEntities.filter(e=>e.labels.includes("battery")).map(e=>e.entity_id)
+    this._addCard(".content","plotly-graph","batteries",
+      stats_batteries(batteries),
+      this.em.roomTemperature,
+      true
+    );
 
     [
       ...this.em.roomInfos
@@ -134,4 +165,4 @@ class AtLcarsRoomConfig extends RoomCard {
   }
 }
 
-customElements.define("at-lcars-room-config", AtLcarsRoomConfig);
+customElements.define("at-lcars-room-stats", AtLcarsRoomStats);

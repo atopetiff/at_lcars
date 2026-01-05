@@ -1,15 +1,15 @@
 // ====================================================================
 // VIEW STRATEGY - RAUM (generiert Raum-Details) -
 // ====================================================================
-class AtLcarsRoomView {
+class AtLcarsRoomAllView {
   static async generate(config, hass) {
-    const { area, devices, entities, basepath, cardtype } = config;
+    const { area, devices, entities, basepath } = config;
 
  
   
 
     const card = {
-      type: cardtype,
+      type: "custom:at-lcars-room-all",
       room: `${area.name}`,
       area_id: area.area_id,
       floor_id: area.floor_id,
@@ -25,4 +25,4 @@ class AtLcarsRoomView {
 }
 
 // Registriere Custom Element
-customElements.define("ll-strategy-at-lcars-view-room", AtLcarsRoomView);
+customElements.define("ll-strategy-at-lcars-view-room-all", AtLcarsRoomAllView);

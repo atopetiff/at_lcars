@@ -251,21 +251,44 @@ class AtLcarsHouse extends HTMLElement {
 
   _houseOverview(){
     var html = ""
-    var others = this._config?.areas.other.map(a=>`<div class="${a.area_id}"></div>`).join("");
-    var inside = `<div class="inside">
-    ${this._config?.areas.inside.map(i=>{
+    
+    var inside = `
+    ${this._config?.floorGroups.filter(f=>f.group!="floorgroup_config").map(i=>{
       return `<div class="${i.floor_id}">
       </div>`
     }).join("")}
-    </div>`
+    `
     ;
     return `
     ${inside}
-    ${others}`
+    `
   }
   _houseOverviewCss(basepath){
+    const noConfig = this._config?.floorGroups.filter(f=>f.group!="floorgroup_config");
+    const distinctLevels =[... new Set(noConfig.map(f=>f.level))].sort().reverse();
+    const gridRows = distinctLevels.map(l=> "1fr").join(" ");
+    const distinctGroups =[... new Set(noConfig.map(f=>f.group))].sort();
+    const gridcols = distinctGroups.map(l=> "1fr").join(" ");
+    console.log({distinctLevels: distinctLevels, gridRows: gridRows, distinctGroups: distinctGroups, gridcols: gridcols});
 
-    var others = this._config?.areas.other.map(a=>`${basepath}>.${a.area_id}{grid-area: ${a.area_id};}`).join(" ");
+    var area = distinctLevels.map(l=>{
+      return distinctGroups.map(g=>{return g+l}).join(" ");
+    });
+    const templateareas = '"'+area.join('" "')+'"'
+    console.log("areas", templateareas);
+    const css = `
+    .lcars_house>.content{
+        grid-template-columns: ${gridcols}; 
+        grid-template-rows: ${gridRows}; 
+        gap: 0px 0px; 
+        grid-template-areas: 
+          ${templateareas}; 
+    }
+    `
+//       const arr = [1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 5];
+// const set = [...new Set(arr)];
+// console.log(set); // [1, 2, 3, 4, 5]
+    var others = noConfig.map(f=>`${basepath}>.${f.floor_id}{grid-area: ${f.group}${f.level};}`).join(" ");
     var inside = `
     ${basepath}>.inside{
       grid-area: inside;
@@ -278,8 +301,9 @@ class AtLcarsHouse extends HTMLElement {
       `;
         //console.log("css", `${inside}${others}`);
     
-    return `${inside}
-    ${others}`
+    return `
+    ${others}
+    ${css}`
   }
 
   _html() {
@@ -342,7 +366,7 @@ class AtLcarsHouse extends HTMLElement {
     this._addCard(".topright", "cb-lcars-elbow-card", "hr", lcars_top_right_alert('input_boolean.red_alert', "goldenrod"),'input_boolean.red_alert');
     this._addCard(".bottomright", "cb-lcars-elbow-card", "fr", lcars_footer_right_alert('input_boolean.red_alert', "goldenrod"),'input_boolean.red_alert');
     
-    this._config.areas.inside.forEach(f=>{
+    this._config?.floorGroups.filter(f=>f.group!="floorgroup_config").forEach(f=>{
     
           this._addCard(`.${f.floor_id}`,"cb-lcars-button-card",f.floor_id,lcars_floor_plan_tempnav(null,f.name,this._config.basepath+"/"+f.floor_id+"?kiosk"),null);
         });

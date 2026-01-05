@@ -26,7 +26,8 @@ import {
   createUtilityViews, 
   createAreaViews ,
   createFloorView,
-  createAreaConfigViews
+  createAreaConfigViews,
+  createAreaAllViews
 } from '../utils/at_lcars-view-builder.js';
 
 class AtLcarsDashboardStrategy {
@@ -39,6 +40,25 @@ class AtLcarsDashboardStrategy {
     const entities = Object.values(hass.entities || {});
     const floors = Object.values(hass.floors || {});
 
+    
+
+    const floorWithGroup = floors.map(f=>{
+      var labelArea = areas.filter(a=>a.name==f.name);
+      var group ="noGroup";
+      if(labelArea.length==1){
+        const labels=labelArea[0].labels.filter(l=>l.startsWith("floorgroup_"));
+        if(labels.length==1){
+          group=labels[0];
+        }
+        
+
+      }
+      return {...f, group: group}
+    });
+
+    console.log({floorWithGroup});
+    var groups = Object.groupBy(floorWithGroup, ({ group }) => group );
+    console.log({groups});
     const protocols =entities.filter(e=>e.labels.includes("protokoll")).map(e=>{return e.entity_id});
     //console.log(protocols);
 
@@ -117,6 +137,7 @@ class AtLcarsDashboardStrategy {
         type: "custom:at-lcars-house",
         protocols: protocols,
         areas: area_struct,
+        floorGroups: floorWithGroup,
         basepath: base
       }
       // createOverviewSection({
@@ -153,24 +174,40 @@ class AtLcarsDashboardStrategy {
     const roomViews =  createAreaViews([
       ...area_struct.other,
       ...area_struct.inside.map(f=>f.areas).flat()
-    ], devices, entities, showRoomViews, config.areas_options || {}, config, base);
-    const roomConfigViews =  createAreaConfigViews([
+    ], devices, entities, showRoomViews, config.areas_options || {}, config, base,"control");
+    const roomConfigViews =  createAreaViews([
       ...area_struct.other,
       ...area_struct.inside.map(f=>f.areas).flat()
-    ], devices, entities, showRoomViews, config.areas_options || {}, config, base);
+    ], devices, entities, showRoomViews, config.areas_options || {}, config, base, "config");
+    
+    const roomAllViews =  createAreaViews([
+      ...area_struct.other,
+      ...area_struct.inside.map(f=>f.areas).flat()
+    ], devices, entities, showRoomViews, config.areas_options || {}, config, base, "all");
+    
+    const roomStatsViews =  createAreaViews([
+      ...area_struct.other,
+      ...area_struct.inside.map(f=>f.areas).flat()
+    ], devices, entities, showRoomViews, config.areas_options || {}, config, base, "stats");
     
     // Erstelle alle Views mit areas_options und config
     const views = [
       ...floorViews,
       createOverviewView(overviewSections),
       ...roomViews,
-      ...roomConfigViews
+      ...roomConfigViews,
+      ...roomAllViews,
+      ...roomStatsViews
       // ...createUtilityViews(entities, showSummaryViews, config),
       
     ];
 
     return {
-      title: "Dynamisches Dashboard",
+      kiosk_mode: {
+        hide_header: '{{ is_state("input_boolean.lcars_kiosk", "on") }}',
+        hide_sidebar: false//'{{ is_state("input_boolean.lcars_kiosk", "on") }}'
+      },
+        title: "Dynamisches Dashboard",
       views
     };
   }

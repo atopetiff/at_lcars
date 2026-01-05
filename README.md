@@ -29,8 +29,10 @@ this HACS Component contains a custom dashboard strategy to mimic the iconic LCA
     - vertical slider for Cover in Room view. this the only slider i found which can be set mimic the behaviour of a Cover
 - [Scheduler-Card](https://github.com/nielsfaber/scheduler-card)
     - in Room Config to set schedules from dashboard
-- browser-mod (optional)
+- kiosk-mode 
     - to remove the stupid header and sidebar (in the mobile app you setup a gesture to open sidebar first);
+- plotly-card
+    - statistiisk
 
 
 </details>
@@ -50,6 +52,8 @@ this HACS Component contains a custom dashboard strategy to mimic the iconic LCA
      type: custom:at-lcars-strategy
 ```
 </details>
+
+create boolean helper with name `input_boolean.lcars_kiosk` this. toggles the kiosk mode
 
 ## Configuration
 

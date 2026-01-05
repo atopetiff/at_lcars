@@ -92,15 +92,30 @@ export function createUtilityViews(entities, showSummaryViews = false, config = 
 /**
  * Erstellt Views für jeden sichtbaren Bereich
  */
-export function createAreaViews(visibleAreas, devices, entities, showRoomViews = false, areasOptions = {}, dashboardConfig = {},basepath="/") {
+export function createAreaViews(visibleAreas, devices, entities, showRoomViews = false, areasOptions = {}, dashboardConfig = {},basepath="/", type="control") {
+  var pathSuffix="";
+  switch (type) {
+    case "config":
+      pathSuffix="-config"
+      break;
+    case "all":
+      pathSuffix="-all"
+      break;
+    case "stats":
+      pathSuffix="-stats"
+      break;
+  
+    default:
+      break;
+  }
   return visibleAreas.map(area => {
     const areaOptions = areasOptions[area.area_id] || {};
     
     return {
       title: area.name,
-      path: area.area_id,
+      path: area.area_id+pathSuffix,
       icon: area.icon || "mdi:floor-plan",
-      subview: !showRoomViews,
+      subview: false,
       // theme: "LCARS Breen",
       strategy: {
         type: "custom:at-lcars-view-room",
@@ -109,7 +124,8 @@ export function createAreaViews(visibleAreas, devices, entities, showRoomViews =
         entities,
         groups_options: areaOptions.groups_options || {},
         dashboardConfig, // Übergebe vollständige Dashboard-Config für Raum-Pins
-        basepath: basepath
+        basepath: basepath,
+        cardtype: "custom:at-lcars-room"+pathSuffix
       }
     };
   });
@@ -126,6 +142,28 @@ export function createAreaConfigViews(visibleAreas, devices, entities, showRoomV
       // theme: "LCARS Breen",
       strategy: {
         type: "custom:at-lcars-view-room-config",
+        area,
+        devices,
+        entities,
+        groups_options: areaOptions.groups_options || {},
+        dashboardConfig, // Übergebe vollständige Dashboard-Config für Raum-Pins
+        basepath: basepath
+      }
+    };
+  });
+}
+export function createAreaAllViews(visibleAreas, devices, entities, showRoomViews = false, areasOptions = {}, dashboardConfig = {}, basepath="") {
+  return visibleAreas.map(area => {
+    const areaOptions = areasOptions[area.area_id] || {};
+    
+    return {
+      title: area.name,
+      path: `${area.area_id}-all`,
+      icon: area.icon || "mdi:floor-plan",
+      subview: !showRoomViews,
+      // theme: "LCARS Breen",
+      strategy: {
+        type: "custom:at-lcars-view-room-all",
         area,
         devices,
         entities,
