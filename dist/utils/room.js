@@ -112,7 +112,7 @@ export class RoomCard extends Card {
     return `
     :host{
       background: red;
-
+      overflow: hidden;
     }
     .room {
         height: 100%;
