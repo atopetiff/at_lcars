@@ -166,7 +166,7 @@ class AtLcarsDashboardStrategy {
       return createFloorView([{
         type: "custom:at-lcars-floor",
         areas: f.areas
-      }], f.name, f.floor_id)
+      }], f.name, "floor-"+f.floor_id)
     });
     
 

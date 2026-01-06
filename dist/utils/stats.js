@@ -166,7 +166,7 @@ return  {
         entity: b,
         yaxis: "y1",
         line: {
-          width: 1
+          width: 2
         },
         show_value: true
       };

@@ -42,6 +42,9 @@ class AtLcarsRoomStats extends RoomCard {
        0px 30px    4px      46px         4px    1fr     1fr     8px     24px    20px   4px     10px;
        
   }
+       .content>*{
+      height: 90vh;
+    }
        .grid{
        display: none;}
         }
@@ -50,15 +53,18 @@ class AtLcarsRoomStats extends RoomCard {
     --ha-card-border-radius: 0px;
     --ha-card-border-width: 0;
     flex-basis: 100%;
-      display: flex;
+      display: block;
       flex-direction: column;
       scroll-snap-type: y mandatory;
       scroll-snap-align: center;
     }
     .content>*{
       flex-basis: 100%;
-      height: 100%;
+      height: 100% !important;
+      min-height: 100% !important;
       scroll-snap-align: start;
+      flex-shrink:0;
+      display: block;
     }
 
     .content>.power>*{

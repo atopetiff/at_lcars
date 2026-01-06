@@ -7,8 +7,6 @@ import { font, scrollbar } from "../utils/scrollbar.js";
 class AtLcarsRoom extends RoomCard {
   constructor() {
     super();
-    this.old = null;
-    this.changeTracker = [];
   }
 
 

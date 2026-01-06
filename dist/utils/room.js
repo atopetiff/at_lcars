@@ -120,6 +120,12 @@ export class RoomCard extends Card {
         max-height: 100vh;
         margin: 0px 0px 0px 0px;  
         background: black;
+
+        /*testen ob es probleme verursacht!!*/
+        position: fixed;
+        top:0px;
+        left:0px;
+
       display: grid;
       overflow: hidden;
       grid-template-columns:
@@ -361,7 +367,7 @@ export class RoomCard extends Card {
     //rooms
     this._addCard(".rooms", 'cb-lcars-button-card',
       "rooms",
-      lcars_nav_btn(this._config.basepath + "/" + this._config.floor_id, "Räume", this.em.color3),
+      lcars_nav_btn(this._config.basepath + "/floor-" + this._config.floor_id, "Räume", this.em.color3),
       null,
       false
     );

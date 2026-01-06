@@ -253,7 +253,9 @@ class AtLcarsHouse extends HTMLElement {
     var html = ""
     
     var inside = `
-    ${this._config?.floorGroups.filter(f=>f.group!="floorgroup_config").map(i=>{
+    ${this._config?.floorGroups
+      //.filter(f=>f.group!="floorgroup_config")
+      .map(i=>{
       return `<div class="${i.floor_id}">
       </div>`
     }).join("")}
@@ -264,7 +266,9 @@ class AtLcarsHouse extends HTMLElement {
     `
   }
   _houseOverviewCss(basepath){
-    const noConfig = this._config?.floorGroups.filter(f=>f.group!="floorgroup_config");
+    const noConfig = this._config?.floorGroups
+    //.filter(f=>f.group!="floorgroup_config")
+    ;
     const distinctLevels =[... new Set(noConfig.map(f=>f.level))].sort().reverse();
     const gridRows = distinctLevels.map(l=> "1fr").join(" ");
     const distinctGroups =[... new Set(noConfig.map(f=>f.group))].sort();
@@ -366,9 +370,11 @@ class AtLcarsHouse extends HTMLElement {
     this._addCard(".topright", "cb-lcars-elbow-card", "hr", lcars_top_right_alert('input_boolean.red_alert', "goldenrod"),'input_boolean.red_alert');
     this._addCard(".bottomright", "cb-lcars-elbow-card", "fr", lcars_footer_right_alert('input_boolean.red_alert', "goldenrod"),'input_boolean.red_alert');
     
-    this._config?.floorGroups.filter(f=>f.group!="floorgroup_config").forEach(f=>{
+    this._config?.floorGroups
+    // .filter(f=>f.group!="floorgroup_config")
+    .forEach(f=>{
     
-          this._addCard(`.${f.floor_id}`,"cb-lcars-button-card",f.floor_id,lcars_floor_plan_tempnav(null,f.name,this._config.basepath+"/"+f.floor_id+"?kiosk"),null);
+          this._addCard(`.${f.floor_id}`,"cb-lcars-button-card",f.floor_id,lcars_floor_plan_tempnav(null,f.name,this._config.basepath+"/floor-"+f.floor_id),null);
         });
     // this._addCard(".bottomleft", "cb-lcars-elbow-card", "fle", lcars_footer_left_alert('input_boolean.red_alert', "goldenrod"),'input_boolean.red_alert');
     
