@@ -122,6 +122,10 @@ class AtLcarsRoomAll extends RoomCard {
     .grid h2{
     margin: 0px;
     }
+    .content>*>*,
+    .grid>*>*{
+    height: 45px;
+    }
     `;
   }
 

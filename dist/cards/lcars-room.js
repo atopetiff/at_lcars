@@ -1,6 +1,6 @@
 import { entitiesIn } from "../utils/entity-filter.js";
 import { Card, EntityManager } from "../utils/entity-manager.js";
-import { lcars_bubble_base, lcars_bubble_lozenge, lcars_bubble_quad } from "../utils/lcars-buttons-bubble.js";
+import { lcars_bubble_base, lcars_bubble_lozenge } from "../utils/lcars-buttons-bubble.js";
 import { lcars_switch, lcars_button, lcars_climate, lcars_cb_alert_elbow, lcars_cb_alert_side, lcars_cb_alert_btn, lcars_nav_btn, lcars_mini_graph, lcars_climate_bubble, lcars_info } from "../utils/lcars-buttons.js";
 import { RoomCard } from "../utils/room.js";
 import { font, scrollbar } from "../utils/scrollbar.js";

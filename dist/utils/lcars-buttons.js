@@ -119,10 +119,13 @@ function lcars_bubble(entity, color_active = "#00e1ff", color_inactive = "#00667
     --ha-font-family-body: 'Antonio', Arial, sans-serif;
     --bubble-button-icon-background-color: transparent;
     text-transform: uppercase
+    font-family: 'Antonio', Arial, sans-serif;
   }
   .bubble-range-fill{
     border-right: 4px solid black;
   }
+
+
   `;
   // //console.log("styles",styles);
   return {

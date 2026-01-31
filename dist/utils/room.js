@@ -1,4 +1,5 @@
 import { Card } from "./entity-manager.js";
+import { lcars_bubble_square, lcars_bubble_square_nav } from "./lcars-buttons-bubble.js";
 import { lcars_cb_alert_btn, lcars_cb_alert_elbow, lcars_cb_alert_side, lcars_nav_btn } from "./lcars-buttons.js";
 
 export class RoomCard extends Card {
@@ -124,6 +125,7 @@ export class RoomCard extends Card {
         /*testen ob es probleme verursacht!!*/
         position: fixed;
         top:0px;
+        
         left:0px;
 
       display: grid;
@@ -148,7 +150,7 @@ export class RoomCard extends Card {
 
     .rooms{
         grid-area: rooms;
-        background-color: yellow;
+        background-color: ${color3};
     }
 
     .side{
@@ -365,9 +367,9 @@ export class RoomCard extends Card {
   setupLayout(type="control") {
     //------------------------------------------------------------------
     //rooms
-    this._addCard(".rooms", 'cb-lcars-button-card',
+    this._addCard(".rooms", 'bubble-card',
       "rooms",
-      lcars_nav_btn(this._config.basepath + "/floor-" + this._config.floor_id, "Räume", this.em.color3),
+      lcars_bubble_square_nav(this._config.basepath + "/floor-" + this._config.floor_id, "Räume", this.em.color3),
       null,
       false
     );
@@ -386,8 +388,8 @@ export class RoomCard extends Card {
     this._addCard(".side", 'cb-lcars-button-card', "side", lcars_cb_alert_side(this.em.redAlert, this.em.color2), this.em.redAlert);
     //------------------------------------------------------------------
     //alert buttons
-    this._addCard(".buttons", 'cb-lcars-button-card', "buttonb", lcars_cb_alert_btn(this.em.yellowAlert, this.em.color2, this.em.yellowAlertColor), this.em.yellowAlert);
-    this._addCard(".buttons", 'cb-lcars-button-card', "buttona", lcars_cb_alert_btn(this.em.redAlert, this.em.color2, this.em.redAlertColor), this.em.redAlert);
+    this._addCard(".buttons", 'bubble-card', "buttonb", lcars_bubble_square(this.em.yellowAlert, this.em.color2, this.em.yellowAlertColor), this.em.yellowAlert);
+    this._addCard(".buttons", 'bubble-card', "buttona", lcars_bubble_square(this.em.redAlert, this.em.color2, this.em.redAlertColor), this.em.redAlert);
 
 
     //------------------------------------------------------------------
@@ -415,7 +417,7 @@ export class RoomCard extends Card {
         color: type=="all"?this.em.color1:this.em.color3
       },
     ].forEach(e => {
-      this._addCard(".actionborder", 'cb-lcars-button-card', `actionborder${e.label}`, lcars_nav_btn(e.target, e.label, e.color), null, false);
+      this._addCard(".actionborder", 'bubble-card', `actionborder${e.label}`, lcars_bubble_square_nav(e.target, e.label, e.color), null, false);
     });
 
 
