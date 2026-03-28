@@ -1,8 +1,6 @@
 
-import { entitiesIn } from "../utils/entity-filter.js";
 import { Card, EntityManager } from "../utils/entity-manager.js";
 import { lcars_bubble_lozenge, lcars_bubble_lozenge_button } from "../utils/lcars-buttons-bubble.js";
-import { lcars_switch, lcars_button, lcars_climate, lcars_cb_alert_elbow, lcars_cb_alert_side, lcars_cb_alert_btn, lcars_nav_btn, lcars_mini_graph, lcars_climate_bubble, lcars_info } from "../utils/lcars-buttons.js";
 import { RoomCard } from "../utils/room.js";
 import { font, scrollbar } from "../utils/scrollbar.js";
 class AtLcarsRoomAll extends RoomCard {
@@ -214,12 +212,7 @@ class AtLcarsRoomAll extends RoomCard {
       });
      
     
-    // [
-    //   ...this.em.roomInfos
-    // ].forEach(e => {
-    //   this._addCard(".grid", 'cb-lcars-button-card', `grid${e}`, lcars_info(e, "#656565ff", "#e0e0e0ff", this.em.color1), e);
-    // });
-
+  
 
   }
 

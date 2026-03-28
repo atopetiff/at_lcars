@@ -1,5 +1,6 @@
+import { lcars_cover_slider } from "../utils/at_lcars_slider_button.js";
 import { Card, EntityManager } from "../utils/entity-manager.js";
-import { lcars_switch, lcars_button, lcars_climate, lcars_cover_open, lcars_cover_slider, lcars_cover_close, lcars_cover_summer } from "../utils/lcars-buttons.js";
+import { lcars_bubble_cover_close, lcars_bubble_cover_open, lcars_bubble_cover_summer, lcars_bubble_lozenge } from "../utils/lcars-buttons-bubble.js";
 import { font } from "../utils/scrollbar.js";
 class AtLcarsCover extends Card {
   constructor() {
@@ -86,9 +87,9 @@ class AtLcarsCover extends Card {
 
     //------------------------------------------------------------------
 
-    this._addCard(".cover_open",'cb-lcars-button-card',
-      `open`,
-      lcars_cover_open(this._config.entity,this._config.color1,this._config.color3, this._config.color4),
+
+    this._addCard(".cover_open", 'bubble-card', `open`,
+      lcars_bubble_cover_open(this._config.entity, this._config.color3, this._config.color1, false, "45px", "14px"),
       this._config.entity
     );
     this._addCard(".cover_slider",'slider-button-card',
@@ -96,14 +97,14 @@ class AtLcarsCover extends Card {
       lcars_cover_slider(this._config.entity),
       this._config.entity
     );
-    this._addCard(".cover_close",'cb-lcars-button-card',
-      `cover_close`,
-      lcars_cover_close(this._config.entity,this._config.color1,this._config.color3, this._config.color4),
+ 
+    this._addCard(".cover_close", 'bubble-card', `cover_close`,
+      lcars_bubble_cover_close(this._config.entity, this._config.color3, this._config.color1, false, "45px", "14px"),
       this._config.entity
     );
-    this._addCard(".cover_summer",'cb-lcars-button-card',
-      `cover_summer`,
-      lcars_cover_summer(this._config.entity,this._config.color1,this._config.color3, this._config.color4),
+ 
+    this._addCard(".cover_summer", 'bubble-card', `cover_summer`,
+      lcars_bubble_cover_summer(this._config.entity, this._config.color3, this._config.color1, false, "45px", "14px"),
       this._config.entity
     );
     

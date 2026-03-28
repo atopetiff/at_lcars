@@ -1,10 +1,7 @@
 import { lcars_bubble_elbow } from "../utils/at_lacrs_bubble_elbow.js";
 import { Card, EntityManager } from "../utils/entity-manager.js";
-import { lcars_cb_alert_omni, lcars_footer_alert, lcars_footer_left_alert, lcars_footer_right_alert, lcars_top_left_alert, lcars_top_right_alert } from "../utils/lcars-borders.js";
 import { lcars_bubble_lozenge } from "../utils/lcars-buttons-bubble.js";
-import { lcars_button } from "../utils/lcars-buttons.js";
 import { font } from "../utils/scrollbar.js";
-//import { lcars_switch, lcars_button, lcars_climate, lcars_cover_open, lcars_cover_slider, lcars_cover_close, lcars_cover_summer } from "./lcars.js";
 class AtLcarsProtocols extends Card {
   constructor() {
     super();
@@ -112,44 +109,22 @@ class AtLcarsProtocols extends Card {
       `;
 
     //console.log(this._config.protocols);
-
-    // this._addCard(".header", "cb-lcars-elbow-card", "header", lcars_cb_alert_omni("cb-lcars-header-right", { top_left: 0, top_right: 30, bottom_right: 0, bottom_left: 0 }, { top: 8, right: 30, bottom: 0, left: 0 }, 'input_boolean.red_alert', "goldenrod"), 'input_boolean.red_alert');
     this._addCard(".header", "bubble-card", "header", lcars_bubble_elbow(this.em.redAlert,{ top_left: 0, top_right: 30, bottom_right: 0, bottom_left: 0 }, { top: 8, right: 30, bottom: 0, left: 0 },"#cc0000",this.em.color2), this.em.redAlert);
-    
-    // this._addCard(".border", "cb-lcars-elbow-card", "border", lcars_cb_alert_omni("cb-lcars-header-right", { top_left: 0, top_right: 0, bottom_right: 0, bottom_left: 0 }, { top: 0, right: 30, bottom: 0, left: 0 }, 'input_boolean.red_alert', "goldenrod"), 'input_boolean.red_alert');
+  
     this._addCard(".border", "bubble-card", "border", lcars_bubble_elbow(this.em.redAlert,{ top_left: 0, top_right: 0, bottom_right: 0, bottom_left: 0 }, { top: 0, right: 30, bottom: 0, left: 0 },"#cc0000",this.em.color2), this.em.redAlert);
     
 
     [
       ...this._config.protocols
     ].forEach(e => {
-      // this._addCard(".content", "cb-lcars-button-card", "prot", lcars_button(e, "yellow"), e);
+
       this._addCard(".content", 'bubble-card', `prot`,
               lcars_bubble_lozenge(e, this.em.color3, this.em.color1, false, "45px", "14px"),
               e
             );
 
     });
-    // //------------------------------------------------------------------
-    // const slider = this.querySelector(".cover_slider");
-    // const sliderCard = document.createElement('slider-button-card', "slider");
-    // sliderCard.setConfig(lcars_cover_slider(this._config.entity));
-    // slider.appendChild(sliderCard);
-    // sliderCard.hass = this._hass;
-    // //------------------------------------------------------------------
-    // const close = this.querySelector(".cover_close");
-    // const closeCard = document.createElement('cb-lcars-button-card', "close");
-    // closeCard.setConfig(lcars_cover_close(this._config.entity));
-    // close.appendChild(closeCard);
-    // closeCard.hass = this._hass;
-    // //------------------------------------------------------------------
-    // const summer = this.querySelector(".cover_summer");
-    // const summerCard = document.createElement('cb-lcars-button-card', "summer");
-    // summerCard.setConfig(lcars_cover_summer(this._config.entity));
-    // summer.appendChild(summerCard);
-    // summerCard.hass = this._hass;
-
-
+ 
   }
 
 

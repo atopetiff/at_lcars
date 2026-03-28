@@ -13,12 +13,6 @@ this HACS Component contains a custom dashboard strategy to mimic the iconic LCA
 <details>
 <summary>click to show dependencies</summary>
 
-- [HA LCARS](https://github.com/th3jesta/ha-lcars)
-    - (mostly for the Font) any help welcome to embedd it here
-- [CB-LCARS](https://github.com/snootched/cb-lcars)
-    - Some buttons
-    - some ellbows
-    - information display
 - [mini-graph-card](https://github.com/kalkih/mini-graph-card)
     - room heating overview
 - [Bubble-Card](https://github.com/Clooos/Bubble-Card)

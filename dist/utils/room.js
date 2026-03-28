@@ -1,7 +1,7 @@
 import { lcars_bubble_elbow } from "./at_lacrs_bubble_elbow.js";
 import { Card } from "./entity-manager.js";
 import { lcars_bubble_square, lcars_bubble_square_nav } from "./lcars-buttons-bubble.js";
-import { lcars_cb_alert_btn, lcars_cb_alert_elbow, lcars_cb_alert_side, lcars_nav_btn } from "./lcars-buttons.js";
+
 
 export class RoomCard extends Card {
   constructor() {
@@ -161,9 +161,9 @@ export class RoomCard extends Card {
 
     .side { grid-area: side; }
 
-    .corner { grid-area: corner; }
+    .corner { grid-area: corner; z-index: 1; }
 
-    .content { grid-area: content; }
+    .content { grid-area: content; z-index: 90; }
 
     .infoborder { grid-area: infoborder; }
 
@@ -379,16 +379,11 @@ export class RoomCard extends Card {
 
 
     //------------------------------------------------------------------
-    //corner alert
-    // this._addCard(".corner", 'cb-lcars-button-card', "corner",
-    //   lcars_cb_alert_elbow(this.em.redAlert, this.em.color2),
-    //   this.em.redAlert
-    // );
+
     this._addCard(".corner", "bubble-card", "corner", lcars_bubble_elbow(this.em.redAlert,{ top_left: 0, top_right: 0, bottom_right: 50, bottom_left: 0 }, { top: 0, right: 10, bottom: 30, left: 0 },"#cc0000",this.em.color2), this.em.redAlert);
     
     //------------------------------------------------------------------
     //corner side
-    // this._addCard(".side", 'cb-lcars-button-card', "side", lcars_cb_alert_side(this.em.redAlert, this.em.color2), this.em.redAlert);
     this._addCard(".side", "bubble-card", "side", lcars_bubble_elbow(this.em.redAlert,{ top_left: 0, top_right: 0, bottom_right: 0, bottom_left: 0 }, { top: 0, right: 10, bottom: 0, left: 0 },"#cc0000",this.em.color2), this.em.redAlert);
 
     //------------------------------------------------------------------

@@ -15,6 +15,75 @@ export function lcars_bubble_lozenge_button(entity, color = "coral", color_activ
 export function lcars_bubble_lozenge(entity, color = "coral", color_active = "red", state = true, height = "55px",fontSize="18px",) {
     return lcars_bubble_base(entity,color, color_active, state, height, fontSize, "");
 }
+export function lcars_bubble_cover_open(entity, color = "coral", color_active = "red", state = true, height = "55px",fontSize="18px",) {
+    let card = lcars_bubble_base(entity,color, color_active, state, height, fontSize,true,false,"30px 0px 0px 30px");
+    const action = {
+            action: "perform-action",
+            perform_action: "cover.open_cover",
+            target: {
+                entity_id: entity
+            }
+        };
+    return {
+        ...card,
+        show_state: false,
+        show_name: true,
+        name: "Auf",
+        button_action: {
+            ...action,
+            tap_action: action
+        },
+
+    };
+}
+export function lcars_bubble_cover_close(entity, color = "coral", color_active = "red", state = true, height = "55px",fontSize="18px",) {
+    let card = lcars_bubble_base(entity,color, color_active, state, height, fontSize,true,false,"0px 30px 30px 0px");
+    const action = {
+            action: "perform-action",
+            perform_action: "cover.close_cover",
+            target: {
+                entity_id: entity
+            }
+        };
+    return {
+        ...card,
+        show_state: false,
+        show_name: true,
+        name: "Zu",
+        button_action: {
+            ...action,
+            tap_action: action
+        },
+
+    };
+}
+export function lcars_bubble_cover_summer(entity, color = "coral", color_active = "red", state = true, height = "55px",fontSize="18px",) {
+    let card = lcars_bubble_base(entity,color, color_active, state, height, fontSize,true,false,"0px 30px 30px 0px");
+    const action = {
+            action: "perform-action",
+            perform_action: "cover.set_cover_position",
+            target: {
+                entity_id: entity
+            },
+            data: {
+                position: 13
+            }
+        };
+    return {
+        ...card,
+        show_state: false,
+        show_name: true,
+        name: "Sommer",
+        
+        button_action: {
+            ...action,
+            tap_action: action
+        },
+        
+
+    };
+
+}
 export function lcars_bubble_square(entity, color = "coral", color_active = "red", state = true, height = "55px",fontSize="18px",icon_bg_overwrite=null) {
     return lcars_bubble_base(entity,color, color_active, state, height, fontSize, false,false,"0px",true,37,icon_bg_overwrite);
 }

@@ -35,7 +35,6 @@ import './cards/lcars-floor.js';
 import './cards/lcars-room.js'; 
 import './cards/lcars-room-config.js'; 
 import './cards/lcars-room-all.js'; 
-import './cards/lcars-room-row.js'; 
 import './cards/lcars-room-stats.js'; 
 
 // Lade Core-Module

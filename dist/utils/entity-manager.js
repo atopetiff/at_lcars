@@ -301,6 +301,22 @@ export class Card extends HTMLElement {
       console.error("Error adding Card to selector", {selector:selector, id:id, msg:e})
     }
   }
+  _addHTMLCard(selector, html, config, id, track = true) {
+    try {
+      const card = this.querySelector(selector);
+     let cardEl = document.createElement("hui-history-graph-card","#graph");
+     card.appendChild(cardEl);
+     setTimeout(() => {
+      
+      cardEl.config(config);
+     }, 0);
+
+        
+      // }, 0);
+    } catch (e) {
+      console.error("Error adding Card to selector", {selector:selector, id:id, msg:e})
+    }
+  }
 
   setConfig(config) {
     // if (!config.entity) {

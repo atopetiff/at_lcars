@@ -2,8 +2,7 @@ import { lcars_bubble_info } from "../utils/at_lcars_bubble_info.js";
 import { scheduler } from "../utils/configs.js";
 import { entitiesIn } from "../utils/entity-filter.js";
 import { Card, EntityManager } from "../utils/entity-manager.js";
-import { lcars_bubble_lozenge, lcars_bubble_lozenge_button } from "../utils/lcars-buttons-bubble.js";
-import { lcars_switch, lcars_button, lcars_climate, lcars_cb_alert_elbow, lcars_cb_alert_side, lcars_cb_alert_btn, lcars_nav_btn, lcars_mini_graph, lcars_climate_bubble, lcars_info } from "../utils/lcars-buttons.js";
+import { lcars_bubble_square_nav } from "../utils/lcars-buttons-bubble.js";
 import { RoomCard } from "../utils/room.js";
 import { font, scrollbar } from "../utils/scrollbar.js";
 import { stats_batteries, stats_climate } from "../utils/stats.js";
@@ -17,7 +16,7 @@ class AtLcarsRoomStats extends RoomCard {
 
 
   set hass(hass) {
-
+    this._hass=hass;
     // Erstes Mal: nur speichern und initial rendern
     // //console.log("needs render", { has: !this._hass, config: !this._config });
     if (!this.em && !!this._config) {
@@ -67,6 +66,17 @@ class AtLcarsRoomStats extends RoomCard {
       flex-shrink:0;
       display: block;
     }
+      .content>.links{
+      display: flex;
+      flex-direction: row;
+        gap: 8px;
+      }
+      .content>.links>*{
+        flex-basis: 250px;
+        height: 45px;
+      
+      }
+    
 
     .content>.power>*{
       flex-basis: 300px;
@@ -83,6 +93,7 @@ class AtLcarsRoomStats extends RoomCard {
       <div class="corner"></div>
       <div class="actionborder"></div>
       <div class="content">
+      <div class="links"></div>
 
       </div>
       <div class="infoborder"></div>
@@ -143,11 +154,41 @@ class AtLcarsRoomStats extends RoomCard {
     
     // this._addCard(".scheduler", 'hui-history-graph-card', `scheduler`, config,"",false);
     
+    let hist ={
+      
+        type: "history-graph",
+        entities: {
+          entity: "climate.b_dining_trv",
+        },
+        title: "ölkm"
+};
+
+    
+      
     this._addCard(".content","plotly-graph","climate",
       stats_climate(this.em.roomClimate,this.em.roomTemperature, this.em.roomHumidity,this.em.roomTrvs, this.em.outsideSun.entity_id, this.em.outsideShadow.entity_id),
       this.em.roomTemperature,
       true
     );
+    // this._addHTMLCard(".content","hui-history-graph-card","climate",
+    //   hist,
+    //  "climate.b_dining_trv",
+    //   true
+    // );
+
+    // const content = this.querySelector('.content');
+    // const card = document.createElement('hui-history-graph-card');
+    // card.hass = this._hass;
+    // const cardConfig = {
+    //     type: 'tile',
+    //     entity: "climate.b_dining_trv",
+    //     vertical: false,
+    //     state_content: 'last_changed'
+    //   };
+    // card.setConfig(hist);
+    // content.appendChild(card);
+    
+
 
     const batteries = this.em.roomEntities.filter(e=>e.labels.includes("battery")).map(e=>e.entity_id)
     this._addCard(".content","plotly-graph","batteries",
@@ -155,11 +196,15 @@ class AtLcarsRoomStats extends RoomCard {
       this.em.roomTemperature,
       true
     );
+    const elements = [this.em.roomClimate,this.em.roomTemperature, this.em.roomHumidity,this.em.roomTrvs, this.em.outsideSun.entity_id, this.em.outsideShadow.entity_id];
+    let elmstring = elements.join('%2C');
+    
 
+        this._addCard(".links", 'bubble-card', `hist`, lcars_bubble_square_nav("/history?entity_id"+elmstring, "Climate", this.em.color1), null, false);
+        this._addCard(".links", 'bubble-card', `hist`, lcars_bubble_square_nav("/history?entity_id"+batteries.join('%2C'), "Batteries", this.em.color1), null, false);
     [
       ...this.em.roomInfos
     ].forEach(e => {
-      // this._addCard(".grid", 'cb-lcars-button-card', `grid${e.entity_id}`, lcars_info(e.entity_id, "#656565ff", "#e0e0e0ff", this.em.color1), e.entity_id);
             this._addCard(".grid", 'bubble-card', `grid${e.entity_id}`, lcars_bubble_info(e, this.em.color1, "#e0e0e0ff",true,true,20), e.entity_id);
     });
 
