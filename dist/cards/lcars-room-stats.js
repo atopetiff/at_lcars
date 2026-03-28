@@ -200,8 +200,8 @@ class AtLcarsRoomStats extends RoomCard {
     let elmstring = elements.join('%2C');
     
 
-        this._addCard(".links", 'bubble-card', `hist`, lcars_bubble_square_nav("/history?entity_id"+elmstring, "Climate", this.em.color1), null, false);
-        this._addCard(".links", 'bubble-card', `hist`, lcars_bubble_square_nav("/history?entity_id"+batteries.join('%2C'), "Batteries", this.em.color1), null, false);
+        this._addCard(".links", 'bubble-card', `hist`, lcars_bubble_square_nav("/history?entity_id="+elmstring, "Climate", this.em.color1), null, false);
+        this._addCard(".links", 'bubble-card', `hist`, lcars_bubble_square_nav("/history?entity_id="+batteries.join('%2C'), "Batteries", this.em.color1), null, false);
     [
       ...this.em.roomInfos
     ].forEach(e => {
