@@ -165,7 +165,8 @@ class AtLcarsDashboardStrategy {
     const floorViews = area_struct.inside.map(f=>{
       return createFloorView([{
         type: "custom:at-lcars-floor",
-        areas: f.areas
+        areas: f.areas,
+        basepath: base
       }], f.name, "floor-"+f.floor_id)
     });
     

@@ -1,113 +1,30 @@
+import { lcars_bubble_elbow } from "../utils/at_lacrs_bubble_elbow.js";
+import { Card, EntityManager } from "../utils/entity-manager.js";
 import { lcars_cb_alert_omni, lcars_footer_alert, lcars_footer_left_alert, lcars_footer_right_alert, lcars_top_left_alert, lcars_top_right_alert } from "../utils/lcars-borders.js";
+import { lcars_bubble_lozenge } from "../utils/lcars-buttons-bubble.js";
 import { lcars_button } from "../utils/lcars-buttons.js";
 import { font } from "../utils/scrollbar.js";
 //import { lcars_switch, lcars_button, lcars_climate, lcars_cover_open, lcars_cover_slider, lcars_cover_close, lcars_cover_summer } from "./lcars.js";
-class AtLcarsProtocols extends HTMLElement {
+class AtLcarsProtocols extends Card {
   constructor() {
     super();
-    this.old = null;
-    this.changeTracker = [];
-  }
-  setConfig(config) {
-    // if (!config.entity) {
-    //   throw new Error("You need to define an entity");
-    // }
-    //console.log(config);
-    this._config = config;
-    this.config = config;
-    this._hass = null;
-    this._lastStates = {};
-  }
-
-  _trackedEntityIds() {
-    // hier alle relevanten entity_ids eintragen/ableiten
-    // z.B. einzelne ID:
-    return [
-      //this._config.entity
-    ];
-
-    // oder mehrere:
-    // return this._config.entities || [];
-  }
-
-  _updateTrackedStates() {
-    this._lastStates = {};
-    const ids = this._trackedEntityIds();
-    for (const id of ids) {
-      this._lastStates[id] = this._hass.states[id];
-    }
-  }
-
-  _elementHasRelevantChange(newHass, id) {
-    const oldState = this._lastStates[id];
-    const newState = newHass.states[id];
-    //console.log("states", { old: oldState, new: newState });
-    if (!oldState && newState) return true;
-    if (oldState && !newState) return true;
-
-    // Vergleich: hier kannst du schärfer/granularer werden
-    if (
-      oldState.state !== newState.state ||
-      oldState.last_changed !== newState.last_changed ||
-      oldState.attributes?.current_position !== newState.attributes?.current_position
-    ) {
-      return true;
-    }
-    return false;
 
   }
-
-  changeDetection(newHass) {
-    this.changeTracker.forEach(ct => {
-      ct.element.hass = this._hass;
-      // if(this._elementHasRelevantChange(newHass,ct.id)){
-      // }
-    })
-  }
-  _hasRelevantChange(newHass) {
-    const ids = this._trackedEntityIds();
-    for (const id of ids) {
-      const oldState = this._lastStates[id];
-      const newState = newHass.states[id];
-      //console.log("states", { old: oldState, new: newState });
-      if (!oldState && newState) return true;
-      if (oldState && !newState) return true;
-      if (!oldState && !newState) continue;
-
-      // Vergleich: hier kannst du schärfer/granularer werden
-      if (
-        oldState.state !== newState.state ||
-        oldState.last_changed !== newState.last_changed ||
-        oldState.attributes?.current_position !== newState.attributes?.current_position
-      ) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-
   set hass(hass) {
-    // Erstes Mal: nur speichern und initial rendern
-    // //console.log("needs render", { has: !this._hass, config: !this._config });
-    if (!this._hass && !!this._config) {
-      this._hass = hass;
-      this._updateTrackedStates();
-      this._render();
-      return;
+  
+      // Erstes Mal: nur speichern und initial rendern
+      // //console.log("needs render", { has: !this._hass, config: !this._config });
+      if (!this.em && !!this._config) {
+        //console.log("inital render floor");
+        this.em = new EntityManager(hass);
+  
+        this._render();
+  
+        return;
+      }
+      this.em.updateHass(hass);
+  
     }
-    // //console.log("hass",hass.entities["switch.office_media"]);
-    const needsRender = this._hasRelevantChange(hass);
-    this.changeDetection(hass);
-    this._hass = hass;
-    // //console.log("needs render", { needsRender: needsRender, config: !this._config });
-    if (needsRender && !this._config == false) {
-      this._updateTrackedStates();
-
-      //this._render();
-    }
-
-  }
 
   _styles() {
     const rc = 'lcars_prot';
@@ -142,6 +59,7 @@ class AtLcarsProtocols extends HTMLElement {
       }
       .${rc}>.header { 
         grid-area: header;
+        z-index:0;
         }
       .${rc}>.border { 
         grid-area: border;
@@ -155,6 +73,7 @@ class AtLcarsProtocols extends HTMLElement {
           gap: 8px;
           overflow: auto;
           max-height: 80vh;
+          z-index: 90;
 
         }
         .${rc}>.content>* {
@@ -180,15 +99,7 @@ class AtLcarsProtocols extends HTMLElement {
 
 
 
-  _addCard(selector, type, name, config, id) {
-    const card = this.querySelector(selector);
-    const fullname = `${name}${id}`;
-    this.changeTracker.push({ id: id, name: fullname, element: document.createElement(type, name) });
-    const newElement = this.changeTracker.find(e => e.name == fullname)
-    newElement.element.setConfig(config);
-    card.appendChild(this.changeTracker.find(e => e.name == fullname).element);
-    newElement.element.hass = this._hass;
-  }
+ 
 
   _render() {
     //console.log("lcars protocols rerender");
@@ -202,14 +113,21 @@ class AtLcarsProtocols extends HTMLElement {
 
     //console.log(this._config.protocols);
 
-    this._addCard(".header", "cb-lcars-elbow-card", "header", lcars_cb_alert_omni("cb-lcars-header-right", { top_left: 0, top_right: 30, bottom_right: 0, bottom_left: 0 }, { top: 8, right: 30, bottom: 0, left: 0 }, 'input_boolean.red_alert', "goldenrod"), 'input_boolean.red_alert');
-    this._addCard(".border", "cb-lcars-elbow-card", "border", lcars_cb_alert_omni("cb-lcars-header-right", { top_left: 0, top_right: 0, bottom_right: 0, bottom_left: 0 }, { top: 0, right: 30, bottom: 0, left: 0 }, 'input_boolean.red_alert', "goldenrod"), 'input_boolean.red_alert');
-
+    // this._addCard(".header", "cb-lcars-elbow-card", "header", lcars_cb_alert_omni("cb-lcars-header-right", { top_left: 0, top_right: 30, bottom_right: 0, bottom_left: 0 }, { top: 8, right: 30, bottom: 0, left: 0 }, 'input_boolean.red_alert', "goldenrod"), 'input_boolean.red_alert');
+    this._addCard(".header", "bubble-card", "header", lcars_bubble_elbow(this.em.redAlert,{ top_left: 0, top_right: 30, bottom_right: 0, bottom_left: 0 }, { top: 8, right: 30, bottom: 0, left: 0 },"#cc0000",this.em.color2), this.em.redAlert);
+    
+    // this._addCard(".border", "cb-lcars-elbow-card", "border", lcars_cb_alert_omni("cb-lcars-header-right", { top_left: 0, top_right: 0, bottom_right: 0, bottom_left: 0 }, { top: 0, right: 30, bottom: 0, left: 0 }, 'input_boolean.red_alert', "goldenrod"), 'input_boolean.red_alert');
+    this._addCard(".border", "bubble-card", "border", lcars_bubble_elbow(this.em.redAlert,{ top_left: 0, top_right: 0, bottom_right: 0, bottom_left: 0 }, { top: 0, right: 30, bottom: 0, left: 0 },"#cc0000",this.em.color2), this.em.redAlert);
+    
 
     [
       ...this._config.protocols
     ].forEach(e => {
-      this._addCard(".content", "cb-lcars-button-card", "prot", lcars_button(e, "yellow"), e);
+      // this._addCard(".content", "cb-lcars-button-card", "prot", lcars_button(e, "yellow"), e);
+      this._addCard(".content", 'bubble-card', `prot`,
+              lcars_bubble_lozenge(e, this.em.color3, this.em.color1, false, "45px", "14px"),
+              e
+            );
 
     });
     // //------------------------------------------------------------------

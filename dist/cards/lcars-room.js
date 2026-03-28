@@ -1,3 +1,4 @@
+import { lcars_bubble_info } from "../utils/at_lcars_bubble_info.js";
 import { entitiesIn } from "../utils/entity-filter.js";
 import { Card, EntityManager } from "../utils/entity-manager.js";
 import { lcars_bubble_base, lcars_bubble_lozenge } from "../utils/lcars-buttons-bubble.js";
@@ -12,7 +13,7 @@ class AtLcarsRoom extends RoomCard {
 
 
   set hass(hass) {
-
+    console.log(hass);
     // Erstes Mal: nur speichern und initial rendern
     // //console.log("needs render", { has: !this._hass, config: !this._config });
     if (!this.em && !!this._config) {
@@ -140,14 +141,16 @@ class AtLcarsRoom extends RoomCard {
       ".graph",
       'mini-graph-card',
       `graph`,
-      lcars_mini_graph(this.em.roomClimate, this.em.roomTrvs, this.em.outsideShadow, this.em.outsideSun),
+      lcars_mini_graph(this.em.roomClimate, this.em.roomTrvs, this.em.outsideShadow.entity_id, this.em.outsideSun.entity_id),
       this.em.roomClimate
     );
 }
+  console.log("roominfos", this.em.roomInfos);
     [
       ...this.em.roomInfos
     ].forEach(e => {
-      this._addCard(".grid", 'cb-lcars-button-card', `grid${e}`, lcars_info(e, "#656565ff", "#e0e0e0ff", this.em.color1), e);
+      // this._addCard(".grid", 'cb-lcars-button-card', `grid${e.entity_id}`, lcars_info(e.entity_id, "#656565ff", "#e0e0e0ff", this.em.color1), e.entity_id);
+      this._addCard(".grid", 'bubble-card', `grid${e.entity_id}`, lcars_bubble_info(e, this.em.color1, "#e0e0e0ff",true,true,20), e.entity_id);
     });
 
 

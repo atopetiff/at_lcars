@@ -1,3 +1,4 @@
+import { lcars_bubble_info } from "../utils/at_lcars_bubble_info.js";
 import { EntityManager } from "../utils/entity-manager.js";
 import { lcars_footer_alert, lcars_footer_left_alert, lcars_cb_alert_omni, lcars_footer_right_alert, lcars_top_left_alert, lcars_top_right_alert } from "../utils/lcars-borders.js";
 import { lcars_floor_plan_tempnav, lcars_floor_plan_window, lcars_floor_plan_humidity, lcars_floor_row_window_left, lcars_floor_row_windownav, lcars_floor_row_window_right, lcars_room_row_info_temp, lcars_room_row_info_humidity, lcars_switch, lcars_climate, lcars_climate_bubble, lcars_cover_bubble } from "../utils/lcars-buttons.js";
@@ -161,9 +162,10 @@ class AtLcarsRoomRow extends HTMLElement {
     this._addCard(".window_left", "cb-lcars-button-card", "wl", lcars_floor_row_window_left(this.em.roomWindow, "fuchsia", "#cc0000"), this.em.roomWindow);
     this._addCard(".window_right", "cb-lcars-button-card", "wr", lcars_floor_row_window_right(this.em.roomWindow, "fuchsia", "#cc0000"), this.em.roomWindow);
     this._addCard(".link", "cb-lcars-button-card", "link", lcars_floor_row_windownav(this.em.roomWindow, this.em.area.name, this.em.area.area_id, this.em.area.icon, "/at-lcars/" + this.em.area.area_id + "?kiosk", this.em.color3, "#cc0000"), this.em.roomWindow);
-    this._addCard(".info", "cb-lcars-button-card", "infotemp", lcars_room_row_info_temp(this.em.roomTemperature), this.em.roomTemperature);
+    // this._addCard(".info", "cb-lcars-button-card", "infotemp", lcars_room_row_info_temp(this.em.roomTemperature), this.em.roomTemperature);
+    this._addCard(".info", 'bubble-card', `infotemp`, lcars_bubble_info(this.em.roomTemperature_entity, "white", "#e0e0e0ff",false,true,20), this.em.roomTemperature_entity.entity_id);
     this._addCard(".info", "cb-lcars-button-card", "infotemp", lcars_room_row_info_humidity(this.em.roomHumidity), this.em.roomHumidity);
-
+// this._addCard(".grid", 'cb-lcars-button-card', `grid${e.entity_id}`, lcars_info(e.entity_id, "#656565ff", "#e0e0e0ff", this.em.color1), e.entity_id);
     this.em.roomLights.forEach(e => {
       this._addCard(
         ".lights",

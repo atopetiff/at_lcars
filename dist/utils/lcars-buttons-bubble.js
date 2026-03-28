@@ -15,8 +15,8 @@ export function lcars_bubble_lozenge_button(entity, color = "coral", color_activ
 export function lcars_bubble_lozenge(entity, color = "coral", color_active = "red", state = true, height = "55px",fontSize="18px",) {
     return lcars_bubble_base(entity,color, color_active, state, height, fontSize, "");
 }
-export function lcars_bubble_square(entity, color = "coral", color_active = "red", state = true, height = "55px",fontSize="18px") {
-    return lcars_bubble_base(entity,color, color_active, state, height, fontSize, false,false,"0px");
+export function lcars_bubble_square(entity, color = "coral", color_active = "red", state = true, height = "55px",fontSize="18px",icon_bg_overwrite=null) {
+    return lcars_bubble_base(entity,color, color_active, state, height, fontSize, false,false,"0px",true,37,icon_bg_overwrite);
 }
 export function lcars_bubble_square_nav(path, name, color = "coral", color_active = "red", state = false, height = "55px",fontSize="18px") {
     return {
@@ -32,8 +32,8 @@ export function lcars_bubble_square_nav(path, name, color = "coral", color_activ
         }
     };
 }
-export function lcars_bubble_base(entity, color = "coral", color_active = "red", state = true, height = "55px", fontSize="18px", leftRound=true,rightRound=true,borderRadius="",showIcon=true) {
-
+export function lcars_bubble_base(entity, color = "coral", color_active = "red", state = true, height = "55px", fontSize="18px", leftRound=true,rightRound=true,borderRadius="",showIcon=true, iconWidth=40, icon_bg_overwrite=null) {
+let icon_bg = icon_bg_overwrite? "${state == 'on' ? '"+color_active+"' : '"+icon_bg_overwrite+"'}":color_active;
     var card = 
      {
         type: "custom:bubble-card",
@@ -50,6 +50,9 @@ export function lcars_bubble_base(entity, color = "coral", color_active = "red",
         show_state: false,
         show_icon: showIcon,
         styles: `
+        :host{
+            height: 100%;
+        }
         .type-custom-bubble-card, .bubble-container {
     height: 100% !important;
 }
@@ -59,16 +62,19 @@ export function lcars_bubble_base(entity, color = "coral", color_active = "red",
         font-weight: bold;
         --bubble-button-main-background-color: ${color};
         --bubble-sub-button-background-color: violet;
+
         --primary-text-color: black;
         --ha-font-family-body: 'Antonio', Arial, sans-serif;
-        --bubble-button-icon-background-color: ${color_active};
+        --bubble-button-icon-background-color: ${icon_bg};
+        
         text-transform: uppercase;
         --row-height: ${height};
-        height: 100%;
+        height: 100% !important;
         ${borderRadius==""?"":`--bubble-border-radius: ${borderRadius};`};
+        box-sizing: border-box;
 
     }
-    .bubble-icon-container {
+    .bubble-icon-container, .large.bubble-icon-container {
         border-right: 6px solid black;
         border-top-right-radius: 0px;
         border-bottom-right-radius: 0px;
@@ -78,8 +84,8 @@ export function lcars_bubble_base(entity, color = "coral", color_active = "red",
         top: 0;
         height: 100%;
         padding-left: 4px;
-        width: 35px;
-    min-width: 35px !important;
+        width: ${iconWidth}px;
+    min-width: ${iconWidth}px !important;
     min-height: unset !important;
     }
     .bubble-main-icon{

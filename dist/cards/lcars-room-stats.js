@@ -1,3 +1,4 @@
+import { lcars_bubble_info } from "../utils/at_lcars_bubble_info.js";
 import { scheduler } from "../utils/configs.js";
 import { entitiesIn } from "../utils/entity-filter.js";
 import { Card, EntityManager } from "../utils/entity-manager.js";
@@ -143,7 +144,7 @@ class AtLcarsRoomStats extends RoomCard {
     // this._addCard(".scheduler", 'hui-history-graph-card', `scheduler`, config,"",false);
     
     this._addCard(".content","plotly-graph","climate",
-      stats_climate(this.em.roomClimate,this.em.roomTemperature, this.em.roomHumidity,this.em.roomTrvs, this.em.outsideSun, this.em.outsideShadow),
+      stats_climate(this.em.roomClimate,this.em.roomTemperature, this.em.roomHumidity,this.em.roomTrvs, this.em.outsideSun.entity_id, this.em.outsideShadow.entity_id),
       this.em.roomTemperature,
       true
     );
@@ -158,7 +159,8 @@ class AtLcarsRoomStats extends RoomCard {
     [
       ...this.em.roomInfos
     ].forEach(e => {
-      this._addCard(".grid", 'cb-lcars-button-card', `grid${e}`, lcars_info(e, "#656565ff", "#e0e0e0ff", this.em.color1), e);
+      // this._addCard(".grid", 'cb-lcars-button-card', `grid${e.entity_id}`, lcars_info(e.entity_id, "#656565ff", "#e0e0e0ff", this.em.color1), e.entity_id);
+            this._addCard(".grid", 'bubble-card', `grid${e.entity_id}`, lcars_bubble_info(e, this.em.color1, "#e0e0e0ff",true,true,20), e.entity_id);
     });
 
 

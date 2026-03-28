@@ -1,114 +1,37 @@
+import { lcars_bubble_elbow } from "../utils/at_lacrs_bubble_elbow.js";
+import { Card, EntityManager } from "../utils/entity-manager.js";
 import { lcars_footer_alert, lcars_footer_left_alert,  lcars_cb_alert_omni, lcars_footer_right_alert, lcars_top_left_alert, lcars_top_right_alert } from "../utils/lcars-borders.js";
+import { lcars_bubble_square_nav } from "../utils/lcars-buttons-bubble.js";
 import { lcars_floor_plan_tempnav } from "../utils/lcars-buttons.js";
 import { font } from "../utils/scrollbar.js";
 
 //import { lcars_switch, lcars_button, lcars_climate, lcars_cover_open, lcars_cover_slider, lcars_cover_close, lcars_cover_summer } from "./lcars.js";
-class AtLcarsHouse extends HTMLElement {
+class AtLcarsHouse extends Card {
   constructor() {
     super();
-    this.old = null;
-    this.changeTracker = [];
   }
-  setConfig(config) {
-    // if (!config.entity) {
-    //   throw new Error("You need to define an entity");
-    // }
-    //console.log(config);
-    this._config = config;
-    this.config = config;
-    this._hass = null;
-    this._lastStates = {};
-  }
+set hass(hass) {
 
-  _trackedEntityIds() {
-    // hier alle relevanten entity_ids eintragen/ableiten
-    // z.B. einzelne ID:
-    return [
-      //this._config.entity
-    ];
-
-    // oder mehrere:
-    // return this._config.entities || [];
-  }
-
-  _updateTrackedStates() {
-    this._lastStates = {};
-    const ids = this._trackedEntityIds();
-    for (const id of ids) {
-      this._lastStates[id] = this._hass.states[id];
-    }
-  }
-
-  _elementHasRelevantChange(newHass, id) {
-    const oldState = this._lastStates[id];
-    const newState = newHass.states[id];
-    //console.log("states", { old: oldState, new: newState });
-    if (!oldState && newState) return true;
-    if (oldState && !newState) return true;
-
-    // Vergleich: hier kannst du schärfer/granularer werden
-    if (
-      oldState.state !== newState.state ||
-      oldState.last_changed !== newState.last_changed ||
-      oldState.attributes?.current_position !== newState.attributes?.current_position
-    ) {
-      return true;
-    }
-    return false;
-
-  }
-
-  changeDetection(newHass) {
-    this.changeTracker.forEach(ct => {
-      ct.element.hass = this._hass;
-      // if(this._elementHasRelevantChange(newHass,ct.id)){
-      // }
-    })
-  }
-  _hasRelevantChange(newHass) {
-    const ids = this._trackedEntityIds();
-    for (const id of ids) {
-      const oldState = this._lastStates[id];
-      const newState = newHass.states[id];
-      //console.log("states", { old: oldState, new: newState });
-      if (!oldState && newState) return true;
-      if (oldState && !newState) return true;
-      if (!oldState && !newState) continue;
-
-      // Vergleich: hier kannst du schärfer/granularer werden
-      if (
-        oldState.state !== newState.state ||
-        oldState.last_changed !== newState.last_changed ||
-        oldState.attributes?.current_position !== newState.attributes?.current_position
-      ) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-
-  set hass(hass) {
     // Erstes Mal: nur speichern und initial rendern
     // //console.log("needs render", { has: !this._hass, config: !this._config });
-    if (!this._hass && !!this._config) {
-      this._hass = hass;
-      this._updateTrackedStates();
+    if (!this.em && !!this._config) {
+      //console.log("inital render floor");
+      this.em = new EntityManager(hass);
+
+      // this.groupEntities();
       this._render();
+
       return;
     }
-    // //console.log("hass",hass.entities["switch.office_media"]);
-    const needsRender = this._hasRelevantChange(hass);
-    this.changeDetection(hass);
-    this._hass = hass;
-    // //console.log("needs render", { needsRender: needsRender, config: !this._config });
-    if (needsRender && !this._config == false) {
-      this._updateTrackedStates();
-      
-      //this._render();
-    }
+    this.em.updateHass(hass);
 
   }
+
+
+
+ 
+
+
 
   _styles() {
     const rc = 'lcars_house';
@@ -198,9 +121,9 @@ class AtLcarsHouse extends HTMLElement {
         filter: drop-shadow(0px 6px 0px black) drop-shadow(0px -6px 0px black);
         }
       .${rc}>.content>*{
-        border: 2px solid white;
+        border: none;
         box-sizing: border-box;
-        border-radius: 4px;
+        border-radius: 0px;
         background: black;
         
         }
@@ -284,7 +207,7 @@ class AtLcarsHouse extends HTMLElement {
     .lcars_house>.content{
         grid-template-columns: ${gridcols}; 
         grid-template-rows: ${gridRows}; 
-        gap: 0px 0px; 
+        gap: 8px 8px; 
         grid-template-areas: 
           ${templateareas}; 
     }
@@ -337,15 +260,6 @@ class AtLcarsHouse extends HTMLElement {
 
   
 
-  _addCard(selector, type, name, config, id) {
-    const card = this.querySelector(selector);
-    const fullname =`${name}${id}`;
-    this.changeTracker.push({id:id,name:fullname,element:document.createElement(type, name)});
-    const newElement = this.changeTracker.find(e=>e.name==fullname)
-    newElement.element.setConfig(config);
-    card.appendChild(this.changeTracker.find(e=>e.name==fullname).element);
-    newElement.element.hass = this._hass;
-  }
 
   _render() {
     //console.log("lcars house rerender");
@@ -366,15 +280,22 @@ class AtLcarsHouse extends HTMLElement {
     // this._addCard(".fle", "cb-lcars-elbow-card", "fle", lcars_footer_left_alert('input_boolean.red_alert', "goldenrod"),'input_boolean.red_alert');
     // this._addCard(".flbar", "cb-lcars-elbow-card", "flbar", lcars_footer_alert('input_boolean.red_alert', "goldenrod"),'input_boolean.red_alert');
     this._addCard(".actions", "at-lcars-protocols", "actions", {type: "custom:at-lcars-protocols", protocols: this._config.protocols},'input_boolean.yellow_alert');
-    this._addCard(".topleft", "cb-lcars-elbow-card", "hl", lcars_cb_alert_omni("cb-lcars-header-right", { top_left: 0, top_right: 30, bottom_right: 0, bottom_left: 0 }, { top: 20, right: 8, bottom: 0, left: 0 }, 'input_boolean.red_alert', "goldenrod"), 'input_boolean.red_alert');
-    this._addCard(".topright", "cb-lcars-elbow-card", "hr", lcars_top_right_alert('input_boolean.red_alert', "goldenrod"),'input_boolean.red_alert');
-    this._addCard(".bottomright", "cb-lcars-elbow-card", "fr", lcars_footer_right_alert('input_boolean.red_alert', "goldenrod"),'input_boolean.red_alert');
+    // this._addCard(".topleft", "cb-lcars-elbow-card", "hl", lcars_cb_alert_omni("cb-lcars-header-right", { top_left: 0, top_right: 30, bottom_right: 0, bottom_left: 0 }, { top: 20, right: 8, bottom: 0, left: 0 }, 'input_boolean.red_alert', "goldenrod"), 'input_boolean.red_alert');
+    this._addCard(".topleft", "bubble-card", "corner", lcars_bubble_elbow(this.em.redAlert,{ top_left: 0, top_right: 30, bottom_right: 0, bottom_left: 0 }, { top: 20, right: 8, bottom: 0, left: 0 },"#cc0000",this.em.color2), this.em.redAlert);
+    
+    // this._addCard(".topright", "cb-lcars-elbow-card", "hr", lcars_top_right_alert('input_boolean.red_alert', "goldenrod"),'input_boolean.red_alert');
+    this._addCard(".topright", "bubble-card", "hr", lcars_bubble_elbow(this.em.redAlert,{ top_left: 30, top_right: 0, bottom_right: 0, bottom_left: 0 }, { top: 20, right: 0, bottom: 0, left: 63 },"#cc0000",this.em.color2), this.em.redAlert);
+
+    // this._addCard(".bottomright", "cb-lcars-elbow-card", "fr", lcars_footer_right_alert('input_boolean.red_alert', "goldenrod"),'input_boolean.red_alert');
+    this._addCard(".bottomright", "bubble-card", "fr", lcars_bubble_elbow(this.em.redAlert,{ top_left: 0, top_right: 0, bottom_right: 0, bottom_left: 30 }, { top: 0, right: 0, bottom: 8, left: 63 },"#cc0000",this.em.color2), this.em.redAlert);
     
     this._config?.floorGroups
     // .filter(f=>f.group!="floorgroup_config")
     .forEach(f=>{
     
-          this._addCard(`.${f.floor_id}`,"cb-lcars-button-card",f.floor_id,lcars_floor_plan_tempnav(null,f.name,this._config.basepath+"/floor-"+f.floor_id),null);
+          // this._addCard(`.${f.floor_id}`,"cb-lcars-button-card",f.floor_id,lcars_floor_plan_tempnav(null,f.name,this._config.basepath+"/floor-"+f.floor_id),null);
+          this._addCard(`.${f.floor_id}`, "bubble-card", f.floor_id, lcars_bubble_square_nav(this._config.basepath+"/floor-"+f.floor_id, f.name, this.em.color3), null,false);
+          
         });
     // this._addCard(".bottomleft", "cb-lcars-elbow-card", "fle", lcars_footer_left_alert('input_boolean.red_alert', "goldenrod"),'input_boolean.red_alert');
     

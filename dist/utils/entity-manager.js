@@ -31,8 +31,8 @@ export class EntityManager {
     this.setColors();
     this.redAlert=this.entities.find(e=>e.labels.includes("redalert"))?.entity_id;
     this.yellowAlert=this.entities.find(e=>e.labels.includes("yellowalert"))?.entity_id;
-    this.outsideShadow=this.entities.find(e=>e.labels.includes("outside_shadow"))?.entity_id;
-    this.outsideSun=this.entities.find(e=>e.labels.includes("outside_sun"))?.entity_id;
+    this.outsideShadow=this.entities.find(e=>e.labels.includes("outside_shadow"));
+    this.outsideSun=this.entities.find(e=>e.labels.includes("outside_sun"));
 
 
 
@@ -193,7 +193,9 @@ export class EntityManager {
   roomWindow = null;
   roomClimate = null;
   roomTemperature = null;
+  roomTemperatureEntity = null;
   roomHumidity = null;
+  roomHumidityEntity = null;
   roomLights = [];
   roomTrvs = [];
   roomPowers = [];
@@ -225,7 +227,9 @@ export class EntityManager {
     const filtered = this.filterForArea(area_id);
     this.area = filtered.area;
     this.roomTemperature = filtered.temperature;
+    this.roomTemperatureEntity = filtered.temperature_entity;
     this.roomHumidity = filtered.humidity;
+    this.roomHumidityEntity = filtered.humidity_entity;
     this.roomDevices = filtered.devices;
     this.roomEntities = filtered.entities;
     this.roomWindow = filtered.window;
@@ -258,7 +262,9 @@ export class EntityManager {
         color4: colors.color4
       },
       temperature: this.hass.areas[area_id].temperature_entity_id,
+      temperature_entity: roomEntities.find(e => e.entity_id==this.hass.areas[area_id].temperature_entity_id),
       humidity: this.hass.areas[area_id].humidity_entity_id,
+      humidity_entity: roomEntities.find(e => e.entity_id==this.hass.areas[area_id].humidity_entity_id),
       devices: roomDevices,
       entities: roomEntities,
       window: roomEntities.find(e => e.labels.includes("fenster"))?.entity_id,
@@ -269,8 +275,8 @@ export class EntityManager {
       trvs: roomEntities.filter(e => e.labels.includes("heizung")).map(e => e.entity_id),
       powerToggles: roomEntities.filter(e => e.labels.includes("powertoggle")&&e.labels.includes("licht")==false).map(e => e.entity_id),
       info: [
-        ...everyroom.filter(e=>e.labels.includes("info")).map(e=>e.entity_id),
-        ...roomEntities.filter(e=>e.labels.includes("info")).map(e=>e.entity_id)
+        ...everyroom.filter(e=>e.labels.includes("info")),
+        ...roomEntities.filter(e=>e.labels.includes("info"))
       ]
     };
   }
