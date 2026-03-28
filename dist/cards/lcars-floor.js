@@ -486,7 +486,7 @@ class AtLcarsFloor extends Card {
       if(!!a.temperature_entity_id){
         this._addCard(`#${a.area_id}info`, 'bubble-card', `#${a.area_id}info_temp`, lcars_bubble_info(a.entities.find(e=>e.entity_id==a.temperature_entity_id), "white", "#e0e0e0ff",false,true,20), a.temperature_entity_id);
       }
-      if(!!a.temperature_entity_id){
+      if(!!a.humidity_entity_id){
         this._addCard(`#${a.area_id}info`, 'bubble-card', `#${a.area_id}info_temp`, lcars_bubble_info(a.entities.find(e=>e.entity_id==a.humidity_entity_id), "white", "#e0e0e0ff",false,true,20), a.humidity_entity_id);
       }
       [
@@ -530,6 +530,7 @@ class AtLcarsFloor extends Card {
       this.em.outsideShadow,
       this.em.outsideSun
     ].filter(e=>!!e).forEach(e => {
+        
         this._addCard(`.out-temp`, 'bubble-card', `out-temp${e.entity_id}`, lcars_bubble_info(e, "white", "#e0e0e0ff",false,true,20), e.entity_id);
 
 
