@@ -116,7 +116,7 @@ set hass(hass) {
           ".  treppe garage"; 
         gap: 4px;
         padding: 16px;
-        filter: drop-shadow(0px 6px 0px black) drop-shadow(0px -6px 0px black);
+        filter: drop-shadow(0px 6px 0px black) drop-shadow(0px -6px 0px black) drop-shadow(6px 0px 0px black)  drop-shadow(-6px 0px 0px black);
         }
       .${rc}>.content>*{
         border: none;

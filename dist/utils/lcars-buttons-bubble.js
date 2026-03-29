@@ -101,6 +101,43 @@ export function lcars_bubble_square_nav(path, name, color = "coral", color_activ
         }
     };
 }
+export function lcars_bubble_square_nav_window(window,path, name, color = "coral", color_active = "red", state = false, height = "55px",fontSize="18px",iconWidth=37,icon_bg_overwrite=null, iconOverwrite=null) {
+    let card ={
+        ...lcars_bubble_base(window,color, color_active, state, height, fontSize,false,false,"0px",true,iconWidth,icon_bg_overwrite),
+        button_type: "name",
+        name: name,
+        show_icon: true,
+        scrolling_effect: false,
+        button_action:{
+            tap_action: {
+                action: "navigate",
+                navigation_path: path
+            }
+        }
+    };
+    if (iconOverwrite) {
+        card = {
+            ...card,
+            icon: iconOverwrite,
+            styles: `
+                ${card.styles}
+                .bubble-name-container {
+   
+           
+    }
+    .bubble-name {
+    
+    align-items: flex-end;
+        width: 100%;
+        height: auto !important;
+        text-align: right;
+    }
+            `
+        }
+    }
+    
+    return card;
+}
 export function lcars_bubble_base(entity, color = "coral", color_active = "red", state = true, height = "55px", fontSize="18px", leftRound=true,rightRound=true,borderRadius="",showIcon=true, iconWidth=40, icon_bg_overwrite=null) {
 let icon_bg = icon_bg_overwrite? "${state == 'on' ? '"+color_active+"' : '"+icon_bg_overwrite+"'}":color_active;
     var card = 
@@ -118,6 +155,7 @@ let icon_bg = icon_bg_overwrite? "${state == 'on' ? '"+color_active+"' : '"+icon
         use_accent_color: true,
         show_state: false,
         show_icon: showIcon,
+
         styles: `
         :host{
             height: 100%;
@@ -167,17 +205,25 @@ let icon_bg = icon_bg_overwrite? "${state == 'on' ? '"+color_active+"' : '"+icon
 
     .bubble-name-container {
     margin: ${showIcon?"0px 24px 0px 52px":"0 4px 4px 4px"};
+    margin: 0px;
     height: 80%;
     align-items: flex-end;
     justify-content: flex-end;
     font-size: 30px;
-
+            max-width: calc(100% - ${showIcon==true?iconWidth+4:0}px);
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    left: ${showIcon==true?iconWidth+4:0}px;
     }
     .bubble-name {
     font-size: ${fontSize};
         font-weight: 600;
     font-family: 'Antonio', Arial, sans-serif;
     align-items: flex-end;
+        
+        text-align: right;
+        padding-right: ${rightRound==true?20:4}px;
+        padding-bottom: 4px;
     }
     `
 

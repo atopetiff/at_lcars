@@ -3,7 +3,7 @@ import { lcars_bubble_info } from "../utils/at_lcars_bubble_info.js";
 
 import { Card, EntityManager } from "../utils/entity-manager.js";
 
-import { lcars_bubble_lozenge, lcars_bubble_square, lcars_bubble_square_nav } from "../utils/lcars-buttons-bubble.js";
+import { lcars_bubble_lozenge, lcars_bubble_square, lcars_bubble_square_nav, lcars_bubble_square_nav_window } from "../utils/lcars-buttons-bubble.js";
 import {  lcars_climate_bubble, lcars_cover_bubble } from "../utils/at_lcars_bubble_climate.js";
 import { font, scrollbar } from "../utils/scrollbar.js";
 
@@ -471,16 +471,16 @@ class AtLcarsFloor extends Card {
 
       if(a.window_entity_id){
 
-        this._addCard(`#${a.area_id}window_left`, "bubble-card", `#${a.area_id}window_left`, lcars_bubble_elbow(a.window_entity_id,{ top_left: 20, top_right: 0, bottom_right: 0, bottom_left: 20 }, { top: 0, right: 20, bottom: 0, left: 0 },"#cc0000","black"), this.tabIndex.window_entity_id);
-        this._addCard(`#${a.area_id}window_right`, "bubble-card", `#${a.area_id}window_right`, lcars_bubble_elbow(a.window_entity_id,{ top_left: 0, top_right: 20, bottom_right: 20, bottom_left: 0 }, { top: 0, right: 20, bottom: 0, left: 0 },"#cc0000","black"), this.tabIndex.window_entity_id);
+        this._addCard(`#${a.area_id}window_left`, "bubble-card", `#${a.area_id}window_left`, lcars_bubble_elbow(a.window_entity_id,{ top_left: 20, top_right: 0, bottom_right: 0, bottom_left: 20 }, { top: 0, right: 20, bottom: 0, left: 0 },"#cc0000","black"), a.window_entity_id);
+        this._addCard(`#${a.area_id}window_right`, "bubble-card", `#${a.area_id}window_right`, lcars_bubble_elbow(a.window_entity_id,{ top_left: 0, top_right: 20, bottom_right: 20, bottom_left: 0 }, { top: 0, right: 20, bottom: 0, left: 0 },"#cc0000","black"), a.window_entity_id);
       }
       // else{
 
       //   this._addCard(`#${a.area_id}window_left`, "bubble-card", `#${a.area_id}window_left`, lcars_bubble_elbow(null,{ top_left: 20, top_right: 0, bottom_right: 0, bottom_left: 20 }, { top: 0, right: 20, bottom: 0, left: 0 },"#cc0000","grey"), null,false);
       //   this._addCard(`#${a.area_id}window_right`, "bubble-card", `#${a.area_id}window_right`, lcars_bubble_elbow(null,{ top_left: 0, top_right: 20, bottom_right: 20, bottom_left: 0 }, { top: 0, right: 20, bottom: 0, left: 0 },"#cc0000","grey"), null,false);
       // }
-
-      this._addCard(`#${a.area_id}link`, "bubble-card", `#${a.area_id}link`, lcars_bubble_square_nav(this._config.basepath +"/"+ a.area_id , a.area_id, a.color1), a.window_entity_id);
+      console.log(a);
+      this._addCard(`#${a.area_id}link`, "bubble-card", `#${a.area_id}link`, lcars_bubble_square_nav_window(a.window_entity_id,this._config.basepath +"/"+ a.area_id , a.area_id, a.color1,"#cc0000",false,"55px","14px",37,a.color1,a.icon), a.window_entity_id);
       // this._addCard(".buttons", 'bubble-card', "buttonb", lcars_bubble_square(this.em.yellowAlert, this.em.color2, this.em.yellowAlertColor), this.em.yellowAlert);
       
       if(!!a.temperature_entity_id){
@@ -520,8 +520,8 @@ class AtLcarsFloor extends Card {
           e);
       });
     });
-    this._addCard(".bottomright", "bubble-card", "fr", lcars_bubble_elbow(this.em.redAlert,{ top_left: 0, top_right: 0, bottom_right: 0, bottom_left: 30 }, { top: 0, right: 0, bottom: 8, left: 63 },"#cc0000",this.em.color2), this.em.redAlert);
-    this._addCard(".bottomleft", "bubble-card", "fle", lcars_bubble_elbow(this.em.redAlert,{ top_left: 0, top_right: 0, bottom_right: 30, bottom_left: 0 }, { top: 0, right: 31, bottom: 8, left: 0 },"#cc0000",this.em.color2), this.em.redAlert);
+    this._addCard(".bottomright", "bubble-card", "fr", lcars_bubble_elbow(this.em.redAlert,{ top_left: 0, top_right: 0, bottom_right: 0, bottom_left: 20 }, { top: 0, right: 0, bottom: 8, left: 63 },"#cc0000",this.em.color2,{ top_left: null, top_right: null, bottom_right: null, bottom_left: 15 }), this.em.redAlert);
+    this._addCard(".bottomleft", "bubble-card", "fle", lcars_bubble_elbow(this.em.redAlert,{ top_left: 0, top_right: 0, bottom_right: 20, bottom_left: 0 }, { top: 0, right: 31, bottom: 8, left: 0 },"#cc0000",this.em.color2,{ top_left: null, top_right: null, bottom_right: 15, bottom_left: null }), this.em.redAlert);
     
 
 

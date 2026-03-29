@@ -10,12 +10,12 @@ function inner_radius(radius, top){
         }
     }
 }
-export function lcars_bubble_elbow(entity_id,radius,border,color_on = "green", color_off="fuchsia"){
+export function lcars_bubble_elbow(entity_id,radius,border,color_on = "green", color_off="fuchsia",innerRadiusOverwrite={ top_left: null, top_right: null, bottom_right: null, bottom_left: null }){
 let color = "${state == 'on' ? '"+color_on+"' : '"+color_off+"'}";
-let inner_radius_top_left = inner_radius(radius.top_left,border.top);
-let inner_radius_top_right = inner_radius(radius.top_right,border.top);
-let inner_radius_bottom_right = inner_radius(radius.bottom_right,border.bottom);
-let inner_radius_bottom_left = inner_radius(radius.bottom_left,border.bottom);
+let inner_radius_top_left = innerRadiusOverwrite.top_left?innerRadiusOverwrite.top_left:inner_radius(radius.top_left,border.top);
+let inner_radius_top_right = innerRadiusOverwrite.top_right?innerRadiusOverwrite.top_right:inner_radius(radius.top_right,border.top);
+let inner_radius_bottom_right = innerRadiusOverwrite.bottom_right?innerRadiusOverwrite.bottom_right:inner_radius(radius.bottom_right,border.bottom);
+let inner_radius_bottom_left = innerRadiusOverwrite.bottom_left?innerRadiusOverwrite.bottom_left:inner_radius(radius.bottom_left,border.bottom);
 
 
 

@@ -74,7 +74,7 @@ class AtLcarsProtocols extends Card {
 
         }
         .${rc}>.content>* {
-          flex-basis: 55px;
+          flex-basis: 45px;
           flex-grow: 0;
           flex-shrink: 0;
         } 

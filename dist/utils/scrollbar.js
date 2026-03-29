@@ -1,5 +1,12 @@
 export function scrollbar(color1,color2,color3,color4){
+
+    //I HATE SCROLLBARS
+    let element = document.getElementsByTagName('html');  // Element auswählen
+    element[0].style.scrollbarColor = 'auto'; 
     return `
+    body, html, * {
+        scrollbar-color: auto !important !important;
+    }
     ::-webkit-scrollbar {
         width: 2px;
         height: 2px;
