@@ -56,9 +56,9 @@ class AtLcarsDashboardStrategy {
       return {...f, group: group}
     });
 
-    console.log({floorWithGroup});
+    // console.log({floorWithGroup});
     var groups = Object.groupBy(floorWithGroup, ({ group }) => group );
-    console.log({groups});
+    // console.log({groups});
     const protocols =entities.filter(e=>e.labels.includes("protokoll")).map(e=>{return e.entity_id});
     //console.log(protocols);
 
@@ -124,12 +124,12 @@ class AtLcarsDashboardStrategy {
 
      const pathname = document.location.pathname;
     const split = pathname.split("/");
-    console.log(split);
+    // console.log(split);
     var base ="/"
     if(split.length>=2){
        base = `/${split[1]}`
     }
-    console.log(base);
+    // console.log(base);
 
     // Erstelle Sections für den Haupt-View
     const overviewSections = [

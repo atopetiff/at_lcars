@@ -194,13 +194,13 @@ set hass(hass) {
     const gridRows = distinctLevels.map(l=> "1fr").join(" ");
     const distinctGroups =[... new Set(noConfig.map(f=>f.group))].sort();
     const gridcols = distinctGroups.map(l=> "1fr").join(" ");
-    console.log({distinctLevels: distinctLevels, gridRows: gridRows, distinctGroups: distinctGroups, gridcols: gridcols});
+    // console.log({distinctLevels: distinctLevels, gridRows: gridRows, distinctGroups: distinctGroups, gridcols: gridcols});
 
     var area = distinctLevels.map(l=>{
       return distinctGroups.map(g=>{return g+l}).join(" ");
     });
     const templateareas = '"'+area.join('" "')+'"'
-    console.log("areas", templateareas);
+    // console.log("areas", templateareas);
     const css = `
     .lcars_house>.content{
         grid-template-columns: ${gridcols}; 
