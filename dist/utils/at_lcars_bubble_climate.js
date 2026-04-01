@@ -253,7 +253,7 @@ function foreground_range_color(from, to, color) {
 
 
 
-export function lcars_mini_graph(climate, heating = [], outside_shadow = null, outside_sun = null) {
+export function lcars_mini_graph(climate, heating = [], outside_shadow = null, outside_sun = null, valve_open=[]) {
   const entities = [
     {
       entity: climate,
@@ -290,6 +290,24 @@ export function lcars_mini_graph(climate, heating = [], outside_shadow = null, o
     },
   ];
  
+    valve_open.forEach(h => {
+      entities.push({
+        entity: h,
+        name: "Ventil",
+        color: "#bb00ff",
+        smoothing: false,
+        show_state: false,
+        show_legend_state: true,
+        show_indicator: true,
+        show_graph: true,
+        show_line: true,
+        show_fill: false,
+        show_points: true,
+        show_legend: true,
+        show_name: true,
+        y_axis: "secondary"
+      });
+    });
     heating.forEach(h => {
       entities.push({
         entity: h,

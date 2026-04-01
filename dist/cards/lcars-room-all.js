@@ -53,7 +53,6 @@ class AtLcarsRoomAll extends RoomCard {
         <span>${this._config.room}</span>
         <div class="end"></div>
       </div>
-      <div class="graph"></div>
       <div class="grid">
         <div class="light">
           <h2>Licht</h2>

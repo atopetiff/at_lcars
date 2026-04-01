@@ -1,7 +1,7 @@
 
-export function lcars_bubble_lozenge_button(entity, color = "coral", color_active = "red", state = true, height = "55px",fontSize="20px",) {
+export function lcars_bubble_lozenge_button(entity, color = "coral", color_active = "red", state = true, height = "55px",fontSize="20px",show_value=false) {
     return {
-        ...lcars_bubble_base(entity,color, color_active, state, height, fontSize, ""),
+        ...lcars_bubble_base(entity,color, color_active, state, height, fontSize, true,true, "",true,45,null,show_value),
         tap_action:{
             action: "toggle"
         },
@@ -16,28 +16,7 @@ export function lcars_bubble_lozenge(entity, color = "coral", color_active = "re
     return lcars_bubble_base(entity,color, color_active, state, height, fontSize, "");
 }
 export function lcars_bubble_cover_open(entity, color = "coral", color_active = "red", state = true, height = "55px",fontSize="18px",) {
-    let card = lcars_bubble_base(entity,color, color_active, state, height, fontSize,true,false,"30px 0px 0px 30px");
-    const action = {
-            action: "perform-action",
-            perform_action: "cover.open_cover",
-            target: {
-                entity_id: entity
-            }
-        };
-    return {
-        ...card,
-        show_state: false,
-        show_name: true,
-        name: "Auf",
-        button_action: {
-            ...action,
-            tap_action: action
-        },
-
-    };
-}
-export function lcars_bubble_cover_close(entity, color = "coral", color_active = "red", state = true, height = "55px",fontSize="18px",) {
-    let card = lcars_bubble_base(entity,color, color_active, state, height, fontSize,true,false,"0px 30px 30px 0px");
+    let card = lcars_bubble_base(entity,color_active, color, state, height, fontSize,true,false,"30px 0px 0px 30px",true,40,color_active);
     const action = {
             action: "perform-action",
             perform_action: "cover.close_cover",
@@ -57,8 +36,29 @@ export function lcars_bubble_cover_close(entity, color = "coral", color_active =
 
     };
 }
+export function lcars_bubble_cover_close(entity, color = "coral", color_active = "red", state = true, height = "55px",fontSize="18px",) {
+    let card = lcars_bubble_base(entity,color, color_active, state, height, fontSize,false,true,"0px 30px 30px 0px", false);
+    const action = {
+            action: "perform-action",
+            perform_action: "cover.open_cover",
+            target: {
+                entity_id: entity
+            }
+        };
+    return {
+        ...card,
+        show_state: false,
+        show_name: true,
+        name: "Auf",
+        button_action: {
+            ...action,
+            tap_action: action
+        },
+
+    };
+}
 export function lcars_bubble_cover_summer(entity, color = "coral", color_active = "red", state = true, height = "55px",fontSize="18px",) {
-    let card = lcars_bubble_base(entity,color, color_active, state, height, fontSize,true,false,"0px 30px 30px 0px");
+    let card = lcars_bubble_base(entity,color, color, state, height, fontSize,false,true,"0px 30px 30px 0px",false);
     const action = {
             action: "perform-action",
             perform_action: "cover.set_cover_position",
@@ -85,7 +85,7 @@ export function lcars_bubble_cover_summer(entity, color = "coral", color_active 
 
 }
 export function lcars_bubble_square(entity, color = "coral", color_active = "red", state = true, height = "55px",fontSize="18px",icon_bg_overwrite=null) {
-    return lcars_bubble_base(entity,color, color_active, state, height, fontSize, false,false,"0px",true,37,icon_bg_overwrite);
+    return lcars_bubble_base(entity,color, color_active, state, height, fontSize, false,false,"0px",true,35,icon_bg_overwrite);
 }
 export function lcars_bubble_square_nav(path, name, color = "coral", color_active = "red", state = false, height = "55px",fontSize="18px") {
     return {
@@ -138,7 +138,7 @@ export function lcars_bubble_square_nav_window(window,path, name, color = "coral
     
     return card;
 }
-export function lcars_bubble_base(entity, color = "coral", color_active = "red", state = true, height = "55px", fontSize="18px", leftRound=true,rightRound=true,borderRadius="",showIcon=true, iconWidth=40, icon_bg_overwrite=null) {
+export function lcars_bubble_base(entity, color = "coral", color_active = "red", state = true, height = "55px", fontSize="18px", leftRound=true,rightRound=true,borderRadius="",showIcon=true, iconWidth=40, icon_bg_overwrite=null, show_value=false) {
 let icon_bg = icon_bg_overwrite? "${state == 'on' ? '"+color_active+"' : '"+icon_bg_overwrite+"'}":color_active;
     var card = 
      {
@@ -153,7 +153,7 @@ let icon_bg = icon_bg_overwrite? "${state == 'on' ? '"+color_active+"' : '"+icon
         button_action: {},
         sub_button: [],
         use_accent_color: true,
-        show_state: false,
+        show_state: show_value,
         show_icon: showIcon,
 
         styles: `
@@ -179,10 +179,11 @@ let icon_bg = icon_bg_overwrite? "${state == 'on' ? '"+color_active+"' : '"+icon
         height: 100% !important;
         ${borderRadius==""?"":`--bubble-border-radius: ${borderRadius};`};
         box-sizing: border-box;
+        --mdc-icon-size: ${iconWidth-15}px;
 
     }
     .bubble-icon-container, .large.bubble-icon-container {
-        border-right: 6px solid black;
+        border-right: 4px solid black;
         border-top-right-radius: 0px;
         border-bottom-right-radius: 0px;
         ${leftRound==false?"border-top-left-radius: 0px; border-top-left-radius: 0px; ":""}
@@ -190,7 +191,7 @@ let icon_bg = icon_bg_overwrite? "${state == 'on' ? '"+color_active+"' : '"+icon
         position: absolute;
         top: 0;
         height: 100%;
-        padding-left: 4px;
+        padding-left: 2px;
         width: ${iconWidth}px;
     min-width: ${iconWidth}px !important;
     min-height: unset !important;
@@ -224,6 +225,17 @@ let icon_bg = icon_bg_overwrite? "${state == 'on' ? '"+color_active+"' : '"+icon
         text-align: right;
         padding-right: ${rightRound==true?20:4}px;
         padding-bottom: 4px;
+        order:2;
+    }
+    .bubble-state {
+    font-size: ${fontSize};
+        font-weight: 400;
+    font-family: 'Antonio', Arial, sans-serif;
+    align-items: flex-end;
+        
+        text-align: right;
+        padding-right: ${rightRound==true?20:4}px;
+        order: 1;
     }
     `
 

@@ -234,6 +234,7 @@ export class EntityManager {
     this.roomEntities = filtered.entities;
     this.roomWindow = filtered.window;
     this.roomClimate = filtered.climate;
+    this.roomClimates = filtered.climates;
     this.roomCover = filtered.covers;
     this.everyRoom = filtered.everyRoom;
     this.roomLights = filtered.lights;
@@ -269,6 +270,7 @@ export class EntityManager {
       entities: roomEntities,
       window: roomEntities.find(e => e.labels.includes("fenster"))?.entity_id,
       climate: roomEntities.find(e => e.labels.includes("thermostat"))?.entity_id,
+      climates: roomEntities.filter(e => e.labels.includes("thermostat")).map(e => e.entity_id),
       covers: roomEntities.filter(e => e.labels.includes("cover")).map(e => e.entity_id),
       everyRoom: everyroom.map(e=>e.entity_id),
       lights: roomEntities.filter(e => e.labels.includes("licht")).map(e => e.entity_id),

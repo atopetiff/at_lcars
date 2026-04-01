@@ -2,7 +2,7 @@ import { lcars_bubble_info } from "../utils/at_lcars_bubble_info.js";
 import { entitiesIn } from "../utils/entity-filter.js";
 import { Card, EntityManager } from "../utils/entity-manager.js";
 import { lcars_bubble_base, lcars_bubble_lozenge } from "../utils/lcars-buttons-bubble.js";
-import {  lcars_mini_graph, lcars_climate_bubble } from "../utils/at_lcars_bubble_climate.js";
+import { lcars_mini_graph, lcars_climate_bubble } from "../utils/at_lcars_bubble_climate.js";
 import { RoomCard } from "../utils/room.js";
 import { font, scrollbar } from "../utils/scrollbar.js";
 class AtLcarsRoom extends RoomCard {
@@ -13,7 +13,7 @@ class AtLcarsRoom extends RoomCard {
 
 
   set hass(hass) {
-    console.log(hass);
+    // console.log(hass);
     // Erstes Mal: nur speichern und initial rendern
     // //console.log("needs render", { has: !this._hass, config: !this._config });
     if (!this.em && !!this._config) {
@@ -64,7 +64,7 @@ class AtLcarsRoom extends RoomCard {
 
   _render() {
     //console.log("lcars room rerender");
-    
+
     this.innerHTML = `
         <style>
             ${font()}
@@ -81,76 +81,107 @@ class AtLcarsRoom extends RoomCard {
     [
       ...this.em.roomLights,
       ...this.em.roomPowers,
-      ...this.em.roomEntities.filter(e=>e.labels.includes("button")).map(e=>e.entity_id)
+      ...this.em.roomEntities.filter(e => e.labels.includes("button")).map(e => e.entity_id)
     ].forEach(e => {
-      this._addCard(".power", 'bubble-card', `power${e}`,
-        lcars_bubble_lozenge(e, this.em.color3, this.em.color1, false, "45px", "14px"),
-        e
-      );
+
+      try {
+        this._addCard(".power", 'bubble-card', `power${e}`,
+          lcars_bubble_lozenge(e, this.em.color3, this.em.color1, false, "45px", "14px"),
+          e
+        );
+      } catch (error) {
+        console.log("error adding switch",e,error);
+      }
     });
     //------------------------------------------------------------------
     //Climate
-    if (!!this.em.roomClimate) {
+    try {
+
+      if (!!this.em.roomClimate) {
+        [
+          ...this.em.roomClimates
+        ].forEach(e => {
+          this._addCard(".climate", 'bubble-card', `climate${e}`,
+            lcars_climate_bubble(e, this.em.color1, this.em.color3,),
+            e
+          );
+        });
+      }
+    } catch (e) {
+      console.error("error adding climates", e)
+    }
+    //------------------------------------------------------------------
+    //Thermostate
+    try {
       [
-        this.em.roomClimate
+        ...this.em.roomTrvs
       ].forEach(e => {
-        this._addCard(".climate", 'bubble-card', `climate${e}`,
+        this._addCard(".climate", 'bubble-card', `trv${e}`,
           lcars_climate_bubble(e, this.em.color1, this.em.color3,),
           e
         );
       });
+    } catch (e) {
+      console.error("error adding trvs", e)
     }
-    //------------------------------------------------------------------
-    //Thermostate
-    [
-      ...this.em.roomTrvs
-    ].forEach(e => {
-      this._addCard(".climate", 'bubble-card', `trv${e}`,
-        lcars_climate_bubble(e, this.em.color1, this.em.color3,),
-        e
-      );
-    });
 
     //------------------------------------------------------------------
     //Covers
-    [
-      ...this.em.roomCover
-    ].forEach(e => {
-      this._addCard(
-        ".covers",
-        'at-lcars-cover',
-        `climate${e}`,
-        {
-          type: "custom:at-cover",
-          entity: e,
-          color1: this.em.color1,
-          color2: this.em.color2,
-          color3: this.em.color3,
-          color4: this.em.color4
-        },
-        e
-      );
+    try {
+      [
+        ...this.em.roomCover
+      ].forEach(e => {
+        this._addCard(
+          ".covers",
+          'at-lcars-cover',
+          `climate${e}`,
+          {
+            type: "custom:at-cover",
+            entity: e,
+            color1: this.em.color1,
+            color2: this.em.color2,
+            color3: this.em.color3,
+            color4: this.em.color4
+          },
+          e
+        );
 
-    });
-    
-    
+      });
+    } catch (e) {
+      console.error("error adding covers");
+    }
+
+
     //------------------------------------------------------------------
-
-    if(!!this.em.roomClimate){
-    this._addCard(
-      ".graph",
-      'mini-graph-card',
-      `graph`,
-      lcars_mini_graph(this.em.roomClimate, this.em.roomTrvs, this.em.outsideShadow.entity_id, this.em.outsideSun.entity_id),
-      this.em.roomClimate
-    );
-}
-  console.log("roominfos", this.em.roomInfos);
+    let valveOpen=this.em.roomEntities.filter(e=>e.labels.map(l=>l.toLowerCase()).includes("valve_open")).map(e=>e.entity_id);
+    if (!!this.em.roomClimate) {
+      try {
+        this._addCard(
+          ".graph",
+          'mini-graph-card',
+          `graph`,
+          lcars_mini_graph(this.em.roomClimate, this.em.roomTrvs, this.em.outsideShadow.entity_id, this.em.outsideSun.entity_id,valveOpen),
+          this.em.roomClimate
+        );
+      } catch (e) {
+        console.error("error adding graph",e)
+      }
+    }
+    console.log("roominfos", this.em.roomInfos);
+    let addedInfos = [];
     [
       ...this.em.roomInfos
     ].forEach(e => {
+      try {
+        if(addedInfos.includes(e.entity_id)==false){
 
-      this._addCard(".grid", 'bubble-card', `grid${e.entity_id}`, lcars_bubble_info(e, this.em.color1, "#e0e0e0ff",true,true,20), e.entity_id);
+          addedInfos.push(e.entity_id);
+          this._addCard(".grid", 'bubble-card', `grid${e.entity_id}`, lcars_bubble_info(e, this.em.color1, "#e0e0e0ff", true, true, 20), e.entity_id);
+        }
+        
+      } catch (error) {
+        console.error("error adding info",e,error)
+      }
     });
 
 

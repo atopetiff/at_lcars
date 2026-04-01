@@ -81,7 +81,7 @@ class AtLcarsFloor extends Card {
 
   _styles() {
     const rc = 'lcars_floor';
-    const bgGridColumns = "4px 15px 0.3fr 31px 6px 63px 2fr 15px 4px"
+    const bgGridColumns = "4px 15px 0.3fr 31px 4px 63px 2fr 15px 4px"
     return `
       .${rc}_bg{
         z-index:0;
@@ -122,7 +122,7 @@ class AtLcarsFloor extends Card {
           margin: 0px 0px 0px 0px;
           display: grid;
           display: grid; 
-          grid-template-columns: 19px 0.3fr 31px 6px 63px 2fr 19px;
+          grid-template-columns: 19px 0.3fr 31px 4px 63px 2fr 19px;
           grid-template-rows: 24px 37px 1fr 23px; 
           gap: 0px 0px; 
           grid-template-areas: 
@@ -335,7 +335,7 @@ class AtLcarsFloor extends Card {
       @media (width < 400px) {
       .${rc}{
          
-          grid-template-columns: 31px 6px 63px 1fr 4px;
+          grid-template-columns: 31px 4px 63px 1fr 4px;
           grid-template-rows: 24px 35px 35px 1fr 25px; 
           gap: 0px 0px; 
           grid-template-areas: 
@@ -361,7 +361,7 @@ class AtLcarsFloor extends Card {
         }
         .${rc}>.content>.room_row{
         
-         grid-template-columns: 31px 6px 63px 1fr 4px;
+         grid-template-columns: 31px 4px 63px 1fr 4px;
          grid-template-rows: 45px 1fr;
         gap: 0px; 
           grid-template-areas: 
@@ -373,7 +373,7 @@ class AtLcarsFloor extends Card {
           display: none;
           }
         .${rc}_bg{
-          grid-template-columns: 31px 6px 63px 1fr;
+          grid-template-columns: 31px 4px 63px 1fr;
         grid-template-areas:
         "tl . tr tr tr tr"
         "tl . tr tr tr tr"
@@ -480,7 +480,7 @@ class AtLcarsFloor extends Card {
       //   this._addCard(`#${a.area_id}window_right`, "bubble-card", `#${a.area_id}window_right`, lcars_bubble_elbow(null,{ top_left: 0, top_right: 20, bottom_right: 20, bottom_left: 0 }, { top: 0, right: 20, bottom: 0, left: 0 },"#cc0000","grey"), null,false);
       // }
 
-      this._addCard(`#${a.area_id}link`, "bubble-card", `#${a.area_id}link`, lcars_bubble_square_nav_window(a.window_entity_id,this._config.basepath +"/"+ a.area_id , a.area_id, a.color1,"#cc0000",false,"55px","14px",37,a.color1,a.icon), a.window_entity_id);
+      this._addCard(`#${a.area_id}link`, "bubble-card", `#${a.area_id}link`, lcars_bubble_square_nav_window(a.window_entity_id,this._config.basepath +"/"+ a.area_id , a.area_id, a.color1,"#cc0000",false,"55px","14px",35,a.color1,a.icon), a.window_entity_id);
       // this._addCard(".buttons", 'bubble-card', "buttonb", lcars_bubble_square(this.em.yellowAlert, this.em.color2, this.em.yellowAlertColor), this.em.yellowAlert);
       
       if(!!a.temperature_entity_id){

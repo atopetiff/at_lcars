@@ -1,4 +1,4 @@
-export function stats_climate(climate, temperature, humidity, trvs, outside_sun, outside_shadow) {
+export function stats_climate(climate, temperature, humidity, trvs, outside_sun, outside_shadow,valve_open=[]) {
 
   var entities = [];
 
@@ -74,6 +74,22 @@ export function stats_climate(climate, temperature, humidity, trvs, outside_sun,
         show_value: true
       });
   }
+  valve_open.forEach(e=>{
+entities.push({
+        entity: e,
+        yaxis: "y7",
+        fill: "tozeroy",
+        line: {
+          
+          width: 1,
+        
+          color: "#bb00ff"
+        },
+        show_value: true
+      });
+  
+  });
+    
 
   return {
     type: "custom:plotly-graph",
@@ -97,7 +113,7 @@ export function stats_climate(climate, temperature, humidity, trvs, outside_sun,
       },
       {
         entity: "",
-        name: "Now",
+        name: "Now9",
         yaxis: "y9",
         showlegend: false,
         line: {
@@ -110,12 +126,29 @@ export function stats_climate(climate, temperature, humidity, trvs, outside_sun,
           0,
           35
         ]
+      },
+      {
+        entity: "",
+        name: "Now7",
+        yaxis: "y7",
+        showlegend: false,
+        line: {
+          width: 1,
+          dash: "dot",
+          color: "#aa00ff"
+        },
+        x: "$ex [Date.now()-86400, Date.now()-1]",
+        y: [
+          0,
+          100
+        ]
       }
     ],
     refresh_interval: 10,
     title: "Climate",
     hours_to_show: 12,
     layout: {
+     
       yaxis: {
         visible: true,
         fixedrange: true
@@ -123,6 +156,13 @@ export function stats_climate(climate, temperature, humidity, trvs, outside_sun,
       yaxis9: {
         visible: true,
         fixedrange: true
+      },
+      yaxis7: {
+        visible: true,
+        fixedrange: true,
+        gridcolor: "#aa00ff",
+        minallowed: 0,
+        maxallowed: 100
       },
       xaxis: {
         rangeselector: {

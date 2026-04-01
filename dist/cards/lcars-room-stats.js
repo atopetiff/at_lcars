@@ -104,7 +104,6 @@ class AtLcarsRoomStats extends RoomCard {
         <span>${this._config.room}</span>
         <div class="end"></div>
       </div>
-      <div class="graph"></div>
       <div class="grid"></div>
       <div class="buttons"></div>
       <div class="actionborder"></div>
@@ -164,9 +163,9 @@ class AtLcarsRoomStats extends RoomCard {
 };
 
     
-      
+      let valveOpen=this.em.roomEntities.filter(e=>e.labels.map(l=>l.toLowerCase()).includes("valve_open")).map(e=>e.entity_id);
     this._addCard(".content","plotly-graph","climate",
-      stats_climate(this.em.roomClimate,this.em.roomTemperature, this.em.roomHumidity,this.em.roomTrvs, this.em.outsideSun.entity_id, this.em.outsideShadow.entity_id),
+      stats_climate(this.em.roomClimate,this.em.roomTemperature, this.em.roomHumidity,this.em.roomTrvs, this.em.outsideSun.entity_id, this.em.outsideShadow.entity_id,valveOpen),
       this.em.roomTemperature,
       true
     );
@@ -202,10 +201,21 @@ class AtLcarsRoomStats extends RoomCard {
 
         this._addCard(".links", 'bubble-card', `hist`, lcars_bubble_square_nav("/history?entity_id="+elmstring, "Climate", this.em.color1), null, false);
         this._addCard(".links", 'bubble-card', `hist`, lcars_bubble_square_nav("/history?entity_id="+batteries.join('%2C'), "Batteries", this.em.color1), null, false);
+    console.log("roominfos", this.em.roomInfos);
+    let addedInfos = [];
     [
       ...this.em.roomInfos
     ].forEach(e => {
-            this._addCard(".grid", 'bubble-card', `grid${e.entity_id}`, lcars_bubble_info(e, this.em.color1, "#e0e0e0ff",true,true,20), e.entity_id);
+      try {
+        if(addedInfos.includes(e.entity_id)==false){
+
+          addedInfos.push(e.entity_id);
+          this._addCard(".grid", 'bubble-card', `grid${e.entity_id}`, lcars_bubble_info(e, this.em.color1, "#e0e0e0ff", true, true, 20), e.entity_id);
+        }
+        
+      } catch (error) {
+        console.error("error adding info",e,error)
+      }
     });
 
 

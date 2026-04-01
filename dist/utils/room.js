@@ -32,7 +32,7 @@ export class RoomCard extends Card {
     @media (width > 550px){
       .room {
         grid-template-columns:
-        ${leftWidth} 30px    4px      46px         4px    1fr     1fr     8px     24px    20px   4px     10px;
+        ${leftWidth} 30px    4px      46px         4px    1fr     1fr     6px     24px    20px   4px     10px;
       grid-template-rows: 20px 22px 1fr 1fr 30px 4px 26px 4px 30px;
         grid-template-areas:
           "footer    footer     .       header       header  header  title   title   title   title   .      side"
@@ -132,7 +132,7 @@ export class RoomCard extends Card {
       display: grid;
       overflow: hidden;
       grid-template-columns:
-        30px          50px         4px    1fr     1fr     8px     24px    20px   4px     10px;
+        30px          50px         6px    1fr     1fr     6px     24px    20px   4px     10px;
       grid-template-rows: 0.7fr 0.3fr 22px 8px 4px 8px 22px ${contentHeigth} 30px 30px;
       gap: 0px 0px;
       grid-auto-flow: row;
@@ -196,7 +196,7 @@ export class RoomCard extends Card {
     .buttons{
         grid-area: buttons;
         display: flex;
-        gap: 8px
+        gap: 6px;
     }
     .buttons>*{
         flex-basis: 50px;
@@ -248,7 +248,7 @@ export class RoomCard extends Card {
     .content{
         grid-area: content;
         background-color: black;
-        margin-top: -17px;
+        margin-top: -15px;
         margin-bottom: -20px;
         z-index: 1;
         border-top-left-radius: 20px;
@@ -256,12 +256,12 @@ export class RoomCard extends Card {
         overflow: auto;
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 6px;
     }
     .content>.power{
         display:flex;
         flex-wrap: wrap;
-        gap: 8px;
+        gap: 6px;
 
     }
     .content>.power>*{

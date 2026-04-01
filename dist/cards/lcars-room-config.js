@@ -71,7 +71,7 @@ class AtLcarsRoomConfig extends RoomCard {
         <span>${this._config.room}</span>
         <div class="end"></div>
       </div>
-      <div class="graph"></div>
+     
       <div class="grid"></div>
       <div class="buttons"></div>
       <div class="actionborder"></div>
@@ -106,7 +106,7 @@ class AtLcarsRoomConfig extends RoomCard {
       ...this.em.roomEntities.filter(e=>e.labels.includes("config")).map(e=>e.entity_id)
     ].forEach(e => {
       this._addCard(".power", 'bubble-card', `power${e}`,
-        lcars_bubble_lozenge_button(e, this.em.color3, this.em.color1, false, "45px", "14px"),
+        lcars_bubble_lozenge_button(e, this.em.color3, this.em.color1, false, "45px", "14px",true),
         e
       );
     });
@@ -117,11 +117,21 @@ class AtLcarsRoomConfig extends RoomCard {
     
     this._addCard(".scheduler", 'scheduler-card', `scheduler`, scheduler([...this.em.roomEntities.map(e=>e.entity_id), ...this.em.everyRoom]), "*");
 
+   console.log("roominfos", this.em.roomInfos);
+    let addedInfos = [];
     [
       ...this.em.roomInfos
     ].forEach(e => {
+      try {
+        if(addedInfos.includes(e.entity_id)==false){
 
-            this._addCard(".grid", 'bubble-card', `grid${e.entity_id}`, lcars_bubble_info(e, this.em.color1, "#e0e0e0ff",true,true,20), e.entity_id);
+          addedInfos.push(e.entity_id);
+          this._addCard(".grid", 'bubble-card', `grid${e.entity_id}`, lcars_bubble_info(e, this.em.color1, "#e0e0e0ff", true, true, 20), e.entity_id);
+        }
+        
+      } catch (error) {
+        console.error("error adding info",e,error)
+      }
     });
 
 

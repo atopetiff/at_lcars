@@ -10,17 +10,18 @@ export function scrollbar(color1,color2,color3,color4){
     ::-webkit-scrollbar {
         width: 2px;
         height: 2px;
-        background: black;
+        background: transparent;
     }
 
     /* Track */
     ::-webkit-scrollbar-track {
-        background: black;
+        background: transparent;
     }
 
     /* Handle */
     ::-webkit-scrollbar-thumb {
         background: ${color1};
+        border-radius:2px;
     }
 
     /* Handle on hover */
@@ -29,7 +30,7 @@ export function scrollbar(color1,color2,color3,color4){
         border-radius:2px;
     }
     ::-webkit-scrollbar-corner{
-    background-color: black;
+    background-color: transparent;
     }
     `;
 }
