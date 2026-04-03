@@ -89,22 +89,23 @@ class AtLcarsCover extends Card {
 
 
     this._addCard(".cover_open", 'bubble-card', `open`,
-      lcars_bubble_cover_open(this._config.entity, this._config.color3, this._config.color1, false, "45px", "14px"),
+      lcars_bubble_cover_open(this._config.entity,this._dc, this._config.color3, this._config.color1, false, "45px", "14px"),
       this._config.entity
     );
+    if(!!this._dc?.use_slider_button_card){
     this._addCard(".cover_slider",'slider-button-card',
       `slider`,
       lcars_cover_slider(this._config.entity),
       this._config.entity
     );
- 
+  }
     this._addCard(".cover_close", 'bubble-card', `cover_close`,
-      lcars_bubble_cover_close(this._config.entity, this._config.color3, this._config.color1, false, "45px", "14px"),
+      lcars_bubble_cover_close(this._config.entity,this._dc, this._config.color3, this._config.color1, false, "45px", "14px"),
       this._config.entity
     );
  
     this._addCard(".cover_summer", 'bubble-card', `cover_summer`,
-      lcars_bubble_cover_summer(this._config.entity, this._config.color3, this._config.color1, false, "45px", "14px"),
+      lcars_bubble_cover_summer(this._config.entity,this._dc, this._config.color3, this._config.color1, false, "45px", "14px"),
       this._config.entity
     );
     

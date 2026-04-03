@@ -86,7 +86,7 @@ class AtLcarsRoom extends RoomCard {
 
       try {
         this._addCard(".power", 'bubble-card', `power${e}`,
-          lcars_bubble_lozenge(e, this.em.color3, this.em.color1, false, "45px", "14px"),
+          lcars_bubble_lozenge(e,this._dc, this.em.color3, this.em.color1, false, "45px", "14px"),
           e
         );
       } catch (error) {
@@ -102,7 +102,7 @@ class AtLcarsRoom extends RoomCard {
           ...this.em.roomClimates
         ].forEach(e => {
           this._addCard(".climate", 'bubble-card', `climate${e}`,
-            lcars_climate_bubble(e, this.em.color1, this.em.color3,),
+            lcars_climate_bubble(e,this._dc, this.em.color1, this.em.color3,),
             e
           );
         });
@@ -117,7 +117,7 @@ class AtLcarsRoom extends RoomCard {
         ...this.em.roomTrvs
       ].forEach(e => {
         this._addCard(".climate", 'bubble-card', `trv${e}`,
-          lcars_climate_bubble(e, this.em.color1, this.em.color3,),
+          lcars_climate_bubble(e, this._dc, this.em.color1, this.em.color3,),
           e
         );
       });
@@ -137,6 +137,7 @@ class AtLcarsRoom extends RoomCard {
           `climate${e}`,
           {
             type: "custom:at-cover",
+            dashboardConfig: this._dc,
             entity: e,
             color1: this.em.color1,
             color2: this.em.color2,
@@ -151,20 +152,22 @@ class AtLcarsRoom extends RoomCard {
       console.error("error adding covers");
     }
 
+    if(!!this._dc?.use_mini_graph_card){
 
-    //------------------------------------------------------------------
-    let valveOpen=this.em.roomEntities.filter(e=>e.labels.map(l=>l.toLowerCase()).includes("valve_open")).map(e=>e.entity_id);
-    if (!!this.em.roomClimate) {
-      try {
-        this._addCard(
-          ".graph",
-          'mini-graph-card',
-          `graph`,
-          lcars_mini_graph(this.em.roomClimate, this.em.roomTrvs, this.em.outsideShadow.entity_id, this.em.outsideSun.entity_id,valveOpen),
-          this.em.roomClimate
-        );
-      } catch (e) {
-        console.error("error adding graph",e)
+      //------------------------------------------------------------------
+      let valveOpen=this.em.roomEntities.filter(e=>e.labels.map(l=>l.toLowerCase()).includes("valve_open")).map(e=>e.entity_id);
+      if (!!this.em.roomClimate) {
+        try {
+          this._addCard(
+            ".graph",
+            'mini-graph-card',
+            `graph`,
+            lcars_mini_graph(this.em.roomClimate, this.em.roomTrvs, this.em.outsideShadow.entity_id, this.em.outsideSun.entity_id,valveOpen),
+            this.em.roomClimate
+          );
+        } catch (e) {
+          console.error("error adding graph",e)
+        }
       }
     }
     console.log("roominfos", this.em.roomInfos);

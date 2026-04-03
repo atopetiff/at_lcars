@@ -14,8 +14,10 @@ import {
   attachAreaCheckboxListeners,
   attachDragAndDropListeners,
   attachExpandButtonListeners,
-  sortAreaItems
+  sortAreaItems,
+  attachCheckboxListener
 } from './editor/at_lcars-editor-handlers.js';
+import { LcarsOptions } from './editor/at_lcars-option-names.js';
 
 class at_lcarsDashboardStrategyEditor extends HTMLElement {
   constructor() {
@@ -42,6 +44,30 @@ class at_lcarsDashboardStrategyEditor extends HTMLElement {
     }
   }
 
+  _checkDependencies(list) {
+    let exist = true;
+    if(!list){
+      return true;
+    }
+    list.forEach(dep => {
+      // Prüfe ob custom:search-card und card-tools verfügbar sind
+      const hasCard = customElements.get(dep) !== undefined;
+      const hasCardTools = window.customCards && window.customCards.some(card => 
+        card.type === 'custom:'+dep
+      );
+      
+      // Alternative Prüfung: Versuche zu erkennen ob die Komponenten geladen wurden
+      const CardExists = hasCard || document.querySelector(dep) !== null;
+      if (CardExists == false ) {
+        exist = false;
+      }
+    });
+    
+    const cardToolsExists = typeof window.customCards !== 'undefined' || typeof window.cardTools !== 'undefined';
+    
+    // Beide müssen verfügbar sein
+    return exist && cardToolsExists;
+  }
   _checkSearchCardDependencies() {
     // Prüfe ob custom:search-card und card-tools verfügbar sind
     const hasSearchCard = customElements.get('search-card') !== undefined;
@@ -61,7 +87,25 @@ class at_lcarsDashboardStrategyEditor extends HTMLElement {
     if (!this._hass || !this._config) {
       return;
     }
+    console.log(this._config);
+    let states = LcarsOptions.map(lo=>{
+      console.log(lo.name,this._config[lo.name]);
+      const deps = this._checkDependencies(lo.dependencies);
+      const val= this._config[lo.name]?this._config[lo.name]:lo.default;
 
+      if( deps==false && val != lo.depsFailValue){
+        this._boolChanged(lo.name,lo.depsFailValue,lo.default);
+      }
+
+      return {
+        ...lo,
+        val: val,
+        depsInstalled: deps
+      };
+     });
+    console.log(states);
+    // const useMiniGraphCard = this._config.use_mini_graph_card === true;
+    const deps = this._checkDependencies();
     const showWeather = this._config.show_weather !== false;
     const showEnergy = this._config.show_energy !== false;
     const showSearchCard = this._config.show_search_card === true;
@@ -98,9 +142,10 @@ class at_lcarsDashboardStrategyEditor extends HTMLElement {
     const areaOrder = this._config.areas_display?.order || [];
 
     // Setze HTML-Inhalt mit Styles und Template
+    
     this.innerHTML = `
       <style>${getEditorStyles()}</style>
-      ${renderEditorHTML({ 
+      ${renderEditorHTML(states,{ 
         allAreas, 
         hiddenAreas, 
         areaOrder, 
@@ -121,7 +166,16 @@ class at_lcarsDashboardStrategyEditor extends HTMLElement {
       })}
     `;
 
+    LcarsOptions.forEach(lo=>
+    
+      attachCheckboxListener(this,lo.name, (val) => this._boolChanged(lo.name,val,lo.default))
+
+    )
     // Binde Event-Listener
+    // attachCheckboxListener(this, LcarsOptions.USE_MINI_GRAPH_CARD, (useMiniGraphCard) => this._boolChanged(LcarsOptions.USE_MINI_GRAPH_CARD,useMiniGraphCard,false));
+    attachCheckboxListener(this,"use-slider-button-card", (useSliderButtonCard) => this._boolChanged("use_slider_button_card",useSliderButtonCard,false));
+    // attachCheckboxListener(this,"use-scheduler-card", (useSchedulerCard) => this._boolChanged("use_scheduler_card",useSliderButtonCard,false));
+    // attachCheckboxListener(this,"use-plotly-card", (usePlotlyCard) => this._boolChanged("use_slider_button_card",useSliderButtonCard,false));
     attachWeatherCheckboxListener(this, (showWeather) => this._showWeatherChanged(showWeather));
     attachEnergyCheckboxListener(this, (showEnergy) => this._showEnergyChanged(showEnergy));
     attachSearchCardCheckboxListener(this, (showSearchCard) => this._showSearchCardChanged(showSearchCard));
@@ -637,6 +691,26 @@ class at_lcarsDashboardStrategyEditor extends HTMLElement {
     this._config = newConfig;
     this._fireConfigChanged(newConfig);
   }
+  _boolChanged(param_name,value,defaultValue=true) {
+    console.log(param_name);
+    if (!this._config || !this._hass) {
+      return;
+    }
+
+    const newConfig = {
+      ...this._config,
+      [param_name]: value
+    };
+
+    // Wenn der Standardwert (true) gesetzt ist, entfernen wir die Property
+    if (value === defaultValue) {
+      delete newConfig[param_name];
+    }
+
+    this._config = newConfig;
+    this._fireConfigChanged(newConfig);
+  }
+ 
 
   _showEnergyChanged(showEnergy) {
     if (!this._config || !this._hass) {

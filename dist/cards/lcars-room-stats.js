@@ -164,11 +164,13 @@ class AtLcarsRoomStats extends RoomCard {
 
     
       let valveOpen=this.em.roomEntities.filter(e=>e.labels.map(l=>l.toLowerCase()).includes("valve_open")).map(e=>e.entity_id);
+      if(!!this._dc?.use_plotly_card){
     this._addCard(".content","plotly-graph","climate",
       stats_climate(this.em.roomClimate,this.em.roomTemperature, this.em.roomHumidity,this.em.roomTrvs, this.em.outsideSun.entity_id, this.em.outsideShadow.entity_id,valveOpen),
       this.em.roomTemperature,
       true
     );
+  }
     // this._addHTMLCard(".content","hui-history-graph-card","climate",
     //   hist,
     //  "climate.b_dining_trv",
@@ -189,18 +191,20 @@ class AtLcarsRoomStats extends RoomCard {
     
 
 
-    const batteries = this.em.roomEntities.filter(e=>e.labels.includes("battery")).map(e=>e.entity_id)
+    const batteries = this.em.roomEntities.filter(e=>e.labels.includes("battery")).map(e=>e.entity_id);
+    if(!!this._dc?.use_plotly_card){
     this._addCard(".content","plotly-graph","batteries",
       stats_batteries(batteries),
       this.em.roomTemperature,
       true
     );
+  }
     const elements = [this.em.roomClimate,this.em.roomTemperature, this.em.roomHumidity,this.em.roomTrvs, this.em.outsideSun.entity_id, this.em.outsideShadow.entity_id];
     let elmstring = elements.join('%2C');
     
 
-        this._addCard(".links", 'bubble-card', `hist`, lcars_bubble_square_nav("/history?entity_id="+elmstring, "Climate", this.em.color1), null, false);
-        this._addCard(".links", 'bubble-card', `hist`, lcars_bubble_square_nav("/history?entity_id="+batteries.join('%2C'), "Batteries", this.em.color1), null, false);
+        this._addCard(".links", 'bubble-card', `hist`, lcars_bubble_square_nav("/history?entity_id="+elmstring, "Climate",{...this._dc, colorblind: false}, this.em.color1), null, false);
+        this._addCard(".links", 'bubble-card', `hist`, lcars_bubble_square_nav("/history?entity_id="+batteries.join('%2C'), "Batteries",{...this._dc, colorblind: false}, this.em.color1), null, false);
     console.log("roominfos", this.em.roomInfos);
     let addedInfos = [];
     [

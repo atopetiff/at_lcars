@@ -5,13 +5,13 @@ export class EntityManager {
   entities = [];
   devices = [];
 
-  redAlert="";
-  redAlertColor="#cc0000";
-  yellowAlert="";
-  yellowAlertColor="#d2bf50";
+  redAlert = "";
+  redAlertColor = "#cc0000";
+  yellowAlert = "";
+  yellowAlertColor = "#d2bf50";
 
-  outsideSun=null;
-  outsideShadow=null;
+  outsideSun = null;
+  outsideShadow = null;
 
   area = null;
   changeTracker = [];
@@ -29,49 +29,49 @@ export class EntityManager {
     this.changeTracker = [];
 
     this.setColors();
-    this.redAlert=this.entities.find(e=>e.labels.includes("redalert"))?.entity_id;
-    this.yellowAlert=this.entities.find(e=>e.labels.includes("yellowalert"))?.entity_id;
-    this.outsideShadow=this.entities.find(e=>e.labels.includes("outside_shadow"));
-    this.outsideSun=this.entities.find(e=>e.labels.includes("outside_sun"));
+    this.redAlert = this.entities.find(e => e.labels.includes("redalert"))?.entity_id;
+    this.yellowAlert = this.entities.find(e => e.labels.includes("yellowalert"))?.entity_id;
+    this.outsideShadow = this.entities.find(e => e.labels.includes("outside_shadow"));
+    this.outsideSun = this.entities.find(e => e.labels.includes("outside_sun"));
 
 
 
   }
-  
-  getColors(area_id=undefined){
-    const color1 = this.entities.find(e=>e.labels.includes("lcars_primary_color")&&e.area_id===area_id);
-    const color2 = this.entities.find(e=>e.labels.includes("lcars_secondary_color")&&e.area_id===area_id);
-    const color3 = this.entities.find(e=>e.labels.includes("lcars_tertiary_color")&&e.area_id===area_id);
-    const color4 = this.entities.find(e=>e.labels.includes("lcars_quanternary_color")&&e.area_id===area_id);
-    const color = this.entities.find(e=>e.labels.includes("lcars_color")&&e.area_id===area_id);
-    
-    if(!!color){
+
+  getColors(area_id = undefined) {
+    const color1 = this.entities.find(e => e.labels.includes("lcars_primary_color") && e.area_id === area_id);
+    const color2 = this.entities.find(e => e.labels.includes("lcars_secondary_color") && e.area_id === area_id);
+    const color3 = this.entities.find(e => e.labels.includes("lcars_tertiary_color") && e.area_id === area_id);
+    const color4 = this.entities.find(e => e.labels.includes("lcars_quanternary_color") && e.area_id === area_id);
+    const color = this.entities.find(e => e.labels.includes("lcars_color") && e.area_id === area_id);
+
+    if (!!color) {
 
       const values = this.hass.states[color.entity_id]?.state;
       const colors = values.split(',');
-      if (colors.length==4){
-        return {color1: colors[0], color2: colors[1], color3: colors[2], color4: colors[3]};
-      } 
+      if (colors.length == 4) {
+        return { color1: colors[0], color2: colors[1], color3: colors[2], color4: colors[3] };
+      }
     }
 
     //console.log({color4});
-    if(!color1 || !color2 || !color3 || !color4){
+    if (!color1 || !color2 || !color3 || !color4) {
       //abbrechen wenn kein komplettes Design vorliegt
-      return {color1: this.color1, color2: this.color2, color3: this.color3, color4: this.color4};
+      return { color1: this.color1, color2: this.color2, color3: this.color3, color4: this.color4 };
     }
     const value1 = this.hass.states[color1.entity_id]?.state;
     const value2 = this.hass.states[color2.entity_id]?.state;
     const value3 = this.hass.states[color3.entity_id]?.state;
     const value4 = this.hass.states[color4.entity_id]?.state;
-    const nullval=["","unknown","undefined",null,undefined];
-    if (nullval.includes(value1) || nullval.includes(value2)  || nullval.includes(value3)  || nullval.includes(value4) ) {
-      return {color1: this.color1, color2: this.color2, color3: this.color3, color4: this.color4};
+    const nullval = ["", "unknown", "undefined", null, undefined];
+    if (nullval.includes(value1) || nullval.includes(value2) || nullval.includes(value3) || nullval.includes(value4)) {
+      return { color1: this.color1, color2: this.color2, color3: this.color3, color4: this.color4 };
     }
 
-    return {color1: value1, color2: value2, color3: value3, color4: value4};
+    return { color1: value1, color2: value2, color3: value3, color4: value4 };
 
   }
-  setColors(area_id=undefined){
+  setColors(area_id = undefined) {
     const colors = this.getColors(area_id);
     //console.log({colors});
     this.color1 = colors.color1;
@@ -115,7 +115,7 @@ export class EntityManager {
   hasRelevantChange(newHass) {
     const ids = this._trackedEntityIds();
     //console.log("ids", ids)
-    if(ids.includes('*')){
+    if (ids.includes('*')) {
       return true;
     }
     for (const id of ids) {
@@ -161,28 +161,28 @@ export class EntityManager {
       this.changeTracker.push({ id: id, name: fullname, element: document.createElement(type, name) });
       const newElement = this.changeTracker.find(e => e.name == fullname);
       try {
-        
+
         newElement.element.setConfig(config);
-  
+
         newElement.element.hass = this.hass;
         return newElement.element;
       } catch (e) {
-        console.error("error adding tracked card create set config",{type: type, name: name, config: config, id: id, changeTracker: this.changeTracker })
+        console.error("error adding tracked card create set config", { type: type, name: name, config: config, id: id, changeTracker: this.changeTracker })
         throw new Error("error adding tracked card create set config");
-        
+
       }
     } else {
       const newElement = document.createElement(type);
-      
+
       try {
         newElement.setConfig(config);
         newElement.hass = this.hass;
         return newElement;
-        
+
       } catch (e) {
-        console.error("error adding NON tracked card create set config",{newElement: newElement,type: type, name: name, config: config, id: id, changeTracker: this.changeTracker, error: e })
+        console.error("error adding NON tracked card create set config", { newElement: newElement, type: type, name: name, config: config, id: id, changeTracker: this.changeTracker, error: e })
         throw new Error("error adding NON tracked card create set config");
-        
+
       }
     }
 
@@ -245,42 +245,88 @@ export class EntityManager {
 
   }
 
-  filterForArea(area_id){
-    
-    const roomDevices = this.devices.filter(d => d.area_id === area_id).map(d => d.id);
-    const roomEntities = this.entities.filter(e =>
-      e.area_id && e.area_id === area_id
-      || (e.device_id && roomDevices.includes(e.device_id))
-    );
-    var colors = this.getColors(area_id);
-    const everyroom = this.entities.filter(e => e.labels.includes("everyroom"));
-    return {
-      area: {
-        ...this.hass.areas[area_id],
-        color1: colors.color1,
-        color2: colors.color2,
-        color3: colors.color3,
-        color4: colors.color4
-      },
-      temperature: this.hass.areas[area_id].temperature_entity_id,
-      temperature_entity: roomEntities.find(e => e.entity_id==this.hass.areas[area_id].temperature_entity_id),
-      humidity: this.hass.areas[area_id].humidity_entity_id,
-      humidity_entity: roomEntities.find(e => e.entity_id==this.hass.areas[area_id].humidity_entity_id),
-      devices: roomDevices,
-      entities: roomEntities,
-      window: roomEntities.find(e => e.labels.includes("fenster"))?.entity_id,
-      climate: roomEntities.find(e => e.labels.includes("thermostat"))?.entity_id,
-      climates: roomEntities.filter(e => e.labels.includes("thermostat")).map(e => e.entity_id),
-      covers: roomEntities.filter(e => e.labels.includes("cover")).map(e => e.entity_id),
-      everyRoom: everyroom.map(e=>e.entity_id),
-      lights: roomEntities.filter(e => e.labels.includes("licht")).map(e => e.entity_id),
-      trvs: roomEntities.filter(e => e.labels.includes("heizung")).map(e => e.entity_id),
-      powerToggles: roomEntities.filter(e => e.labels.includes("powertoggle")&&e.labels.includes("licht")==false).map(e => e.entity_id),
-      info: [
-        ...everyroom.filter(e=>e.labels.includes("info")),
-        ...roomEntities.filter(e=>e.labels.includes("info"))
-      ]
-    };
+  filterForArea(area_id) {
+    if (area_id == null) {
+      
+      const roomDevices = this.devices.filter(d => d.area_id === area_id ).map(d => d.id);
+      console.log("roomDevices",roomDevices);
+      const roomEntities = this.entities.filter(e =>
+        e.area_id && e.area_id === area_id
+        || (e.device_id && roomDevices.includes(e.device_id))
+      );
+      var colors = this.getColors(area_id);
+      return {
+        area: {
+          aliases: [],
+        area_id: null,
+        floor_id: "none",
+        humidity_entity_id: null,
+        icon: "mdi:desktop-classic",
+        labels: [],
+        name: "NONE",
+        picture: null,
+        temperature_entity_id: null,
+          color1: colors.color1,
+          color2: colors.color2,
+          color3: colors.color3,
+          color4: colors.color4
+        },
+        temperature: null,
+        temperature_entity: null,
+        humidity: null,
+        humidity_entity: null,
+        devices: roomDevices,
+        entities: roomEntities,
+        window: roomEntities.find(e => e.labels.includes("fenster"))?.entity_id,
+        climate: roomEntities.find(e => e.labels.includes("thermostat"))?.entity_id,
+        climates: roomEntities.filter(e => e.labels.includes("thermostat")).map(e => e.entity_id),
+        covers: roomEntities.filter(e => e.labels.includes("cover")).map(e => e.entity_id),
+        everyRoom: [],
+        lights: roomEntities.filter(e => e.labels.includes("licht")).map(e => e.entity_id),
+        trvs: roomEntities.filter(e => e.labels.includes("heizung")).map(e => e.entity_id),
+        powerToggles: roomEntities.filter(e => e.labels.includes("powertoggle") && e.labels.includes("licht") == false).map(e => e.entity_id),
+        info: [
+          ...roomEntities.filter(e => e.labels.includes("info"))
+        ]
+      };
+    } else {
+
+      console.log("area",this.hass.areas[area_id]);
+      const roomDevices = this.devices.filter(d => d.area_id === area_id).map(d => d.id);
+      const roomEntities = this.entities.filter(e =>
+        e.area_id && e.area_id === area_id
+        || (e.device_id && roomDevices.includes(e.device_id))
+      );
+      var colors = this.getColors(area_id);
+      const everyroom = this.entities.filter(e => e.labels.includes("everyroom"));
+      return {
+        area: {
+          ...this.hass.areas[area_id],
+          color1: colors.color1,
+          color2: colors.color2,
+          color3: colors.color3,
+          color4: colors.color4
+        },
+        temperature: this.hass.areas[area_id].temperature_entity_id,
+        temperature_entity: roomEntities.find(e => e.entity_id == this.hass.areas[area_id].temperature_entity_id),
+        humidity: this.hass.areas[area_id].humidity_entity_id,
+        humidity_entity: roomEntities.find(e => e.entity_id == this.hass.areas[area_id].humidity_entity_id),
+        devices: roomDevices,
+        entities: roomEntities,
+        window: roomEntities.find(e => e.labels.includes("fenster"))?.entity_id,
+        climate: roomEntities.find(e => e.labels.includes("thermostat"))?.entity_id,
+        climates: roomEntities.filter(e => e.labels.includes("thermostat")).map(e => e.entity_id),
+        covers: roomEntities.filter(e => e.labels.includes("cover")).map(e => e.entity_id),
+        everyRoom: everyroom.map(e => e.entity_id),
+        lights: roomEntities.filter(e => e.labels.includes("licht")).map(e => e.entity_id),
+        trvs: roomEntities.filter(e => e.labels.includes("heizung")).map(e => e.entity_id),
+        powerToggles: roomEntities.filter(e => e.labels.includes("powertoggle") && e.labels.includes("licht") == false).map(e => e.entity_id),
+        info: [
+          ...everyroom.filter(e => e.labels.includes("info")),
+          ...roomEntities.filter(e => e.labels.includes("info"))
+        ]
+      };
+    }
   }
 
 
@@ -292,41 +338,45 @@ export class Card extends HTMLElement {
   }
   _addCard(selector, type, name, config, id, track = true) {
     try {
-      
+
       const card = this.querySelector(selector);
       const fullname = `${name}${id}`;
       // setTimeout(() => {
-        card.appendChild(this.em._addCard(type, name, config, id, track));
-        
+      card.appendChild(this.em._addCard(type, name, config, id, track));
+
       // }, 0);
     } catch (e) {
-      console.error("Error adding Card to selector", {selector:selector, id:id, msg:e})
+      console.error("Error adding Card to selector", { selector: selector, id: id, msg: e })
     }
   }
   _addHTMLCard(selector, html, config, id, track = true) {
+
     try {
       const card = this.querySelector(selector);
-     let cardEl = document.createElement("hui-history-graph-card","#graph");
-     card.appendChild(cardEl);
-     setTimeout(() => {
-      
-      cardEl.config(config);
-     }, 0);
+      let cardEl = document.createElement("hui-history-graph-card", "#graph");
+      card.appendChild(cardEl);
+      setTimeout(() => {
 
-        
+        cardEl.config(config);
+      }, 0);
+
+
       // }, 0);
     } catch (e) {
-      console.error("Error adding Card to selector", {selector:selector, id:id, msg:e})
+      console.error("Error adding Card to selector", { selector: selector, id: id, msg: e })
     }
   }
 
-  setConfig(config) {
+  async setConfig(config) {
+
     // if (!config.entity) {
     //   throw new Error("You need to define an entity");
     // }
-    //console.log(config);
+    console.log(config);
     this._config = config;
+
     this.config = config;
+    this._dc = config?.dashboardConfig;
     // this._hass = null;
     this._lastStates = {};
   }

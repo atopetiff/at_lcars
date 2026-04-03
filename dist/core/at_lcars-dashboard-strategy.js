@@ -40,7 +40,7 @@ class AtLcarsDashboardStrategy {
     const entities = Object.values(hass.entities || {});
     const floors = Object.values(hass.floors || {});
 
-    
+    console.log(config);
 
     const floorWithGroup = floors.map(f=>{
       var labelArea = areas.filter(a=>a.name==f.name);
@@ -160,13 +160,50 @@ class AtLcarsDashboardStrategy {
       //   : [])
     ];
 
-   
+    console.log("area_struct",area_struct);
+
+    console.log("seperte views",!!config.group_by_floors);
+    if(!config.group_by_floors){
+      let rooms =[];
+      area_struct.inside.forEach(floor=>{
+        rooms =[
+          ...rooms,
+          ...floor.areas
+        ];
+      });
+      rooms=[
+        ...rooms,
+        {
+          aliases: [],
+        area_id: null,
+        floor_id: "none",
+        humidity_entity_id: null,
+        icon: "mdi:desktop-classic",
+        labels: [],
+        name: "NONE",
+        picture: null,
+        temperature_entity_id: null,
+      }
+      ]
+      area_struct.inside=[
+        {
+          areas: rooms,
+          floor_id: "all",
+          level: 0,
+          name: "EG"
+        }
+      ];
+
+    }
+    console.log("area_struct NEW",area_struct);
+    
 
     const floorViews = area_struct.inside.map(f=>{
       return createFloorView([{
         type: "custom:at-lcars-floor",
         areas: f.areas,
-        basepath: base
+        basepath: base,
+        dashboardConfig: config
       }], f.name, "floor-"+f.floor_id)
     });
     
@@ -214,13 +251,14 @@ class AtLcarsDashboardStrategy {
   }
 
   // Füge die Methode hinzu, um den Config-Editor zu laden
-  // static async getConfigElement() {
-  //   // Der Editor sollte schon geladen sein, da er im Loader ist
-  //   // Warte kurz, falls er noch lädt
-  //   await import('./at_lcars-dashboard-strategy-editor.js');
-  //   await customElements.whenDefined('at_lcars-dashboard-strategy-editor');
-  //   return document.createElement('at_lcars-dashboard-strategy-editor');
-  // }
+  static async getConfigElement() {
+    console.log("getconfigelement");
+    // Der Editor sollte schon geladen sein, da er im Loader ist
+    // Warte kurz, falls er noch lädt
+    await import('./at_lcars-dashboard-strategy-editor.js');
+    await customElements.whenDefined('at_lcars-dashboard-strategy-editor');
+    return document.createElement('at_lcars-dashboard-strategy-editor');
+  }
 }
 
 // Registriere Custom Element mit dem korrekten Namen

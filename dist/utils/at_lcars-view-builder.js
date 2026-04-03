@@ -94,6 +94,7 @@ export function createUtilityViews(entities, showSummaryViews = false, config = 
  */
 export function createAreaViews(visibleAreas, devices, entities, showRoomViews = false, areasOptions = {}, dashboardConfig = {},basepath="/", type="control") {
   var pathSuffix="";
+
   switch (type) {
     case "config":
       pathSuffix="-config"
@@ -108,14 +109,16 @@ export function createAreaViews(visibleAreas, devices, entities, showRoomViews =
     default:
       break;
   }
+  
   return visibleAreas.map(area => {
     const areaOptions = areasOptions[area.area_id] || {};
-    
     return {
       title: area.name,
+      
       path: area.area_id+pathSuffix,
       icon: area.icon || "mdi:floor-plan",
       subview: false,
+      config: dashboardConfig,
       // theme: "LCARS Breen",
       strategy: {
         type: "custom:at-lcars-view-room",
@@ -125,13 +128,16 @@ export function createAreaViews(visibleAreas, devices, entities, showRoomViews =
         groups_options: areaOptions.groups_options || {},
         dashboardConfig, // Übergebe vollständige Dashboard-Config für Raum-Pins
         basepath: basepath,
+        test: "bla",
         cardtype: "custom:at-lcars-room"+pathSuffix
       }
     };
+
   });
 }
 export function createAreaConfigViews(visibleAreas, devices, entities, showRoomViews = false, areasOptions = {}, dashboardConfig = {}, basepath="") {
   return visibleAreas.map(area => {
+  
     const areaOptions = areasOptions[area.area_id] || {};
     
     return {

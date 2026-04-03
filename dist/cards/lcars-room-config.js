@@ -106,7 +106,7 @@ class AtLcarsRoomConfig extends RoomCard {
       ...this.em.roomEntities.filter(e=>e.labels.includes("config")).map(e=>e.entity_id)
     ].forEach(e => {
       this._addCard(".power", 'bubble-card', `power${e}`,
-        lcars_bubble_lozenge_button(e, this.em.color3, this.em.color1, false, "45px", "14px",true),
+        lcars_bubble_lozenge_button(e,this._dc, this.em.color3, this.em.color1, false, "45px", "14px",true),
         e
       );
     });
@@ -114,9 +114,9 @@ class AtLcarsRoomConfig extends RoomCard {
 
 
 
-    
+    if(!!this._dc?.use_scheduler_card){
     this._addCard(".scheduler", 'scheduler-card', `scheduler`, scheduler([...this.em.roomEntities.map(e=>e.entity_id), ...this.em.everyRoom]), "*");
-
+    }
    console.log("roominfos", this.em.roomInfos);
     let addedInfos = [];
     [

@@ -370,7 +370,7 @@ export class RoomCard extends Card {
     //rooms
     this._addCard(".rooms", 'bubble-card',
       "rooms",
-      lcars_bubble_square_nav(this._config.basepath + "/floor-" + this._config.floor_id, "Räume", this.em.color3),
+      lcars_bubble_square_nav(this._config.basepath + "/floor-" + this._config.floor_id, "Räume",{...this._dc,colorblind: false}, this.em.color3),
       null,
       false
     );
@@ -388,8 +388,8 @@ export class RoomCard extends Card {
 
     //------------------------------------------------------------------
     //alert buttons
-    this._addCard(".buttons", 'bubble-card', "buttonb", lcars_bubble_square(this.em.yellowAlert, this.em.color2, this.em.yellowAlertColor,false,"30px","12px",this.em.color2), this.em.yellowAlert);
-    this._addCard(".buttons", 'bubble-card', "buttona", lcars_bubble_square(this.em.redAlert, this.em.color2, this.em.redAlertColor,false,"30px","12px",this.em.color2), this.em.redAlert);
+    this._addCard(".buttons", 'bubble-card', "buttonb", lcars_bubble_square(this.em.yellowAlert,this._dc, this.em.color2, this.em.yellowAlertColor,false,"30px","12px",this.em.color2), this.em.yellowAlert);
+    this._addCard(".buttons", 'bubble-card', "buttona", lcars_bubble_square(this.em.redAlert,this._dc, this.em.color2, this.em.redAlertColor,false,"30px","12px",this.em.color2), this.em.redAlert);
 
 
     //------------------------------------------------------------------
@@ -417,7 +417,7 @@ export class RoomCard extends Card {
         color: type=="all"?this.em.color1:this.em.color3
       },
     ].forEach(e => {
-      this._addCard(".actionborder", 'bubble-card', `actionborder${e.label}`, lcars_bubble_square_nav(e.target, e.label, e.color), null, false);
+      this._addCard(".actionborder", 'bubble-card', `actionborder${e.label}`, lcars_bubble_square_nav(e.target, e.label,{...this._dc,colorblind: false}, e.color), null, false);
     });
 
 

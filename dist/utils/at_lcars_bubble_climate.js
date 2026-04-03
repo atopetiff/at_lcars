@@ -1,6 +1,32 @@
 
 
-function lcars_bubble(entity, color_active = "#00e1ff", color_inactive = "#006673") {
+function lcars_bubble(entity,config={}, color_active = "#00e1ff", color_inactive = "#006673") {
+    let extraModeCss="";
+    if(!!config.colorblind){
+      let border ="${state == 'off' ? '"+color_inactive+"' : '"+color_active+"'}"
+    extraModeCss=`
+        ${extraModeCss}
+        .bubble-background{
+            box-shadow: inset 0px 0px 0px 5px ${color_inactive} !important;
+            opacity: 1 !important;
+        }
+        
+        *{
+        --bubble-button-main-background-color: transparent;
+            --primary-text-color: white;
+        }
+            .bubble-range-fill{
+            z-index: 200;
+            }
+        .bubble-name-container{
+          z-index: 300;
+        }
+        .bubble-sub-button-container{
+          z-index: 400;
+        }
+
+    `;
+}
   const styles = `* {
     --row-height: 45px;
     --bubble-default-color: ${color_active};
@@ -16,7 +42,7 @@ function lcars_bubble(entity, color_active = "#00e1ff", color_inactive = "#00667
   .bubble-range-fill{
     border-right: 4px solid black;
   }
-
+  ${extraModeCss}
 
   `;
   // //console.log("styles",styles);
@@ -75,15 +101,15 @@ function lcars_bubble(entity, color_active = "#00e1ff", color_inactive = "#00667
 }
 
 
-export function lcars_climate_bubble(entity, color_active = "#00e1ff", color_inactive = "#006673") {
-  const slider = lcars_bubble(entity, color_active, color_inactive)
+export function lcars_climate_bubble(entity,config={}, color_active = "#00e1ff", color_inactive = "#006673") {
+  const slider = lcars_bubble(entity,config, color_active, color_inactive)
   return {
     ...slider,
     attribute: "current_temperature",
   };
 }
-export function lcars_cover_bubble(entity, color_active = "#00e1ff", color_inactive = "#006673") {
-  const slider = lcars_bubble(entity, color_active, color_inactive)
+export function lcars_cover_bubble(entity, config={}, color_active = "#00e1ff", color_inactive = "#006673") {
+  const slider = lcars_bubble(entity,config, color_active, color_inactive)
   
   return {
     ...slider,
@@ -142,7 +168,7 @@ export function lcars_cover_bubble(entity, color_active = "#00e1ff", color_inact
   };
 }
 export function lcars_cover_bubble_vert(entity, color_active = "#00e1ff", color_inactive = "#006673") {
-  let slider = lcars_bubble(entity, color_active, color_inactive);
+  let slider = lcars_bubble(entity,config={}, color_active, color_inactive);
   slider = {
     ...slider,
     styles: `

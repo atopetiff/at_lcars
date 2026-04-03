@@ -119,7 +119,7 @@ class AtLcarsProtocols extends Card {
     ].forEach(e => {
 
       this._addCard(".content", 'bubble-card', `prot`,
-              lcars_bubble_lozenge(e, this.em.color3, this.em.color1, false, "45px", "14px"),
+              lcars_bubble_lozenge(e,this._dc, this.em.color3, this.em.color1, false, "45px", "14px"),
               e
             );
 

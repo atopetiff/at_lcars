@@ -5,6 +5,16 @@
 
 import { renderAreaEntitiesHTML } from './at_lcars-editor-template.js';
 
+export function attachCheckboxListener(element,name, callback) {
+  
+  const weatherCheckbox = element.querySelector(`#${name}`);
+  if (weatherCheckbox) {
+    weatherCheckbox.addEventListener('change', (e) => {
+      console.log(e);
+      callback(e.target.checked);
+    });
+  }
+}
 export function attachWeatherCheckboxListener(element, callback) {
   const weatherCheckbox = element.querySelector('#show-weather');
   if (weatherCheckbox) {

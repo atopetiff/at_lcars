@@ -284,7 +284,7 @@ set hass(hass) {
     .forEach(f=>{
     
 
-          this._addCard(`.${f.floor_id}`, "bubble-card", f.floor_id, lcars_bubble_square_nav(this._config.basepath+"/floor-"+f.floor_id, f.name, this.em.color3), null,false);
+          this._addCard(`.${f.floor_id}`, "bubble-card", f.floor_id, lcars_bubble_square_nav(this._config.basepath+"/floor-"+f.floor_id, f.name,this._dc, this.em.color3), null,false);
           
         });
     

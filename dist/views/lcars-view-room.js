@@ -3,9 +3,8 @@
 // ====================================================================
 class AtLcarsRoomView {
   static async generate(config, hass) {
-    const { area, devices, entities, basepath, cardtype } = config;
+    const { area, devices, entities, basepath, cardtype, dashboardConfig } = config;
 
- 
   
 
     const card = {
@@ -13,7 +12,8 @@ class AtLcarsRoomView {
       room: `${area.name}`,
       area_id: area.area_id,
       floor_id: area.floor_id,
-      basepath: basepath
+      basepath: basepath,
+      dashboardConfig: dashboardConfig
     };
 
     return {

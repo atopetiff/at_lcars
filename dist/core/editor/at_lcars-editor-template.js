@@ -3,9 +3,39 @@
 // ====================================================================
 // HTML-Template für den Dashboard Strategy Editor
 
-export function renderEditorHTML({ allAreas, hiddenAreas, areaOrder, showEnergy, showWeather, showSummaryViews, showRoomViews, showSearchCard, hasSearchCardDeps, summariesColumns, alarmEntity, alarmEntities, favoriteEntities, roomPinEntities, allEntities, groupByFloors, showCoversSummary }) {
+// import { LcarsOptions } from "./at_lcars-option-names";
+
+export function renderEditorHTML(lo,{ allAreas, hiddenAreas, areaOrder, showEnergy, showWeather, showSummaryViews, showRoomViews, showSearchCard, hasSearchCardDeps, summariesColumns, alarmEntity, alarmEntities, favoriteEntities, roomPinEntities, allEntities, groupByFloors, showCoversSummary,
+   
+ }) {
+  var dynamic ="";
+lo.forEach(lo=>{
+  //print key and value pairs
+  //transform the value to uppercase
+  console.log(lo.name,lo.val)
+  dynamic = `
+    ${dynamic}
+    <div class="form-row">
+          <input 
+            type="checkbox" 
+            id="${lo.name}" 
+            ${lo.val ? 'checked' : ''}
+            ${!lo.depsInstalled ? 'disabled' : ''}
+          />
+          <label for="${lo.name}">${lo.title}</label>
+        </div>
+        <div class="description">
+          ${lo.description}
+        </div>
+  `
+});
   return `
     <div class="card-config">
+      <div class="section">
+        <div class="section-title">Weitere Dependencies</div>
+        ${dynamic}
+        
+      </div>
       <div class="section">
         <div class="section-title">Info-Karten</div>
         <div class="form-row">
@@ -80,8 +110,8 @@ export function renderEditorHTML({ allAreas, hiddenAreas, areaOrder, showEnergy,
           <select id="room-pin-entity-select" style="flex: 1; min-width: 0; padding: 8px; border-radius: 4px; border: 1px solid var(--divider-color); background: var(--card-background-color); color: var(--primary-text-color);">
             <option value="">Entität auswählen...</option>
             ${allEntities
-              .filter(entity => entity.area_id || entity.device_area_id)
-              .map(entity => `
+      .filter(entity => entity.area_id || entity.device_area_id)
+      .map(entity => `
                 <option value="${entity.entity_id}">${entity.name}</option>
               `).join('')}
           </select>
@@ -108,9 +138,9 @@ export function renderEditorHTML({ allAreas, hiddenAreas, areaOrder, showEnergy,
           </label>
         </div>
         <div class="description">
-          ${hasSearchCardDeps 
-            ? 'Zeigt die custom:search-card direkt unter der Uhr in der Übersicht an.' 
-            : '⚠️ Benötigt <strong>custom:search-card</strong> und <strong>card-tools</strong>. Bitte installieren Sie beide Komponenten, um diese Funktion zu nutzen.'}
+          ${hasSearchCardDeps
+      ? 'Zeigt die custom:search-card direkt unter der Uhr in der Übersicht an.'
+      : '⚠️ Benötigt <strong>custom:search-card</strong> und <strong>card-tools</strong>. Bitte installieren Sie beide Komponenten, um diese Funktion zu nutzen.'}
         </div>
       </div>
 
@@ -221,8 +251,8 @@ function renderFavoritesList(favoriteEntities, allEntities) {
   return `
     <div style="border: 1px solid var(--divider-color); border-radius: 4px; overflow: hidden;">
       ${favoriteEntities.map((entityId, index) => {
-        const name = entityMap.get(entityId) || entityId;
-        return `
+    const name = entityMap.get(entityId) || entityId;
+    return `
           <div class="favorite-item" data-entity-id="${entityId}" style="display: flex; align-items: center; padding: 8px 12px; border-bottom: 1px solid var(--divider-color); background: var(--card-background-color);">
             <span class="drag-handle" style="margin-right: 12px; cursor: grab; color: var(--secondary-text-color);">☰</span>
             <span style="flex: 1; font-size: 14px;">
@@ -234,7 +264,7 @@ function renderFavoritesList(favoriteEntities, allEntities) {
             </button>
           </div>
         `;
-      }).join('')}
+  }).join('')}
     </div>
   `;
 }
@@ -251,12 +281,12 @@ export function renderRoomPinsList(roomPinEntities, allEntities, allAreas) {
   return `
     <div style="border: 1px solid var(--divider-color); border-radius: 4px; overflow: hidden;">
       ${roomPinEntities.map((entityId, index) => {
-        const entity = entityMap.get(entityId);
-        const name = entity?.name || entityId;
-        const areaId = entity?.area_id || entity?.device_area_id;
-        const areaName = areaId ? areaMap.get(areaId) || areaId : 'Kein Raum';
-        
-        return `
+    const entity = entityMap.get(entityId);
+    const name = entity?.name || entityId;
+    const areaId = entity?.area_id || entity?.device_area_id;
+    const areaName = areaId ? areaMap.get(areaId) || areaId : 'Kein Raum';
+
+    return `
           <div class="room-pin-item" data-entity-id="${entityId}" style="display: flex; align-items: center; padding: 8px 12px; border-bottom: 1px solid var(--divider-color); background: var(--card-background-color);">
             <span class="drag-handle" style="margin-right: 12px; cursor: grab; color: var(--secondary-text-color);">☰</span>
             <span style="flex: 1; font-size: 14px;">
@@ -270,7 +300,7 @@ export function renderRoomPinsList(roomPinEntities, allEntities, allAreas) {
             </button>
           </div>
         `;
-      }).join('')}
+  }).join('')}
     </div>
   `;
 }
@@ -284,7 +314,7 @@ function renderAreaItems(allAreas, hiddenAreas, areaOrder) {
     const isHidden = hiddenAreas.includes(area.area_id);
     const orderIndex = areaOrder.indexOf(area.area_id);
     const displayOrder = orderIndex !== -1 ? orderIndex : 9999 + index;
-    
+
     return `
       <div class="area-item" 
            data-area-id="${area.area_id}"
@@ -354,11 +384,11 @@ export function renderAreaEntitiesHTML(areaId, groupedEntities, hiddenEntities, 
         </div>
         <div class="entity-list" data-area-id="${areaId}" data-group="${group.key}" style="display: none;">
           ${entities.map(entityId => {
-            const state = hass.states[entityId];
-            const name = state?.attributes?.friendly_name || entityId.split('.')[1].replace(/_/g, ' ');
-            const isHidden = hiddenInGroup.includes(entityId);
-            
-            return `
+      const state = hass.states[entityId];
+      const name = state?.attributes?.friendly_name || entityId.split('.')[1].replace(/_/g, ' ');
+      const isHidden = hiddenInGroup.includes(entityId);
+
+      return `
               <div class="entity-item">
                 <input 
                   type="checkbox" 
@@ -372,7 +402,7 @@ export function renderAreaEntitiesHTML(areaId, groupedEntities, hiddenEntities, 
                 <span class="entity-id">${entityId}</span>
               </div>
             `;
-          }).join('')}
+    }).join('')}
         </div>
       </div>
     `;

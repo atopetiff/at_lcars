@@ -1,7 +1,7 @@
 
-export function lcars_bubble_lozenge_button(entity, color = "coral", color_active = "red", state = true, height = "55px",fontSize="20px",show_value=false) {
+export function lcars_bubble_lozenge_button(entity, config={}, color = "coral", color_active = "red", state = true, height = "55px",fontSize="20px",show_value=false) {
     return {
-        ...lcars_bubble_base(entity,color, color_active, state, height, fontSize, true,true, "",true,45,null,show_value),
+        ...lcars_bubble_base(entity,config,color, color_active, state, height, fontSize, true,true, "",true,45,null,show_value),
         tap_action:{
             action: "toggle"
         },
@@ -12,11 +12,11 @@ export function lcars_bubble_lozenge_button(entity, color = "coral", color_activ
         }
     };
 }
-export function lcars_bubble_lozenge(entity, color = "coral", color_active = "red", state = true, height = "55px",fontSize="18px",) {
-    return lcars_bubble_base(entity,color, color_active, state, height, fontSize, "");
+export function lcars_bubble_lozenge(entity, config={}, color = "coral", color_active = "red", state = true, height = "55px",fontSize="18px",) {
+    return lcars_bubble_base(entity,config,color, color_active, state, height, fontSize, "");
 }
-export function lcars_bubble_cover_open(entity, color = "coral", color_active = "red", state = true, height = "55px",fontSize="18px",) {
-    let card = lcars_bubble_base(entity,color_active, color, state, height, fontSize,true,false,"30px 0px 0px 30px",true,40,color_active);
+export function lcars_bubble_cover_open(entity, config={}, color = "coral", color_active = "red", state = true, height = "55px",fontSize="18px",) {
+    let card = lcars_bubble_base(entity, config,color_active, color, state, height, fontSize,true,false,"30px 0px 0px 30px",true,40,color_active);
     const action = {
             action: "perform-action",
             perform_action: "cover.close_cover",
@@ -36,8 +36,8 @@ export function lcars_bubble_cover_open(entity, color = "coral", color_active = 
 
     };
 }
-export function lcars_bubble_cover_close(entity, color = "coral", color_active = "red", state = true, height = "55px",fontSize="18px",) {
-    let card = lcars_bubble_base(entity,color, color_active, state, height, fontSize,false,true,"0px 30px 30px 0px", false);
+export function lcars_bubble_cover_close(entity, config={}, color = "coral", color_active = "red", state = true, height = "55px",fontSize="18px",) {
+    let card = lcars_bubble_base(entity, config,color, color_active, state, height, fontSize,false,true,"0px 30px 30px 0px", false);
     const action = {
             action: "perform-action",
             perform_action: "cover.open_cover",
@@ -57,8 +57,8 @@ export function lcars_bubble_cover_close(entity, color = "coral", color_active =
 
     };
 }
-export function lcars_bubble_cover_summer(entity, color = "coral", color_active = "red", state = true, height = "55px",fontSize="18px",) {
-    let card = lcars_bubble_base(entity,color, color, state, height, fontSize,false,true,"0px 30px 30px 0px",false);
+export function lcars_bubble_cover_summer(entity, config={}, color = "coral", color_active = "red", state = true, height = "55px",fontSize="18px",) {
+    let card = lcars_bubble_base(entity, config,color, color, state, height, fontSize,false,true,"0px 30px 30px 0px",false);
     const action = {
             action: "perform-action",
             perform_action: "cover.set_cover_position",
@@ -84,12 +84,12 @@ export function lcars_bubble_cover_summer(entity, color = "coral", color_active 
     };
 
 }
-export function lcars_bubble_square(entity, color = "coral", color_active = "red", state = true, height = "55px",fontSize="18px",icon_bg_overwrite=null) {
-    return lcars_bubble_base(entity,color, color_active, state, height, fontSize, false,false,"0px",true,35,icon_bg_overwrite);
+export function lcars_bubble_square(entity, config={}, color = "coral", color_active = "red", state = true, height = "55px",fontSize="18px",icon_bg_overwrite=null) {
+    return lcars_bubble_base(entity, config,color, color_active, state, height, fontSize, false,false,"0px",true,35,icon_bg_overwrite);
 }
-export function lcars_bubble_square_nav(path, name, color = "coral", color_active = "red", state = false, height = "55px",fontSize="18px") {
+export function lcars_bubble_square_nav(path, name, config={},color = "coral", color_active = "red", state = false, height = "55px",fontSize="18px") {
     return {
-        ...lcars_bubble_base(null,color, color_active, state, height, fontSize,false,false,"0px",false),
+        ...lcars_bubble_base(null, config,color, color_active, state, height, fontSize,false,false,"0px",false),
         button_type: "name",
         name: name,
         show_icon: false,
@@ -101,9 +101,9 @@ export function lcars_bubble_square_nav(path, name, color = "coral", color_activ
         }
     };
 }
-export function lcars_bubble_square_nav_window(window,path, name, color = "coral", color_active = "red", state = false, height = "55px",fontSize="18px",iconWidth=37,icon_bg_overwrite=null, iconOverwrite=null) {
+export function lcars_bubble_square_nav_window(window,path, name, config={}, color = "coral", color_active = "red", state = false, height = "55px",fontSize="18px",iconWidth=37,icon_bg_overwrite=null, iconOverwrite=null) {
     let card ={
-        ...lcars_bubble_base(window,color, color_active, state, height, fontSize,false,false,"0px",true,iconWidth,icon_bg_overwrite),
+        ...lcars_bubble_base(window, config,color, color_active, state, height, fontSize,false,false,"0px",true,iconWidth,icon_bg_overwrite),
         button_type: "name",
         name: name,
         show_icon: true,
@@ -138,8 +138,25 @@ export function lcars_bubble_square_nav_window(window,path, name, color = "coral
     
     return card;
 }
-export function lcars_bubble_base(entity, color = "coral", color_active = "red", state = true, height = "55px", fontSize="18px", leftRound=true,rightRound=true,borderRadius="",showIcon=true, iconWidth=40, icon_bg_overwrite=null, show_value=false) {
-let icon_bg = icon_bg_overwrite? "${state == 'on' ? '"+color_active+"' : '"+icon_bg_overwrite+"'}":color_active;
+export function lcars_bubble_base(entity, config={}, color = "coral", color_active = "red", state = true, height = "55px", fontSize="18px", leftRound=true,rightRound=true,borderRadius="",showIcon=true, iconWidth=40, icon_bg_overwrite=null, show_value=false) {
+    let extraModeCss="";
+    if(!!config.colorblind){
+        let border ="${state == 'off' ? '"+color+"' : '"+color_active+"'}"
+    extraModeCss=`
+        ${extraModeCss}
+        .bubble-background{
+            box-shadow: inset 0px 0px 0px 5px ${border} !important;
+            opacity: 1 !important;
+        }
+        .bubble-wrapper{
+            background-color: black !important;
+        }
+        *{
+            --primary-text-color: white;
+        }
+    `;
+}
+    let icon_bg = icon_bg_overwrite? "${state == 'on' ? '"+color_active+"' : '"+icon_bg_overwrite+"'}":color_active;
     var card = 
      {
         type: "custom:bubble-card",
@@ -162,6 +179,9 @@ let icon_bg = icon_bg_overwrite? "${state == 'on' ? '"+color_active+"' : '"+icon
         }
         .type-custom-bubble-card, .bubble-container {
     height: 100% !important;
+}   .bubble-main-icon {
+    color: black !important;
+    opacity: 1 !important;
 }
     * {
         --bubble-default-color: ${color_active};
@@ -237,6 +257,7 @@ let icon_bg = icon_bg_overwrite? "${state == 'on' ? '"+color_active+"' : '"+icon
         padding-right: ${rightRound==true?20:4}px;
         order: 1;
     }
+        ${extraModeCss}
     `
 
     };
