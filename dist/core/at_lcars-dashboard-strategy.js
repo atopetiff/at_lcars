@@ -262,7 +262,7 @@ class AtLcarsDashboardStrategy {
   @font-face {
     font-family: "Antonio";
     src: url("${fontUrl}") format("woff2");
-    font-weight: 400;
+  
     font-style: normal;
     font-display: swap;
   }
