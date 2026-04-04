@@ -139,7 +139,8 @@ class AtLcarsDashboardStrategy {
         protocols: protocols,
         areas: area_struct,
         floorGroups: floorWithGroup,
-        basepath: base
+        basepath: base,
+        dashboardConfig: config
       }
       // createOverviewSection({
       //   lightsOn,

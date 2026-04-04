@@ -40,7 +40,9 @@ set hass(hass) {
       .${rc}_bg{
         z-index:0;
         background: black;
-        /*position: absolute;*/
+        position: ${this._dc.absolute_fullscreen==false?"absolute":"fixed;"}
+        top: 0;
+        left: 0;
         width: 100%;
         height: 100%;
         display: grid; 
@@ -53,6 +55,7 @@ set hass(hass) {
             "bl . br"
             "bl . br"; 
           padding: 0px 0px 0px 0px;
+          padding: 0px 0px 0px calc(env(safe-area-inset-left) / 2);
       }
       .${rc}_bg>.topleft{
         grid-area: tl;
@@ -68,7 +71,7 @@ set hass(hass) {
       }
       .${rc}{
           z-index: 200;
-          position: absolute;
+          position: ${this._dc.absolute_fullscreen==false?"absolute":"fixed;"}
           top: 0;
           left:0;
 
@@ -87,6 +90,7 @@ set hass(hass) {
             "actions fle psf fr"
             "flbar fle psf fr"; 
           padding: 0px 0px 0px 0px;
+          padding: 0px 0px 0px calc(env(safe-area-inset-left) / 2);
           --ha-font-family-body: 'Antonio', Arial, sans-serif;
       }
       .${rc}>.bgborder1{
