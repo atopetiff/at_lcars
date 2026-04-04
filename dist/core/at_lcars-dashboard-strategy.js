@@ -6,25 +6,25 @@
 // ====================================================================
 
 import { getVisibleAreas } from '../utils/at_lcars-helpers.js';
-import { 
-  collectPersons, 
-  collectLights, 
-  collectCovers, 
-  collectSecurityUnsafe, 
-  collectBatteriesCritical, 
-  findWeatherEntity, 
-  findDummySensor 
+import {
+  collectPersons,
+  collectLights,
+  collectCovers,
+  collectSecurityUnsafe,
+  collectBatteriesCritical,
+  findWeatherEntity,
+  findDummySensor
 } from '../utils/at_lcars-data-collectors.js';
 import { createPersonBadges } from '../utils/at_lcars-badge-builder.js';
-import { 
-  createOverviewSection, 
-  createAreasSection, 
-  createWeatherEnergySection 
+import {
+  createOverviewSection,
+  createAreasSection,
+  createWeatherEnergySection
 } from '../utils/at_lcars-section-builder.js';
-import { 
-  createOverviewView, 
-  createUtilityViews, 
-  createAreaViews ,
+import {
+  createOverviewView,
+  createUtilityViews,
+  createAreaViews,
   createFloorView,
   createAreaConfigViews,
   createAreaAllViews,
@@ -43,40 +43,40 @@ class AtLcarsDashboardStrategy {
 
     console.log(config);
 
-    const floorWithGroup = floors.map(f=>{
-      var labelArea = areas.filter(a=>a.name==f.name);
-      var group ="noGroup";
-      if(labelArea.length==1){
-        const labels=labelArea[0].labels.filter(l=>l.startsWith("floorgroup_"));
-        if(labels.length==1){
-          group=labels[0];
+    const floorWithGroup = floors.map(f => {
+      var labelArea = areas.filter(a => a.name == f.name);
+      var group = "noGroup";
+      if (labelArea.length == 1) {
+        const labels = labelArea[0].labels.filter(l => l.startsWith("floorgroup_"));
+        if (labels.length == 1) {
+          group = labels[0];
         }
-        
+
 
       }
-      return {...f, group: group}
+      return { ...f, group: group }
     });
 
     // console.log({floorWithGroup});
-    var groups = Object.groupBy(floorWithGroup, ({ group }) => group );
+    var groups = Object.groupBy(floorWithGroup, ({ group }) => group);
     // console.log({groups});
-    const protocols =entities.filter(e=>e.labels.includes("protokoll")).map(e=>{return e.entity_id});
+    const protocols = entities.filter(e => e.labels.includes("protokoll")).map(e => { return e.entity_id });
     //console.log(protocols);
 
-    const notHiddenAreas = areas.filter(a=>a.labels.includes("hidden")===false);
-    const noLevelFloor = floors.filter(f=>f.level===null).map(f=>f.floor_id);
+    const notHiddenAreas = areas.filter(a => a.labels.includes("hidden") === false);
+    const noLevelFloor = floors.filter(f => f.level === null).map(f => f.floor_id);
     //console.log({noLevelFloor});
     let area_struct = {
       other: [
-        ...notHiddenAreas.filter(a=>a.floor_id===null || noLevelFloor.includes(a.floor_id)),
+        ...notHiddenAreas.filter(a => a.floor_id === null || noLevelFloor.includes(a.floor_id)),
         // ...notHiddenAreas.filter(a=>floors.filter(f=>f.floor_id===a.floor_id&&f.level===null)),
         // ...floors.filter(f=>f.level===null).map(f=>{return {notHiddenAreas.filter(a=>a.floor_id===f.floor_id)};})
         // ...floors.filter(f=>f.level===null).map(f=>{return {floor_id: f.floor_id,name: f.name, level: f.level, areas: notHiddenAreas.filter(a=>a.floor_id===f.floor_id)};})
       ],
-      inside: floors.filter(f=>f.level!==null).map(f=>{return {floor_id: f.floor_id,name: f.name, level: f.level, areas: notHiddenAreas.filter(a=>a.floor_id===f.floor_id)};})
+      inside: floors.filter(f => f.level !== null).map(f => { return { floor_id: f.floor_id, name: f.name, level: f.level, areas: notHiddenAreas.filter(a => a.floor_id === f.floor_id) }; })
     };
 
-    
+
 
 
     // //console.log("areas",{areas:areas, floors:floors,struct: area_struct})
@@ -123,12 +123,12 @@ class AtLcarsDashboardStrategy {
     // Prüfe ob Bereiche nach Etagen gruppiert werden sollen (Standard: false)
     const groupByFloors = config.group_by_floors === true;
 
-     const pathname = document.location.pathname;
+    const pathname = document.location.pathname;
     const split = pathname.split("/");
     // console.log(split);
-    var base ="/"
-    if(split.length>=2){
-       base = `/${split[1]}`
+    var base = "/"
+    if (split.length >= 2) {
+      base = `/${split[1]}`
     }
     // console.log(base);
 
@@ -164,29 +164,29 @@ class AtLcarsDashboardStrategy {
     // console.log("area_struct",area_struct);
 
     // console.log("seperte views",!!config.group_by_floors);
-    if(!config.group_by_floors){
-      let rooms =[];
-      area_struct.inside.forEach(floor=>{
-        rooms =[
+    if (!config.group_by_floors) {
+      let rooms = [];
+      area_struct.inside.forEach(floor => {
+        rooms = [
           ...rooms,
           ...floor.areas
         ];
       });
-      rooms=[
+      rooms = [
         ...rooms,
         {
           aliases: [],
-        area_id: null,
-        floor_id: "none",
-        humidity_entity_id: null,
-        icon: "mdi:desktop-classic",
-        labels: [],
-        name: "NONE",
-        picture: null,
-        temperature_entity_id: null,
-      }
+          area_id: null,
+          floor_id: "none",
+          humidity_entity_id: null,
+          icon: "mdi:desktop-classic",
+          labels: [],
+          name: "NONE",
+          picture: null,
+          temperature_entity_id: null,
+        }
       ]
-      area_struct.inside=[
+      area_struct.inside = [
         {
           areas: rooms,
           floor_id: "all",
@@ -196,8 +196,8 @@ class AtLcarsDashboardStrategy {
       ];
 
     }
-    console.log("area_struct NEW",area_struct);
-    
+    console.log("area_struct NEW", area_struct);
+
 
     // const floorViews = area_struct.inside.map(f=>{
     //   return createFloorView([{
@@ -209,60 +209,64 @@ class AtLcarsDashboardStrategy {
     // });
     let areas_sorted = [];
 
-    area_struct.inside.forEach(f=>{
+    if (config?.areas_display?.order) {
 
-      let areas = [];
-      config.areas_display.order.forEach(o=>{
-        const area = f.areas.find(a=>a.area_id==o);
-        if(area){
-          areas.push(area);
-        }
+
+      area_struct.inside.forEach(f => {
+
+        let areas = [];
+        config.areas_display.order.forEach(o => {
+          const area = f.areas.find(a => a.area_id == o);
+          if (area) {
+            areas.push(area);
+          }
+        });
+        areas = [
+          ...areas,
+          ...f.areas.filter(ua => areas.some(a => a.area_id == ua.area_id) == false)
+        ];
+
+        areas_sorted = [
+          ...areas_sorted,
+          {
+            ...f,
+            areas: areas,
+
+          }
+        ]
       });
-      areas=[
-        ...areas,
-        ...f.areas.filter(ua=>areas.some(a=>a.area_id==ua.area_id)==false)
-      ];
 
-      areas_sorted = [
-        ...areas_sorted,
-        {
-          ...f,
-          areas: areas,
+      area_struct = {
+        ...area_struct,
+        inside: areas_sorted
+      };
 
-        }
-      ]
+    }
+    const floorViews = area_struct.inside.map(f => {
+      return createFloorStrat(f.name, "floor-" + f.floor_id, f.areas, config, base);
     });
 
-    area_struct = {
-      ...area_struct,
-      inside: areas_sorted
-    };
-
-    const floorViews = area_struct.inside.map(f=>{
-      return createFloorStrat(f.name, "floor-"+f.floor_id,f.areas,config,base);
-    });
-    
 
 
-    const roomViews =  createAreaViews([
+    const roomViews = createAreaViews([
       ...area_struct.other,
-      ...area_struct.inside.map(f=>f.areas).flat()
-    ], devices, entities, showRoomViews, config.areas_options || {}, config, base,"control");
-    const roomConfigViews =  createAreaViews([
+      ...area_struct.inside.map(f => f.areas).flat()
+    ], devices, entities, showRoomViews, config.areas_options || {}, config, base, "control");
+    const roomConfigViews = createAreaViews([
       ...area_struct.other,
-      ...area_struct.inside.map(f=>f.areas).flat()
+      ...area_struct.inside.map(f => f.areas).flat()
     ], devices, entities, showRoomViews, config.areas_options || {}, config, base, "config");
-    
-    const roomAllViews =  createAreaViews([
+
+    const roomAllViews = createAreaViews([
       ...area_struct.other,
-      ...area_struct.inside.map(f=>f.areas).flat()
+      ...area_struct.inside.map(f => f.areas).flat()
     ], devices, entities, showRoomViews, config.areas_options || {}, config, base, "all");
-    
-    const roomStatsViews =  createAreaViews([
+
+    const roomStatsViews = createAreaViews([
       ...area_struct.other,
-      ...area_struct.inside.map(f=>f.areas).flat()
+      ...area_struct.inside.map(f => f.areas).flat()
     ], devices, entities, showRoomViews, config.areas_options || {}, config, base, "stats");
-    
+
     // Erstelle alle Views mit areas_options und config
     const views = [
       ...floorViews,
@@ -272,7 +276,7 @@ class AtLcarsDashboardStrategy {
       ...roomAllViews,
       ...roomStatsViews
       // ...createUtilityViews(entities, showSummaryViews, config),
-      
+
     ];
 
     return {
@@ -280,7 +284,7 @@ class AtLcarsDashboardStrategy {
         hide_header: '{{ is_state("input_boolean.lcars_kiosk", "on") }}',
         hide_sidebar: false//'{{ is_state("input_boolean.lcars_kiosk", "on") }}'
       },
-        title: "Dynamisches Dashboard",
+      title: "Dynamisches Dashboard",
       views
     };
   }
