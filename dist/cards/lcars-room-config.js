@@ -103,7 +103,8 @@ class AtLcarsRoomConfig extends RoomCard {
     //------------------------------------------------------------------
     //Buttons
     [
-      ...this.em.roomEntities.filter(e=>e.labels.includes("config")).map(e=>e.entity_id)
+      ...this.em.roomEntities.filter(e=>e.labels.map(l=>l.toLowerCase()).some(l=>l=="config")).map(e=>e.entity_id),
+      ...this.em.entities.filter(e=>e.labels.map(l=>l.toLowerCase()).some(l=>l=="everyconfig")).map(e=>e.entity_id),
     ].forEach(e => {
       this._addCard(".power", 'bubble-card', `power${e}`,
         lcars_bubble_lozenge_button(e,this._dc, this.em.color3, this.em.color1, false, "45px", "14px",true),
