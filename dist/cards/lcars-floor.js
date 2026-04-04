@@ -5,7 +5,7 @@ import { Card, EntityManager } from "../utils/entity-manager.js";
 
 import { lcars_bubble_lozenge, lcars_bubble_square, lcars_bubble_square_nav, lcars_bubble_square_nav_window } from "../utils/lcars-buttons-bubble.js";
 import {  lcars_climate_bubble, lcars_cover_bubble, lcars_bubble_battery} from "../utils/at_lcars_bubble_climate.js";
-import { font, scrollbar } from "../utils/scrollbar.js";
+import {  scrollbar } from "../utils/scrollbar.js";
 
 class AtLcarsFloor extends Card {
   constructor() {
@@ -516,7 +516,6 @@ class AtLcarsFloor extends Card {
     //console.log("lcars house rerender");
     this.innerHTML = `
         <style>
-            ${font()}
             ${this._styles()}
         </style>
         ${this._html(batteryStates.length>0,!!this._dc.show_battery_on_top)}

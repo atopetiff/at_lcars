@@ -269,7 +269,7 @@ set hass(hass) {
     //console.log("lcars house rerender");
     this.innerHTML = `
         <style>
-            ${font()}
+        
             ${this._styles()}
         </style>
         ${this._html()}

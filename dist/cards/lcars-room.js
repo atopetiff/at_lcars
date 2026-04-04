@@ -4,7 +4,7 @@ import { Card, EntityManager } from "../utils/entity-manager.js";
 import { lcars_bubble_base, lcars_bubble_lozenge } from "../utils/lcars-buttons-bubble.js";
 import { lcars_mini_graph, lcars_climate_bubble } from "../utils/at_lcars_bubble_climate.js";
 import { RoomCard } from "../utils/room.js";
-import { font, scrollbar } from "../utils/scrollbar.js";
+import {  scrollbar } from "../utils/scrollbar.js";
 class AtLcarsRoom extends RoomCard {
   constructor() {
     super();
@@ -67,7 +67,7 @@ class AtLcarsRoom extends RoomCard {
 
     this.innerHTML = `
         <style>
-            ${font()}
+            
             ${scrollbar(this.em.color1, this.em.color2, this.em.color3, this.em.color4)}
             ${this.css_mobile_new(this.em.color1, this.em.color2, this.em.color3, this.em.color4)}
             ${this.css_tablet(this.em.color1, this.em.color2, this.em.color3, this.em.color4)}

@@ -246,7 +246,33 @@ class AtLcarsDashboardStrategy {
       return createFloorStrat(f.name, "floor-" + f.floor_id, f.areas, config, base);
     });
 
+    try {
+      const fontUrl = new URL("./Antonio.woff2", import.meta.url).href;
+      console.log(fontUrl)
+      let link = document.createElement("link");
+      link.setAttribute('type', 'font/woff2');
+      link.setAttribute('rel', 'preload');
+      link.setAttribute('as', 'font');
+      link.setAttribute('href', fontUrl);
+      link.setAttribute('crossorigin', "anonymous");
+      document.head.appendChild(link);
+      let style = document.createElement("style");
+      
+      style.textContent = `
+  @font-face {
+    font-family: "Antonio";
+    src: url("${fontUrl}") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
 
+  
+`;
+      document.head.appendChild(style);
+    } catch (error) {
+      console.error("Error adding font",error);
+    }
 
     const roomViews = createAreaViews([
       ...area_struct.other,

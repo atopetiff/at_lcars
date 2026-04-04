@@ -3,7 +3,7 @@ import { scheduler } from "../utils/configs.js";
 import { Card, EntityManager } from "../utils/entity-manager.js";
 import { lcars_bubble_lozenge, lcars_bubble_lozenge_button } from "../utils/lcars-buttons-bubble.js";
 import { RoomCard } from "../utils/room.js";
-import { font, scrollbar } from "../utils/scrollbar.js";
+import {  scrollbar } from "../utils/scrollbar.js";
 class AtLcarsRoomConfig extends RoomCard {
   constructor() {
     super();
@@ -87,7 +87,7 @@ class AtLcarsRoomConfig extends RoomCard {
 
     this.innerHTML = `
         <style>
-            ${font()}
+            
             ${scrollbar(this.em.color1, this.em.color2, this.em.color3, this.em.color4)}
             ${this.css_mobile_new(this.em.color1, this.em.color2, this.em.color3, this.em.color4,"2fr",false)}
             ${this.css_tablet(this.em.color1, this.em.color2, this.em.color3, this.em.color4,"150px", false)}
