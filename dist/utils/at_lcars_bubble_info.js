@@ -35,7 +35,7 @@ if (border==false) {
     --bubble-button-main-background-color: transparent;
     --bubble-sub-button-background-color: violet;
     
-    --ha-font-family-body: 'Antonio', Arial, sans-serif;
+    --ha-font-family-body: 'Antonio', monospace, Arial, sans-serif;
     --bubble-button-icon-background-color: transparent;
     text-transform: uppercase;
     box-sizing: border-box
@@ -64,7 +64,7 @@ if (border==false) {
   padding: 0 4px
   }
   .bubble-state, .bubble-sub-button-name-container{
-    font-family: 'Antonio', Arial, sans-serif;
+    font-family: 'Antonio', monospace, Arial, sans-serif;
     font-weight: bold;
     font-size: ${(height+0)}px;
     margin-top: -4px

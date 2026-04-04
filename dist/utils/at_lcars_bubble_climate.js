@@ -1,10 +1,54 @@
 
+export function lcars_bubble_battery(entity, config = {}, color_active = "#00e1ff", color_inactive = "#006673") {
+  const bubble = lcars_bubble(entity, config, color_active, color_inactive);
+  return {
+    ...bubble,
+    show_state: true,
+    button_action: {
 
-function lcars_bubble(entity,config={}, color_active = "#00e1ff", color_inactive = "#006673") {
-    let extraModeCss="";
-    if(!!config.colorblind){
-      let border ="${state == 'off' ? '"+color_inactive+"' : '"+color_active+"'}"
-    extraModeCss=`
+      tap_action: {
+        action: "more-info"
+      }
+    },
+    sub_button: [
+      // {
+
+
+      //   show_icon: false,
+      //   show_background: false,
+      //   show_arrow: false,
+      //   state_background: false,
+      //   show_name: false,
+      //   show_state: true,
+      //   show_attribute: false,
+      //   tap_action: {
+      //     action: "more-info"
+      //   },
+      //   hold_action: {
+      //     action: "more-info"
+      //   }
+      // },
+      {
+
+        show_attribute: false,
+        show_icon: true,
+
+        show_background: true,
+        show_arrow: false,
+        state_background: false,
+        show_name: false,
+        hold_action: {
+          action: "more-info"
+        }
+      }
+    ]
+  };
+}
+function lcars_bubble(entity, config = {}, color_active = "#00e1ff", color_inactive = "#006673") {
+  let extraModeCss = "";
+  if (!!config.colorblind) {
+    let border = "${state == 'off' ? '" + color_inactive + "' : '" + color_active + "'}"
+    extraModeCss = `
         ${extraModeCss}
         .bubble-background{
             box-shadow: inset 0px 0px 0px 5px ${color_inactive} !important;
@@ -26,7 +70,7 @@ function lcars_bubble(entity,config={}, color_active = "#00e1ff", color_inactive
         }
 
     `;
-}
+  }
   const styles = `* {
     --row-height: 45px;
     --bubble-default-color: ${color_active};
@@ -34,10 +78,10 @@ function lcars_bubble(entity,config={}, color_active = "#00e1ff", color_inactive
     --bubble-button-main-background-color: ${color_inactive};
     --bubble-sub-button-background-color: #ffffffaa;
     --primary-text-color: black;
-    --ha-font-family-body: 'Antonio', Arial, sans-serif;
+    --ha-font-family-body: 'Antonio', monospace, Arial, sans-serif;
     --bubble-button-icon-background-color: transparent;
     text-transform: uppercase;
-    font-family: 'Antonio', Arial, sans-serif;
+    font-family: 'Antonio',monospace, Arial, sans-serif;
   }
   .bubble-range-fill{
     border-right: 4px solid black;
@@ -93,7 +137,7 @@ function lcars_bubble(entity,config={}, color_active = "#00e1ff", color_inactive
     },
     attribute: "current_temperature",
     show_icon: false,
-    show_name: false,
+    show_name: true,
     tap_to_slide: false,
     relative_slide: false,
     slider_live_update: true
@@ -101,16 +145,16 @@ function lcars_bubble(entity,config={}, color_active = "#00e1ff", color_inactive
 }
 
 
-export function lcars_climate_bubble(entity,config={}, color_active = "#00e1ff", color_inactive = "#006673") {
-  const slider = lcars_bubble(entity,config, color_active, color_inactive)
+export function lcars_climate_bubble(entity, config = {}, color_active = "#00e1ff", color_inactive = "#006673") {
+  const slider = lcars_bubble(entity, config, color_active, color_inactive)
   return {
     ...slider,
     attribute: "current_temperature",
   };
 }
-export function lcars_cover_bubble(entity, config={}, color_active = "#00e1ff", color_inactive = "#006673") {
-  const slider = lcars_bubble(entity,config, color_active, color_inactive)
-  
+export function lcars_cover_bubble(entity, config = {}, color_active = "#00e1ff", color_inactive = "#006673") {
+  const slider = lcars_bubble(entity, config, color_active, color_inactive)
+
   return {
     ...slider,
     attribute: "current_position",
@@ -168,7 +212,7 @@ export function lcars_cover_bubble(entity, config={}, color_active = "#00e1ff", 
   };
 }
 export function lcars_cover_bubble_vert(entity, color_active = "#00e1ff", color_inactive = "#006673") {
-  let slider = lcars_bubble(entity,config={}, color_active, color_inactive);
+  let slider = lcars_bubble(entity, config = {}, color_active, color_inactive);
   slider = {
     ...slider,
     styles: `
@@ -194,7 +238,7 @@ export function lcars_cover_bubble_vert(entity, color_active = "#00e1ff", color_
     show_state: true,
     show_attribute: false,
     sub_button: [
-      
+
     ],
     min_value: 100,
     max_value: 0,
@@ -279,7 +323,7 @@ function foreground_range_color(from, to, color) {
 
 
 
-export function lcars_mini_graph(climate, heating = [], outside_shadow = null, outside_sun = null, valve_open=[]) {
+export function lcars_mini_graph(climate, heating = [], outside_shadow = null, outside_sun = null, valve_open = []) {
   const entities = [
     {
       entity: climate,
@@ -315,45 +359,45 @@ export function lcars_mini_graph(climate, heating = [], outside_shadow = null, o
       name: "Soll"
     },
   ];
- 
-    valve_open.forEach(h => {
-      entities.push({
-        entity: h,
-        name: "Ventil",
-        color: "#bb00ff",
-        smoothing: false,
-        show_state: false,
-        show_legend_state: true,
-        show_indicator: true,
-        show_graph: true,
-        show_line: true,
-        show_fill: false,
-        show_points: true,
-        show_legend: true,
-        show_name: true,
-        y_axis: "secondary"
-      });
-    });
-    heating.forEach(h => {
-      entities.push({
-        entity: h,
-        attribute: "temperature",
-        name: "Heizung",
-        color: "red",
-        smoothing: false,
-        show_state: false,
-        show_legend_state: true,
-        show_indicator: true,
-        show_graph: true,
-        show_line: true,
-        show_fill: false,
-        show_points: true,
-        show_legend: true,
-        show_name: true
-      });
-    });
 
-  
+  valve_open.forEach(h => {
+    entities.push({
+      entity: h,
+      name: "Ventil",
+      color: "#bb00ff",
+      smoothing: false,
+      show_state: false,
+      show_legend_state: true,
+      show_indicator: true,
+      show_graph: true,
+      show_line: true,
+      show_fill: false,
+      show_points: true,
+      show_legend: true,
+      show_name: true,
+      y_axis: "secondary"
+    });
+  });
+  heating.forEach(h => {
+    entities.push({
+      entity: h,
+      attribute: "temperature",
+      name: "Heizung",
+      color: "red",
+      smoothing: false,
+      show_state: false,
+      show_legend_state: true,
+      show_indicator: true,
+      show_graph: true,
+      show_line: true,
+      show_fill: false,
+      show_points: true,
+      show_legend: true,
+      show_name: true
+    });
+  });
+
+
   if (!!outside_shadow) {
     entities.push({
       entity: outside_shadow,

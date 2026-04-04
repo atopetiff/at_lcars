@@ -4,7 +4,7 @@ import { lcars_bubble_info } from "../utils/at_lcars_bubble_info.js";
 import { Card, EntityManager } from "../utils/entity-manager.js";
 
 import { lcars_bubble_lozenge, lcars_bubble_square, lcars_bubble_square_nav, lcars_bubble_square_nav_window } from "../utils/lcars-buttons-bubble.js";
-import {  lcars_climate_bubble, lcars_cover_bubble } from "../utils/at_lcars_bubble_climate.js";
+import {  lcars_climate_bubble, lcars_cover_bubble, lcars_bubble_battery} from "../utils/at_lcars_bubble_climate.js";
 import { font, scrollbar } from "../utils/scrollbar.js";
 
 class AtLcarsFloor extends Card {
@@ -77,18 +77,43 @@ class AtLcarsFloor extends Card {
       </div>
     `;
   }
+  batteryRow(style_class, prefix) {
+
+    return `
+      
+      <div class="${style_class}">
+
+        <div class="window_left" id="${prefix}window_left"></div>
+        <div class="info" id="${prefix}info" ></div>
+        <div class="link"  id="${prefix}link"></div>
+        <div class="buttons">
+          <div class="battery" id="${prefix}battery"></div>
+        </div>
+        <div class="window_right" id="${prefix}window_right"></div>
+
+      </div>
+    `;
+  }
 
 
   _styles() {
     const rc = 'lcars_floor';
     const bgGridColumns = "4px 15px 0.3fr 31px 4px 63px 2fr 15px 4px"
     return `
+      /*at-lcars-floor{
+        position: relative;
+      }*/
       .${rc}_bg{
         z-index:0;
         background: black;
-        position: absolute;
+        position: ${this._dc.absolute_fullscreen==false?"absolute":"fixed;"}
+
         width: 100%;
         height: 100%;
+        max-height: 100vh;
+        top: 0;
+        left: 0;
+
           /*max-height: calc(100vh - var(--header-height));*/
         display: grid; 
           grid-template-columns: ${bgGridColumns};
@@ -100,6 +125,8 @@ class AtLcarsFloor extends Card {
             "bl bl bl bl . br br br br"
             "bl bl bl bl . br br br br"; 
           padding: 0px 0px 0px 0px;
+          padding: 0px 0px 0px calc(env(safe-area-inset-left) / 2);
+
       }
       .${rc}_bg>.topleft{
         grid-area: tl;
@@ -114,8 +141,14 @@ class AtLcarsFloor extends Card {
         grid-area: br;
       }
       .${rc}{
-          z-index: 1;
-          position: absolute;
+
+          z-index: 2;
+          position: ${this._dc.absolute_fullscreen==false?"absolute":"fixed;"}
+
+          
+          max-height: 100vh;
+          top:0;
+          left:0;
           width: 100%;
           height: 100% ;
           /*max-height: calc(100vh - var(--header-height));*/
@@ -131,6 +164,7 @@ class AtLcarsFloor extends Card {
             "content content content content content content content"
             ". . . . . . ."; 
           padding: 0px 0px 0px 0px;
+          padding: 0px 0px 0px calc(env(safe-area-inset-left) / 2);
           
           --ha-font-family-body: 'Antonio', Arial, sans-serif;
       }
@@ -138,6 +172,7 @@ class AtLcarsFloor extends Card {
         grid-area: outside;
         display: flex;
         flex-direction: column;
+        margin-top: -12px;
       }
       .${rc}>.quick{
         grid-area: quick;
@@ -203,7 +238,11 @@ class AtLcarsFloor extends Card {
           padding: 0px 0px 0px 0px;
           border-bottom: 4px solid black;
         }
-
+      .${rc}>.content>.room_row.battery_row{
+        flex-shrink: 1;
+        flex-basis: 0px;
+        }
+      
        .${rc}>.content>.room_row>.window_left{
         grid-area: windowleft;
       }
@@ -243,6 +282,7 @@ class AtLcarsFloor extends Card {
         margin-left: 0px;
    
         }
+      
       .${rc}>.content>.room_row>.link{
         grid-area: link;
       }
@@ -263,6 +303,9 @@ class AtLcarsFloor extends Card {
         flex-grow:1;
         flex-shrink:1;
       }
+        .${rc}>.content>.room_row.battery_row>.buttons>*>*{
+          flex-basis: 250px;
+        }
         .${rc}>.content>.room_row>.buttons>.btns{
           flex-basis: 234px;
           flex-grow:1;
@@ -349,9 +392,12 @@ class AtLcarsFloor extends Card {
           
           --ha-font-family-body: 'Antonio', Arial, sans-serif;
       }
+           .${rc}>.outside{
+            margin-top:0;
+           }
           .${rc}>.outside>.out-temp,.${rc}>.outside.out-hum{
   
-          flex-direction: column;
+          flex-direction: row;
          }
           .${rc}>.outside>.out-temp>*,.${rc}>.outside.out-hum>*{
   
@@ -420,7 +466,7 @@ class AtLcarsFloor extends Card {
     return rooms;
   }
 
-  _html() {
+  _html(showBatteries,batteriesOnTop) {
     const tag = 'at-lcars-floor';
     const style_class = 'lcars_floor';
     return `
@@ -439,7 +485,10 @@ class AtLcarsFloor extends Card {
         <div class="alert"></div>
         <div class="nav"></div>
         <div class="content">
-          ${this._rooms()}
+        ${showBatteries&&batteriesOnTop==true?this.batteryRow("room_row battery_row","bat"):""}
+        ${this._rooms()}
+        ${showBatteries&&batteriesOnTop==false?this.batteryRow("room_row battery_row","bat"):""}
+        
         </div>
        
       </${tag}>
@@ -451,20 +500,50 @@ class AtLcarsFloor extends Card {
 
 
   _render() {
+    var batteryWarn=true
+    if(this._dc.show_battery_warn==false){
+      batteryWarn=false;
+    }
+    
+    let batteryStates=[];
+    if (batteryWarn) {
+      
+      var batteriesAll =this.em.entities.filter(e=>e.labels.map(l=>l.toLowerCase()).includes("battery"));
+      console.log("Batteries All",batteriesAll);
+      const minValBattery=this._dc?.show_battery_value?this._dc?.show_battery_value:30;
+      batteryStates =Object.values(this.em.hass.states || {}).filter(s=>batteriesAll.some(ba=>ba.entity_id==s.entity_id&&Number(s.state)<minValBattery));
+    }
     //console.log("lcars house rerender");
     this.innerHTML = `
         <style>
             ${font()}
             ${this._styles()}
         </style>
-        ${this._html()}
+        ${this._html(batteryStates.length>0,!!this._dc.show_battery_on_top)}
       `;
 
 
     
-    //console.log("config", this._config);
+    
+    if (batteryWarn) {
+      
+      batteryStates.map(bs=>bs.entity_id).forEach(e=>{
+        this._addCard(
+          `#batbattery`,
+          "bubble-card",
+          `batbattery${e}`,
+          lcars_bubble_battery(e, this._dc, this.em.color1, this.em.color3,),
+          e);
+        });
+        if (batteryStates.length>0) {
+          this._addCard(`#batlink`, "bubble-card", `#batlink`, lcars_bubble_square_nav_window(null,"/history?label_id=battery" , "Batterien",{...this._dc,colorblind: false}, this.em.color1,"#cc0000",false,"55px","14px",35,this.em.color1,"mdi:battery-70"), null,false);
+          
+        }
+      }
 
-    this._addCard(".topleft", "bubble-card", "hl", lcars_bubble_elbow(this.em.redAlert,{ top_left: 0, top_right: 30, bottom_right: 0, bottom_left: 0 }, { top: 20, right: 31, bottom: 0, left: 0 },"#cc0000",this.em.color2), this.em.redAlert);
+    
+    console.log("Battery States", batteryStates);
+    this._addCard(".topleft", "bubble-card", "hl", lcars_bubble_elbow(this.em.redAlert,{ top_left: 0, top_right: 20, bottom_right: 0, bottom_left: 0 }, { top: 8, right: 31, bottom: 0, left: 0 },"#cc0000",this.em.color2), this.em.redAlert);
     this._addCard(".topright", "bubble-card", "hr", lcars_bubble_elbow(this.em.redAlert,{ top_left: 30, top_right: 0, bottom_right: 0, bottom_left: 0 }, { top: 20, right: 0, bottom: 0, left: 63 },"#cc0000",this.em.color2), this.em.redAlert);
 
     this._areasWithEntities.forEach(a => {
@@ -532,7 +611,7 @@ class AtLcarsFloor extends Card {
       this.em.outsideSun
     ].filter(e=>!!e).forEach(e => {
         
-        this._addCard(`.out-temp`, 'bubble-card', `out-temp${e.entity_id}`, lcars_bubble_info(e, "white", "#e0e0e0ff",false,true,20), e.entity_id);
+        this._addCard(`.out-temp`, 'bubble-card', `out-temp${e.entity_id}`, lcars_bubble_info(e, "white", "#e0e0e0ff",false,true,25), e.entity_id);
 
 
     });

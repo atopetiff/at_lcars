@@ -10,12 +10,11 @@ export function renderEditorHTML(lo,{ allAreas, hiddenAreas, areaOrder, showEner
  }) {
   var dynamic ="";
 lo.forEach(lo=>{
-  //print key and value pairs
-  //transform the value to uppercase
-  console.log(lo.name,lo.val)
-  dynamic = `
-    ${dynamic}
-    <div class="form-row">
+  let html="";
+  switch (lo.typ) {
+    case "checkbox":
+      html= `
+        <div class="form-row">
           <input 
             type="checkbox" 
             id="${lo.name}" 
@@ -24,9 +23,40 @@ lo.forEach(lo=>{
           />
           <label for="${lo.name}">${lo.title}</label>
         </div>
-        <div class="description">
+        
+      `;
+      break;
+    case "number":
+    html= `
+        <div class="form-row">
+          <input 
+            type="number" 
+            id="${lo.name}" 
+            value="${lo.val}"
+            
+            ${!lo.depsInstalled ? 'disabled' : ''}
+          />
+          <label for="${lo.name}">${lo.title}</label>
+        </div>
+        
+      `;
+      break;
+    
+    default:
+      break;
+  }
+  html=`
+    ${html}
+    <div class="description">
           ${lo.description}
         </div>
+  `;
+  //print key and value pairs
+  //transform the value to uppercase
+  console.log(lo.name,lo.val)
+  dynamic = `
+    ${dynamic}
+    ${html}
   `
 });
   return `

@@ -17,6 +17,32 @@ export function createOverviewView(sections) {
   };
 }
 
+
+export function createFloorStrat(name, path, areas, dashboardConfig = {},basepath="/") {
+  var pathSuffix="";
+  
+
+    return {
+      title: name,
+      
+      path: path,
+      icon: "mdi:floor-plan",
+      subview: false,
+      config: dashboardConfig,
+      // theme: "LCARS Breen",
+      strategy: {
+        type: "custom:at-lcars-view-floor",
+        groups_options: {},
+        dashboardConfig, // Übergebe vollständige Dashboard-Config für Raum-Pins
+        basepath: basepath,
+        areas: areas,
+        test: "bla",
+        cardtype: "custom:at-lcars-floor"
+      }
+    };
+
+
+}
 export function createFloorView(sections, name, path) {
   return {
     title: name,

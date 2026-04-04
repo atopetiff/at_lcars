@@ -191,7 +191,7 @@ export function lcars_bubble_base(entity, config={}, color = "coral", color_acti
         --bubble-sub-button-background-color: violet;
 
         --primary-text-color: black;
-        --ha-font-family-body: 'Antonio', Arial, sans-serif;
+        --ha-font-family-body: 'Antonio', monospace, Arial, sans-serif;
         --bubble-button-icon-background-color: ${icon_bg};
         
         text-transform: uppercase;
@@ -239,7 +239,7 @@ export function lcars_bubble_base(entity, config={}, color = "coral", color_acti
     .bubble-name {
     font-size: ${fontSize};
         font-weight: 600;
-    font-family: 'Antonio', Arial, sans-serif;
+    font-family: 'Antonio', monospace, Arial, sans-serif;
     align-items: flex-end;
         
         text-align: right;
@@ -250,7 +250,7 @@ export function lcars_bubble_base(entity, config={}, color = "coral", color_acti
     .bubble-state {
     font-size: ${fontSize};
         font-weight: 400;
-    font-family: 'Antonio', Arial, sans-serif;
+    font-family: 'Antonio', monospace, Arial, sans-serif;
     align-items: flex-end;
         
         text-align: right;

@@ -44,6 +44,7 @@ import './core/at_lcars-dashboard-strategy.js';
 import './views/lcars-view-room.js';
 import './views/lcars-view-room-config.js';
 import './views/lcars-view-room-all.js';
+import './views/lcars-view-floor.js';
 
 
 //console.log('AT LCARS loaded successfully');

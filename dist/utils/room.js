@@ -124,7 +124,10 @@ export class RoomCard extends Card {
         background: black;
 
         /*testen ob es probleme verursacht!!*/
-        position: fixed;
+        /*position: fixed;*/
+        ${this._dc.absolute_fullscreen==false?"":"position: fixed;"}
+        padding: 0px 0px 0px calc(env(safe-area-inset-left) / 2);
+
         top:0px;
         
         left:0px;
@@ -327,7 +330,7 @@ export class RoomCard extends Card {
           background-color: ${color2};
       }
     .title>span{
-        font-family: 'Antonio', Arial, sans-serif;
+        font-family: 'Antonio', monospace, Arial, sans-serif;
         text-transform: uppercase;
         font-size: 22px;
         line-height: 20px;

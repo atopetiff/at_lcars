@@ -15,6 +15,16 @@ export function attachCheckboxListener(element,name, callback) {
     });
   }
 }
+export function attachNumberListener(element,name, callback) {
+  
+  const weatherCheckbox = element.querySelector(`#${name}`);
+  if (weatherCheckbox) {
+    weatherCheckbox.addEventListener('change', (e) => {
+      // console.log(e.target.value);
+      callback(e.target.value);
+    });
+  }
+}
 export function attachWeatherCheckboxListener(element, callback) {
   const weatherCheckbox = element.querySelector('#show-weather');
   if (weatherCheckbox) {

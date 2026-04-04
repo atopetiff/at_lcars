@@ -15,7 +15,8 @@ import {
   attachDragAndDropListeners,
   attachExpandButtonListeners,
   sortAreaItems,
-  attachCheckboxListener
+  attachCheckboxListener,
+  attachNumberListener
 } from './editor/at_lcars-editor-handlers.js';
 import { LcarsOptions } from './editor/at_lcars-option-names.js';
 
@@ -91,10 +92,14 @@ class at_lcarsDashboardStrategyEditor extends HTMLElement {
     let states = LcarsOptions.map(lo=>{
       console.log(lo.name,this._config[lo.name]);
       const deps = this._checkDependencies(lo.dependencies);
-      const val= this._config[lo.name]?this._config[lo.name]:lo.default;
+      const intval= this._config[lo.name]
+      const val=intval==undefined?lo.default:intval;
+    
 
       if( deps==false && val != lo.depsFailValue){
-        this._boolChanged(lo.name,lo.depsFailValue,lo.default);
+        if(lo.typ=="checkbox"){ 
+          this._boolChanged(lo.name,lo.depsFailValue,lo.default);
+        }
       }
 
       return {
@@ -166,11 +171,19 @@ class at_lcarsDashboardStrategyEditor extends HTMLElement {
       })}
     `;
 
-    LcarsOptions.forEach(lo=>
-    
-      attachCheckboxListener(this,lo.name, (val) => this._boolChanged(lo.name,val,lo.default))
-
-    )
+    LcarsOptions.forEach(lo=>{
+      switch (lo.typ) {
+        case "checkbox":
+          attachCheckboxListener(this,lo.name, (val) => this._boolChanged(lo.name,val,lo.default))
+          break;
+        case "number":
+          attachNumberListener(this,lo.name, (val) => this._numberChanged(lo.name,val,lo.default))
+          break;
+      
+        default:
+          break;
+      }
+    });
     // Binde Event-Listener
     // attachCheckboxListener(this, LcarsOptions.USE_MINI_GRAPH_CARD, (useMiniGraphCard) => this._boolChanged(LcarsOptions.USE_MINI_GRAPH_CARD,useMiniGraphCard,false));
     attachCheckboxListener(this,"use-slider-button-card", (useSliderButtonCard) => this._boolChanged("use_slider_button_card",useSliderButtonCard,false));
@@ -692,7 +705,27 @@ class at_lcarsDashboardStrategyEditor extends HTMLElement {
     this._fireConfigChanged(newConfig);
   }
   _boolChanged(param_name,value,defaultValue=true) {
+  
     console.log(param_name);
+    if (!this._config || !this._hass) {
+      return;
+    }
+
+    const newConfig = {
+      ...this._config,
+      [param_name]: value
+    };
+
+    // Wenn der Standardwert (true) gesetzt ist, entfernen wir die Property
+    if (value === defaultValue) {
+      delete newConfig[param_name];
+    }
+
+    this._config = newConfig;
+    this._fireConfigChanged(newConfig);
+  }
+  _numberChanged(param_name,value,defaultValue) {
+    console.log("numberChanged",param_name,value);
     if (!this._config || !this._hass) {
       return;
     }

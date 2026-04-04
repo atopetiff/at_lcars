@@ -10,15 +10,16 @@ this HACS Component contains a custom dashboard strategy to mimic the iconic LCA
 - im German so sometimes labels have German naming. will be configureabel in later versions
 
 ## Dependencies
+- [Bubble-Card](https://github.com/Clooos/Bubble-Card)
+    - all Buttons
+    - all info Elements
+    - most Cover Sliders
+    - Temperature / Climate Sliders
 <details>
-<summary>click to show dependencies</summary>
+<summary>click to show optional dependencies</summary>
 
 - [mini-graph-card](https://github.com/kalkih/mini-graph-card)
     - room heating overview
-- [Bubble-Card](https://github.com/Clooos/Bubble-Card)
-    - most Buttons
-    - most Cover Sliders
-    - Temperature Sliders
 - [Slider-Button-Card](https://github.com/custom-cards/slider-button-card)
     - vertical slider for Cover in Room view. this the only slider i found which can be set mimic the behaviour of a Cover
 - [Scheduler-Card](https://github.com/nielsfaber/scheduler-card)
@@ -72,6 +73,9 @@ Labels|Description|
 |`Window`|A Window entity. Currently only the first in the room with that label creates the alarm border. Multiple windows in a Room --> Create an Or Group|
 |`Config`|shows an Entity in room Config|
 |`hidden`|hides a room from the house view|
+|`Battery`|if activated in the dashboard Config all entities with this label will be shown in room overview if ther value is below the configured value
+|`EveryConfig`|shows entity in every room config panel
+|`Quick`|shows entity in the top of roomview
 
 ### Colors
 

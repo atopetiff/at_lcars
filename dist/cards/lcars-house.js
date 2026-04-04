@@ -34,10 +34,13 @@ set hass(hass) {
   _styles() {
     const rc = 'lcars_house';
     return `
+      at-lcars-house{
+        position: relative;
+      }
       .${rc}_bg{
         z-index:0;
         background: black;
-        position: absolute;
+        /*position: absolute;*/
         width: 100%;
         height: 100%;
         display: grid; 
@@ -64,8 +67,11 @@ set hass(hass) {
         grid-area: br;
       }
       .${rc}{
-          z-index: 1;
+          z-index: 200;
           position: absolute;
+          top: 0;
+          left:0;
+
           height: calc(100% - var(--header-height));
           max-height: calc(100vh - var(--header-height));
           width: 100%;

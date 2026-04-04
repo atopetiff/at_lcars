@@ -27,7 +27,8 @@ import {
   createAreaViews ,
   createFloorView,
   createAreaConfigViews,
-  createAreaAllViews
+  createAreaAllViews,
+  createFloorStrat
 } from '../utils/at_lcars-view-builder.js';
 
 class AtLcarsDashboardStrategy {
@@ -65,7 +66,7 @@ class AtLcarsDashboardStrategy {
     const notHiddenAreas = areas.filter(a=>a.labels.includes("hidden")===false);
     const noLevelFloor = floors.filter(f=>f.level===null).map(f=>f.floor_id);
     //console.log({noLevelFloor});
-    const area_struct = {
+    let area_struct = {
       other: [
         ...notHiddenAreas.filter(a=>a.floor_id===null || noLevelFloor.includes(a.floor_id)),
         // ...notHiddenAreas.filter(a=>floors.filter(f=>f.floor_id===a.floor_id&&f.level===null)),
@@ -160,9 +161,9 @@ class AtLcarsDashboardStrategy {
       //   : [])
     ];
 
-    console.log("area_struct",area_struct);
+    // console.log("area_struct",area_struct);
 
-    console.log("seperte views",!!config.group_by_floors);
+    // console.log("seperte views",!!config.group_by_floors);
     if(!config.group_by_floors){
       let rooms =[];
       area_struct.inside.forEach(floor=>{
@@ -198,13 +199,47 @@ class AtLcarsDashboardStrategy {
     console.log("area_struct NEW",area_struct);
     
 
+    // const floorViews = area_struct.inside.map(f=>{
+    //   return createFloorView([{
+    //     type: "custom:at-lcars-floor",
+    //     areas: f.areas,
+    //     basepath: base,
+    //     dashboardConfig: config
+    //   }], f.name, "floor-"+f.floor_id)
+    // });
+    let areas_sorted = [];
+
+    area_struct.inside.forEach(f=>{
+
+      let areas = [];
+      config.areas_display.order.forEach(o=>{
+        const area = f.areas.find(a=>a.area_id==o);
+        if(area){
+          areas.push(area);
+        }
+      });
+      areas=[
+        ...areas,
+        ...f.areas.filter(ua=>areas.some(a=>a.area_id==ua.area_id)==false)
+      ];
+
+      areas_sorted = [
+        ...areas_sorted,
+        {
+          ...f,
+          areas: areas,
+
+        }
+      ]
+    });
+
+    area_struct = {
+      ...area_struct,
+      inside: areas_sorted
+    };
+
     const floorViews = area_struct.inside.map(f=>{
-      return createFloorView([{
-        type: "custom:at-lcars-floor",
-        areas: f.areas,
-        basepath: base,
-        dashboardConfig: config
-      }], f.name, "floor-"+f.floor_id)
+      return createFloorStrat(f.name, "floor-"+f.floor_id,f.areas,config,base);
     });
     
 

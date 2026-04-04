@@ -52,5 +52,44 @@ export const LcarsOptions = [
         ],
         depsFailValue: false
     },
-    
+    {
+        name: "show_battery_warn",
+        title: "Batterie Warnung anzeigen",
+        description: "Sollen Batterien Warnung unterhalb Batterie Warn Wert in der Raumansicht angezeigt werden",
+        typ: "checkbox",
+        default: true,
+        dependencies: [
+        ],
+        depsFailValue: true
+    },
+    {
+        name: "show_battery_value",
+        title: "Batterie Warn Wert",
+        description: "unterhalb dieser schwelle werden Entities mit dem label 'Battery' angezeigt",
+        typ: "number",
+        default: 30,
+        dependencies: [
+        ],
+        depsFailValue: 30
+    },
+    {
+        name: "show_battery_on_top",
+        title: "Batterie Warnung oben",
+        description: "Batterie Warnung über Räumen anzeigen. defaults to false",
+        typ: "checkbox",
+        default: false,
+        dependencies: [
+        ],
+        depsFailValue: false
+    },
+    {
+        name: "absolute_fullscreen",
+        title: "Absoluter Fullscreen",
+        description: "verwendet fixed für die Anzeigen sodas keine weiter anzeigen möglich sind",
+        typ: "checkbox",
+        default: true,
+        dependencies: [
+        ],
+        depsFailValue: true
+    },
 ];
