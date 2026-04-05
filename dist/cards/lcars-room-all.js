@@ -149,7 +149,7 @@ class AtLcarsRoomAll extends RoomCard {
       ...this.em.roomEntities.filter(e=>e.labels.includes("config")).map(e=>e.entity_id)
     ].forEach(e => {
       this._addCard(".config", 'bubble-card', `config${e}`,
-        lcars_bubble_lozenge_button(e,this._dc, this.em.color3, this.em.color1, false, "45px", "14px"),
+        lcars_bubble_lozenge_button(e,this._dc, this.em.color3, this.em.color1, false, "45px", "14px",true),
         e
       );
     });
@@ -191,7 +191,7 @@ class AtLcarsRoomAll extends RoomCard {
         targets.forEach(t=>{
 
           this._addCard(t, 'bubble-card', `${t}${rd}${e.entity_id}`,
-            lcars_bubble_lozenge_button(e.entity_id,this._dc, this.em.color3, this.em.color4, false, "45px", "14px"),
+            lcars_bubble_lozenge_button(e.entity_id,this._dc, this.em.color3, this.em.color4, false, "45px", "14px",true),
             e.entity_id
           );
         });
@@ -205,7 +205,7 @@ class AtLcarsRoomAll extends RoomCard {
       card.appendChild(document.createTextNode("helpers / automations ..."));
       this.em.roomEntities.filter(e=>e.area_id!=null && e.labels.includes("config")==false).forEach(e=>{
       this._addCard(".direct", 'bubble-card', `dev${e.entity_id}`,
-        lcars_bubble_lozenge_button(e.entity_id,this._dc, this.em.color3, this.em.color4, false, "45px", "14px"),
+        lcars_bubble_lozenge_button(e.entity_id,this._dc, this.em.color3, this.em.color4, false, "45px", "14px",true),
         e.entity_id
       );
       });

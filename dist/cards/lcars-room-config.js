@@ -3,7 +3,7 @@ import { scheduler } from "../utils/configs.js";
 import { Card, EntityManager } from "../utils/entity-manager.js";
 import { lcars_bubble_lozenge, lcars_bubble_lozenge_button } from "../utils/lcars-buttons-bubble.js";
 import { RoomCard } from "../utils/room.js";
-import {  scrollbar } from "../utils/scrollbar.js";
+import { scrollbar } from "../utils/scrollbar.js";
 class AtLcarsRoomConfig extends RoomCard {
   constructor() {
     super();
@@ -31,7 +31,7 @@ class AtLcarsRoomConfig extends RoomCard {
   }
 
 
-  get css_addon(){
+  get css_addon() {
     return `
     .scheduler{
       --ha-card-background: black;
@@ -89,8 +89,8 @@ class AtLcarsRoomConfig extends RoomCard {
         <style>
             
             ${scrollbar(this.em.color1, this.em.color2, this.em.color3, this.em.color4)}
-            ${this.css_mobile_new(this.em.color1, this.em.color2, this.em.color3, this.em.color4,"2fr",false)}
-            ${this.css_tablet(this.em.color1, this.em.color2, this.em.color3, this.em.color4,"150px", false)}
+            ${this.css_mobile_new(this.em.color1, this.em.color2, this.em.color3, this.em.color4, "2fr", false)}
+            ${this.css_tablet(this.em.color1, this.em.color2, this.em.color3, this.em.color4, "150px", false)}
             ${this.css_addon}
         </style>
         ${this.html_new}
@@ -98,40 +98,46 @@ class AtLcarsRoomConfig extends RoomCard {
 
     this.setupLayout('config');
 
-    
+
 
     //------------------------------------------------------------------
     //Buttons
+    let configs =this.em.roomEntities.filter(e => e.labels.map(l => l.toLowerCase()).some(l => l == "config")).map(e => e.entity_id);
     [
-      ...this.em.roomEntities.filter(e=>e.labels.map(l=>l.toLowerCase()).some(l=>l=="config")).map(e=>e.entity_id),
-      ...this.em.entities.filter(e=>e.labels.map(l=>l.toLowerCase()).some(l=>l=="everyconfig")).map(e=>e.entity_id),
+      ...configs,
+      ...this.em.entities.filter(e => e.labels.map(l => l.toLowerCase()).some(l => l == "everyconfig") && configs.includes(e.entity_id)==false).map(e => e.entity_id),
     ].forEach(e => {
       this._addCard(".power", 'bubble-card', `power${e}`,
-        lcars_bubble_lozenge_button(e,this._dc, this.em.color3, this.em.color1, false, "45px", "14px",true),
+        lcars_bubble_lozenge_button(e, this._dc, this.em.color3, this.em.color1, false, "45px", "14px", true),
         e
       );
     });
-    
 
 
 
-    if(!!this._dc?.use_scheduler_card){
-    this._addCard(".scheduler", 'scheduler-card', `scheduler`, scheduler([...this.em.roomEntities.map(e=>e.entity_id), ...this.em.everyRoom]), "*");
+
+    if (!!this._dc?.use_scheduler_card) {
+
+      this._addCard(".scheduler", 'scheduler-card', `scheduler`, scheduler([...this.em.roomEntities.map(e => e.entity_id), ...this.em.everyRoom,...configs]), "*");
+      if(this.em.area.labels.map(l=>l.toLowerCase()).includes("config")){
+        this._addCard(".scheduler", 'scheduler-card', `allscheduler`, scheduler([],"Alle Zeitpläne",true), "*");
+
+      }
     }
-   console.log("roominfos", this.em.roomInfos);
+    console.log("roominfos", this.em.roomInfos);
     let addedInfos = [];
     [
       ...this.em.roomInfos
     ].forEach(e => {
       try {
-        if(addedInfos.includes(e.entity_id)==false){
+        if (addedInfos.includes(e.entity_id) == false) {
 
           addedInfos.push(e.entity_id);
           this._addCard(".grid", 'bubble-card', `grid${e.entity_id}`, lcars_bubble_info(e, this.em.color1, "#e0e0e0ff", true, true, 20), e.entity_id);
         }
-        
+
       } catch (error) {
-        console.error("error adding info",e,error)
+        console.error("error adding info", e, error)
       }
     });
 

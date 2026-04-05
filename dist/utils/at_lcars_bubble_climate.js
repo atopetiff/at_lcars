@@ -84,7 +84,8 @@ function lcars_bubble(entity, config = {}, color_active = "#00e1ff", color_inact
     font-family: 'Antonio',monospace, Arial, sans-serif;
   }
   .bubble-range-fill{
-    border-right: 4px solid black;
+    /*border-right: 4px solid black;*/
+    box-shadow: 4px 0px 0px 0px black
   }
   ${extraModeCss}
 

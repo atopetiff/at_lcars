@@ -1,5 +1,5 @@
-export function scheduler(entities) {
-  return {
+export function scheduler(entities, title="", discover_existing=false) {
+  let scheduler = {
     type: "custom:scheduler-card",
     default_editor: "scheme",
     sort_by: [
@@ -15,7 +15,22 @@ export function scheduler(entities) {
       ]
     },
     show_header_toggle: false,
-    discover_existing: false,
-    include: entities
+    discover_existing: discover_existing,
+
   };
+  if(title!=""){
+    scheduler={
+      ...scheduler,
+      title: title
+    }
+  }
+  if(entities.length>0){
+    scheduler={
+      ...scheduler,
+      include: entities,
+    };
+  }
+  return {
+    ...scheduler
+  }
 }

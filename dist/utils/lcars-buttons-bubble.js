@@ -101,6 +101,28 @@ export function lcars_bubble_square_nav(path, name, config={},color = "coral", c
         }
     };
 }
+export function lcars_bubble_nav(path, name, config={},color = "coral", color_active = "red", state = false, height = "55px",fontSize="18px",icon=null) {
+    let nav= {
+        ...lcars_bubble_base(null, config,color, color_active, state, height, fontSize,true,true,"25px",false),
+        button_type: "name",
+        name: name,
+        show_icon: false,
+        button_action:{
+            tap_action: {
+                action: "navigate",
+                navigation_path: path
+            }
+        }
+    };
+    if(icon!=null){
+        nav={
+            ...nav,
+            show_icon: true,
+            icon: icon
+        }
+    }
+    return nav;
+}
 export function lcars_bubble_square_nav_window(window,path, name, config={}, color = "coral", color_active = "red", state = false, height = "55px",fontSize="18px",iconWidth=37,icon_bg_overwrite=null, iconOverwrite=null) {
     let card ={
         ...lcars_bubble_base(window, config,color, color_active, state, height, fontSize,false,false,"0px",true,iconWidth,icon_bg_overwrite),
