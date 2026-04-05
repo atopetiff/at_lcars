@@ -72,11 +72,14 @@ class AtLcarsRoomStats extends RoomCard {
     gap: 8px;
     flex-wrap: wrap;
     overflow: auto;
-    justify-content: space-evenly;
+    justify-content: stretch;
+    justify-items: self-start;
+    padding-right: 20px;
       }
       .content>.links>*{
-        flex-basis: 250px;
+        flex-basis: 150px;
         height: 45px;
+        flex-grow:1;
       
       }
     
