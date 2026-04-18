@@ -119,7 +119,7 @@ export class RoomCard extends Card {
     .room {
         height: 100%;
         width: 100%;
-        max-height: 100vh;
+        max-height: ${this._dc.absolute_fullscreen==false?"calc(100vh - var(--header-height))":"100vh"};
         margin: 0px 0px 0px 0px;  
         background: black;
 
