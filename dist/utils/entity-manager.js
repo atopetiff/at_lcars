@@ -20,15 +20,17 @@ export class EntityManager {
   color2 = "#cc99cc";
   color3 = "#99f";
   color4 = "#99c";
-
-  constructor(hass) {
+  dashboardConfig = undefined;
+  constructor(hass,config) {
+    console.log(config);
     this.updateTrackedStates(hass);
+    this.dashboardConfig=config?.dashboardConfig;
     this.entities = Object.values(this.hass.entities || {});
     this.devices = Object.values(this.hass.devices || {});
     // this.areas = Object.values(this.hass.areas || {});
     this.changeTracker = [];
 
-    this.setColors();
+    this.setColors(undefined);
     this.redAlert = this.entities.find(e => e.labels.includes("redalert"))?.entity_id;
     this.yellowAlert = this.entities.find(e => e.labels.includes("yellowalert"))?.entity_id;
     this.outsideShadow = this.entities.find(e => e.labels.includes("outside_shadow"));
@@ -39,6 +41,16 @@ export class EntityManager {
   }
 
   getColors(area_id = undefined) {
+    console.log("setColors",this.dashboardConfig?.monochrome);
+    if (this.dashboardConfig?.monochrome==true) {
+  
+      return {
+        color1: this.dashboardConfig?.monoprim?this.dashboardConfig?.monoprim:"#c69",
+        color2: this.dashboardConfig?.monosec?this.dashboardConfig?.monosec:"#fc6",
+        color3: this.dashboardConfig?.monosec?this.dashboardConfig?.monosec:"#fc6",
+        color4: this.dashboardConfig?.monosec?this.dashboardConfig?.monosec:"#fc6" };
+
+    } 
     const color1 = this.entities.find(e => e.labels.includes("lcars_primary_color") && e.area_id === area_id);
     const color2 = this.entities.find(e => e.labels.includes("lcars_secondary_color") && e.area_id === area_id);
     const color3 = this.entities.find(e => e.labels.includes("lcars_tertiary_color") && e.area_id === area_id);
@@ -72,12 +84,15 @@ export class EntityManager {
 
   }
   setColors(area_id = undefined) {
-    const colors = this.getColors(area_id);
-    //console.log({colors});
-    this.color1 = colors.color1;
-    this.color2 = colors.color2;
-    this.color3 = colors.color3;
-    this.color4 = colors.color4;
+    
+      const colors = this.getColors(area_id);
+      //console.log({colors});
+      this.color1 = colors.color1;
+      this.color2 = colors.color2;
+      this.color3 = colors.color3;
+      this.color4 = colors.color4;
+      
+    
   }
 
   _trackedEntityIds() {

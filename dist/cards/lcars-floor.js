@@ -27,7 +27,7 @@ class AtLcarsFloor extends Card {
     // //console.log("needs render", { has: !this._hass, config: !this._config });
     if (!this.em && !!this._config) {
       //console.log("inital render floor");
-      this.em = new EntityManager(hass);
+      this.em = new EntityManager(hass,this._config);
 
       this.groupEntities();
       this._render();
@@ -143,15 +143,15 @@ class AtLcarsFloor extends Card {
       .${rc}{
 
           z-index: 2;
-          position: ${this._dc.absolute_fullscreen==false?"absolute":"fixed;"}
+          position: ${this._dc.absolute_fullscreen==false?"absolute":"fixed"};
 
           
           max-height: 100vh;
-          top:0;
           left:0;
+          top:${this._dc.absolute_fullscreen==false?"var(--header-height)":"0px"};
           width: 100%;
           height: 100% ;
-          /*max-height: calc(100vh - var(--header-height));*/
+          max-height: ${this._dc.absolute_fullscreen==false?"calc(100vh - calc(var(--header-height) + 23px))":"100vh"};
           margin: 0px 0px 0px 0px;
           display: grid;
           display: grid; 
@@ -559,7 +559,7 @@ class AtLcarsFloor extends Card {
       //   this._addCard(`#${a.area_id}window_right`, "bubble-card", `#${a.area_id}window_right`, lcars_bubble_elbow(null,{ top_left: 0, top_right: 20, bottom_right: 20, bottom_left: 0 }, { top: 0, right: 20, bottom: 0, left: 0 },"#cc0000","grey"), null,false);
       // }
       
-      this._addCard(`#${a.area_id}link`, "bubble-card", `#${a.area_id}link`, lcars_bubble_square_nav_window(a.window_entity_id,this._config.basepath +"/"+ a.area_id , a.area_id,{...this._dc,colorblind: false}, a.color1,"#cc0000",false,"55px","14px",35,a.color1,a.icon), a.window_entity_id);
+      this._addCard(`#${a.area_id}link`, "bubble-card", `#${a.area_id}link`, lcars_bubble_square_nav_window(a.window_entity_id,this._config.basepath +"/"+ a.area_id , a.area_id,{...this._dc,colorblind: false}, this._dc?.monochrome==true?a.color3:a.color1,"#cc0000",false,"55px","14px",35,this._dc?.monochrome==true?a.color3:a.color1,a.icon), a.window_entity_id);
       // this._addCard(".buttons", 'bubble-card', "buttonb", lcars_bubble_square(this.em.yellowAlert, this.em.color2, this.em.yellowAlertColor), this.em.yellowAlert);
       
       if(!!a.temperature_entity_id){

@@ -13,7 +13,7 @@ class AtLcarsProtocols extends Card {
       // //console.log("needs render", { has: !this._hass, config: !this._config });
       if (!this.em && !!this._config) {
         //console.log("inital render floor");
-        this.em = new EntityManager(hass);
+        this.em = new EntityManager(hass,this.config);
   
         this._render();
   

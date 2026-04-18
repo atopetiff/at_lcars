@@ -18,7 +18,7 @@ class AtLcarsRoomAll extends RoomCard {
     // //console.log("needs render", { has: !this._hass, config: !this._config });
     if (!this.em && !!this._config) {
       //console.log("inital render room");
-      this.em = new EntityManager(hass);
+      this.em = new EntityManager(hass,this.config);
       this.em.fillRoom(this._config.area_id)
 
       this._render();

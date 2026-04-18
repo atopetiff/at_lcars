@@ -27,10 +27,26 @@ lo.forEach(lo=>{
       `;
       break;
     case "number":
-    html= `
+      html= `
         <div class="form-row">
           <input 
             type="number" 
+            id="${lo.name}" 
+            value="${lo.val}"
+            
+            ${!lo.depsInstalled ? 'disabled' : ''}
+          />
+          <label for="${lo.name}">${lo.title}</label>
+        </div>
+        
+      `;
+      break;
+    
+    case "color":
+      html= `
+        <div class="form-row">
+          <input 
+            type="color" 
             id="${lo.name}" 
             value="${lo.val}"
             

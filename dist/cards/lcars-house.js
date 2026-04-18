@@ -14,7 +14,7 @@ set hass(hass) {
     // //console.log("needs render", { has: !this._hass, config: !this._config });
     if (!this.em && !!this._config) {
       //console.log("inital render floor");
-      this.em = new EntityManager(hass);
+      this.em = new EntityManager(hass,this.config);
 
       // this.groupEntities();
       this._render();
@@ -40,7 +40,7 @@ set hass(hass) {
       .${rc}_bg{
         z-index:0;
         background: black;
-        position: ${this._dc.absolute_fullscreen==false?"absolute":"fixed;"}
+        position: ${this._dc.absolute_fullscreen==false?"absolute":"fixed"};
         top: 0;
         left: 0;
         width: 100%;

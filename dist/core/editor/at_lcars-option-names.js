@@ -1,5 +1,35 @@
 export const LcarsOptions = [
      {
+        name: "monochrome",
+        title: "Monochrome Modus",
+        description: "vereinfacht Farbdarstellung um Farbfehlsichtigkeiten auszugleichen",
+        typ: "checkbox",
+        default: false,
+        dependencies: [
+        ],
+        depsFailValue: false
+    },
+     {
+        name: "monoprim",
+        title: "Monochrome Modus Primärfarbe",
+        description: "farbe für aktiv im Monochrome modus",
+        typ: "color",
+        default: "#c69",
+        dependencies: [
+        ],
+        depsFailValue: false
+    },
+     {
+        name: "monosec",
+        title: "Monochrome Modus Sekundärfarbe",
+        description: "farbe für alles andere im Monochrome modus",
+        typ: "color",
+        default: "fc6",
+        dependencies: [
+        ],
+        depsFailValue: false
+    },
+     {
         name: "colorblind",
         title: "Farbenblinden Modus",
         description: "vereinfacht Farbdarstellung um Farbfehlsichtigkeiten auszugleichen",
