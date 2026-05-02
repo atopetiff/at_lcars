@@ -34,16 +34,19 @@ set hass(hass) {
   _styles() {
     const rc = 'lcars_house';
     return `
-      at-lcars-house{
+      /*at-lcars-house{
         position: relative;
-      }
+      }*/
       .${rc}_bg{
         z-index:0;
         background: black;
         position: ${this._dc.absolute_fullscreen==false?"absolute":"fixed"};
-        top: 0;
-        left: 0;
-        width: 100%;
+                top:${this._dc.absolute_fullscreen==false?"var(--header-height)":"0px"};
+          width: calc(100% - var(--mdc-drawer-width,0px));
+          height: 100% ;
+          max-height: ${this._dc.absolute_fullscreen==false?"calc(100vh - calc(var(--header-height) + 23px))":"100vh"};
+      
+      
         height: 100%;
         display: grid; 
           grid-template-columns: 1.5fr 8px 2fr; 
@@ -70,14 +73,17 @@ set hass(hass) {
         grid-area: br;
       }
       .${rc}{
-          z-index: 200;
-          position: ${this._dc.absolute_fullscreen==false?"absolute":"fixed;"}
-          top: 0;
+          z-index: 2;
+          position: ${this._dc.absolute_fullscreen==false?"absolute":"fixed"};
+
+          top:${this._dc.absolute_fullscreen==false?"var(--header-height)":"0px"};
+          width: calc(100% - var(--mdc-drawer-width,0px));
+          height: 100% ;
+          max-height: ${this._dc.absolute_fullscreen==false?"calc(100vh - calc(var(--header-height) + 23px))":"100vh"};
+      
           left:0;
 
-          height: calc(100% - var(--header-height));
-          max-height: calc(100vh - var(--header-height));
-          width: 100%;
+      
           margin: 0px 0px 0px 0px;
           display: grid;
           display: grid; 

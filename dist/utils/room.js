@@ -113,7 +113,7 @@ export class RoomCard extends Card {
     const graph = showGraph == true ? 'graph' : 'grid';
     return `
     :host{
-      background: red;
+      background: black;
       overflow: hidden;
     }
     .room {

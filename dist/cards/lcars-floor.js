@@ -106,15 +106,17 @@ class AtLcarsFloor extends Card {
       .${rc}_bg{
         z-index:0;
         background: black;
-        position: ${this._dc.absolute_fullscreen==false?"absolute":"fixed;"}
+        position: ${this._dc.absolute_fullscreen==false?"absolute":"fixed"};
 
-        width: 100%;
-        height: 100%;
-        max-height: 100vh;
-        top: 0;
+        top:${this._dc.absolute_fullscreen==false?"var(--header-height)":"0px"};
+          width: 100%;
+          height: 100% ;
+          max-height: ${this._dc.absolute_fullscreen==false?"calc(100vh - calc(var(--header-height) + 23px))":"100vh"};
+      
+ 
         left: 0;
 
-          /*max-height: calc(100vh - var(--header-height));*/
+
         display: grid; 
           grid-template-columns: ${bgGridColumns};
           grid-template-rows: 50px 1fr 1fr 25px; 
