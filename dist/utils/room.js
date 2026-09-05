@@ -261,7 +261,15 @@ export class RoomCard extends Card {
         flex-direction: column;
         gap: 6px;
     }
-    .content>.power{
+    .content>.textheader{
+      margin-top: 1rem;
+    }
+    .content>.power,
+    .content>.config,
+    .content>.automations,
+    .content>.everyroomconfig,
+    .content>.color,
+    .content>.hiddenbtn{
         display:flex;
         flex-wrap: wrap;
         gap: 6px;
@@ -269,6 +277,17 @@ export class RoomCard extends Card {
     }
     .content>.power>*{
         flex-basis: 135px;
+      flex-grow: 1;
+      flex-shrink: 1;
+      height: 45px !important;
+      
+    }
+    .content>.config>*,
+    .content>.automations>*,
+    .content>.everyroomconfig>*,
+    .content>.color>*,
+    .content>.hiddenbtn>*{
+        flex-basis: 175px;
       flex-grow: 1;
       flex-shrink: 1;
       height: 45px !important;

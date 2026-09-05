@@ -153,6 +153,31 @@ export function lcars_climate_bubble(entity, config = {}, color_active = "#00e1f
     attribute: "current_temperature",
   };
 }
+export function lcars_slider_bubble(entity, config = {}, color_active = "#00e1ff", color_inactive = "#006673") {
+  const slider = lcars_bubble(entity, config, color_active, color_inactive)
+  return {
+    ...slider,
+    attribute: "current_temperature",
+    sub_button: [
+      // {
+        
+      //   show_attribute: true,
+      //   attribute: "initial",
+      //   show_icon: false,
+      //   show_state: true,
+      //   show_background: false,
+      //   show_arrow: false,
+      //   state_background: false,
+      //   show_name: false,
+      //   hold_action: {
+      //     action: "more-info"
+      //   }
+      // }
+    ],
+    show_icon: true,
+    show_state: true
+  };
+}
 export function lcars_cover_bubble(entity, config = {}, color_active = "#00e1ff", color_inactive = "#006673") {
   const slider = lcars_bubble(entity, config, color_active, color_inactive)
 

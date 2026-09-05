@@ -1,4 +1,6 @@
+import { lcars_slider_bubble } from "../utils/at_lcars_bubble_climate.js";
 import { lcars_bubble_info } from "../utils/at_lcars_bubble_info.js";
+import { lcars_bubble_seperator } from "../utils/at_lcars_bubble_seperator.js";
 import { scheduler } from "../utils/configs.js";
 import { Card, EntityManager } from "../utils/entity-manager.js";
 import { lcars_bubble_lozenge, lcars_bubble_lozenge_button } from "../utils/lcars-buttons-bubble.js";
@@ -57,11 +59,20 @@ class AtLcarsRoomConfig extends RoomCard {
       <div class="actionborder"></div>
       <div class="content">
 
-          <div class="power"></div>
+      <div class="everyroomconfigheader textheader"></div>
+      <div class="everyroomconfig"></div>
+          <div class="configheader textheader"></div>
+          <div class="config"></div>
+          <div class="automationsheader textheader"></div>
+          <div class="automations"></div>
           <div class="climate"></div>
           <div class="trv"></div>
           <div class="covers"></div>
           <div class="scheduler"></div>
+          <div class="hiddenbtnheader textheader"></div>
+          <div class="hiddenbtn"></div>
+          <div class="colorheader textheader"></div>
+          <div class="color"></div>
       </div>
       <div class="infoborder"></div>
       <div class="footer"></div>
@@ -102,28 +113,101 @@ class AtLcarsRoomConfig extends RoomCard {
 
     //------------------------------------------------------------------
     //Buttons
-    let configs =this.em.roomEntities.filter(e => e.labels.map(l => l.toLowerCase()).some(l => l == "config")).map(e => e.entity_id);
+    let configs =this.em.roomEntities.filter(e => e.labels.map(l => l.toLowerCase()).some(l => l == "config"));
+    this._addCard(".everyroomconfigheader", 'bubble-card', `everyroomconfigtext`,
+      lcars_bubble_seperator("Global", this.em.color3,  true, false, 25),
+      null,false
+    );
     [
-      ...configs,
       ...this.em.entities.filter(e => e.labels.map(l => l.toLowerCase()).some(l => l == "everyconfig") && configs.includes(e.entity_id)==false).map(e => e.entity_id),
     ].forEach(e => {
-      this._addCard(".power", 'bubble-card', `power${e}`,
+      this._addCard(".everyroomconfig", 'bubble-card', `everyroomconfig${e}`,
         lcars_bubble_lozenge_button(e, this._dc, this.em.color3, this.em.color1, false, "45px", "14px", true),
         e
       );
     });
+    
+    console.log("room configs", configs);
+    let automations =  configs.filter(e=>e.platform=="automation");
+    let color = configs.filter(e=>e.labels.map(l => l.toLowerCase()).some(l => l == "lcars_color"));
+    let hiddenbuttons = configs.filter(e=>e.labels.map(l => l.toLowerCase()).some(l => l == "hiddenbutton"));
+    this._addCard(".configheader", 'bubble-card', `configtext`,
+      lcars_bubble_seperator("Config", this.em.color3,  true, false, 25),
+      null,false
+    );
+    configs = configs.filter(e=>[...automations, ...color,...hiddenbuttons].some(a=>a.entity_id==e.entity_id)==false);
+    [
+      ...configs
+    ].forEach(e => {
+      if (e.platform=="input_number") {
+        this._addCard(".config", 'bubble-card', `config${e}`,
+          lcars_slider_bubble(e.entity_id, this._dc, this.em.color1, this.em.color3),
+          e.entity_id
+        );
+        
+      } else {
+        this._addCard(".config", 'bubble-card', `config${e}`,
+          lcars_bubble_lozenge_button(e.entity_id, this._dc, this.em.color3, this.em.color1, false, "45px", "14px", true),
+          e.entity_id
+        );
+        
+      }
+    });
+ 
+  this._addCard(".automationsheader", 'bubble-card', `automationstext`,
+      lcars_bubble_seperator("Automations", this.em.color3,  true, false, 25),
+      null,false
+    );
+    [
+      ...automations.map(e=>e.entity_id)
+    ].forEach(e => {
+      this._addCard(".automations", 'bubble-card', `automations${e}`,
+        lcars_bubble_lozenge_button(e, this._dc, this.em.color3, this.em.color1, false, "45px", "14px", true),
+        e
+      );
+    });
+    
 
 
 
 
     if (!!this._dc?.use_scheduler_card) {
 
-      this._addCard(".scheduler", 'scheduler-card', `scheduler`, scheduler([...this.em.roomEntities.map(e => e.entity_id), ...this.em.everyRoom,...configs]), "*");
+      this._addCard(".scheduler", 'scheduler-card', `scheduler`, scheduler([...this.em.roomEntities.map(e => e.entity_id), ...this.em.everyRoom,...configs.map(e=>e.entity_id)]), "*");
       if(this.em.area.labels.map(l=>l.toLowerCase()).includes("config")){
         this._addCard(".scheduler", 'scheduler-card', `allscheduler`, scheduler([],"Alle Zeitpläne",true), "*");
 
       }
     }
+
+    //hiddenbuttons. schalter zwar nützlich aber nicht empfehlenswert in hauptansicht
+    this._addCard(".hiddenbtnheader", 'bubble-card', `hiddenbtntext`,
+      lcars_bubble_seperator("Hidden Buttons", this.em.color3,  true, false, 25),
+      null,false
+    );
+    [
+      ...hiddenbuttons.map(e=>e.entity_id)
+    ].forEach(e => {
+      this._addCard(".hiddenbtn", 'bubble-card', `hiddenbtn${e}`,
+        lcars_bubble_lozenge_button(e, this._dc, this.em.color3, this.em.color1, false, "45px", "14px", true),
+        e
+      );
+    });
+
+    //Colors
+    this._addCard(".colorheader", 'bubble-card', `colortext`,
+      lcars_bubble_seperator("Color", this.em.color3,  true, false, 25),
+      null,false
+    );
+    [
+      ...color.map(e=>e.entity_id)
+    ].forEach(e => {
+      this._addCard(".color", 'bubble-card', `color${e}`,
+        lcars_bubble_lozenge_button(e, this._dc, this.em.color3, this.em.color1, false, "45px", "14px", true),
+        e
+      );
+    });
+
     console.log("roominfos", this.em.roomInfos);
     let addedInfos = [];
     [
