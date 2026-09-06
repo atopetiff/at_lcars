@@ -387,7 +387,7 @@ export class RoomCard extends Card {
     `;
   }
 
-  setupLayout(type = "control") {
+  setupLayout(type = "control", music_assistant_path) {
     //------------------------------------------------------------------
     //rooms
     this._addCard(".rooms", 'bubble-card',
@@ -428,7 +428,7 @@ export class RoomCard extends Card {
         },
         {
           label: "Open",
-          target: this._config.basepath + "/" + this._config.area_id+"-open",
+          target: music_assistant_path,
           color: type == "music_open" ? this.em.color1 : this.em.color3
         },
       ]

@@ -142,7 +142,7 @@ class AtLcarsRoomMusic extends RoomCard {
         ${this.html_new}
       `;
 
-    this.setupLayout('music_ma');
+    this.setupLayout('music_ma',this._dc?.music_assistant_path);
 
 
 
