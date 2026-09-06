@@ -57,6 +57,21 @@ lo.forEach(lo=>{
         
       `;
       break;
+    case "text":
+      html= `
+        <div class="form-row">
+          <input 
+            type="text" 
+            id="${lo.name}" 
+            value="${lo.val}"
+            
+            ${!lo.depsInstalled ? 'disabled' : ''}
+          />
+          <label for="${lo.name}">${lo.title}</label>
+        </div>
+        
+      `;
+      break;
     
     default:
       break;

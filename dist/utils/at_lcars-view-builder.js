@@ -131,6 +131,9 @@ export function createAreaViews(visibleAreas, devices, entities, showRoomViews =
     case "stats":
       pathSuffix="-stats"
       break;
+    case "music":
+      pathSuffix="-music"
+      break;
   
     default:
       break;

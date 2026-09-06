@@ -4,8 +4,8 @@ import { lcars_bubble_info } from "../utils/at_lcars_bubble_info.js";
 import { Card, EntityManager } from "../utils/entity-manager.js";
 
 import { lcars_bubble_lozenge, lcars_bubble_square, lcars_bubble_square_nav, lcars_bubble_square_nav_window } from "../utils/lcars-buttons-bubble.js";
-import {  lcars_climate_bubble, lcars_cover_bubble, lcars_bubble_battery} from "../utils/at_lcars_bubble_climate.js";
-import {  scrollbar } from "../utils/scrollbar.js";
+import { lcars_climate_bubble, lcars_cover_bubble, lcars_bubble_battery } from "../utils/at_lcars_bubble_climate.js";
+import { scrollbar } from "../utils/scrollbar.js";
 
 class AtLcarsFloor extends Card {
   constructor() {
@@ -27,7 +27,7 @@ class AtLcarsFloor extends Card {
     // //console.log("needs render", { has: !this._hass, config: !this._config });
     if (!this.em && !!this._config) {
       //console.log("inital render floor");
-      this.em = new EntityManager(hass,this._config);
+      this.em = new EntityManager(hass, this._config);
 
       this.groupEntities();
       this._render();
@@ -39,7 +39,7 @@ class AtLcarsFloor extends Card {
   }
 
   groupEntities() {
-
+    console.log("areas group enti", this._config.areas);
     this._areasWithEntities = this._config.areas.map(a => {
       const all = this.em.filterForArea(a.area_id);
 
@@ -77,6 +77,23 @@ class AtLcarsFloor extends Card {
       </div>
     `;
   }
+  musicrow(style_class, prefix) {
+
+    return `
+      
+      <div class="${style_class}">
+
+        <div class="window_left" id="${prefix}window_left"></div>
+        <div class="info" id="${prefix}info" ></div>
+        <div class="link"  id="${prefix}link"></div>
+        <div class="buttons">
+          <div class="music_btns" id="${prefix}btns"></div>
+        </div>
+        <div class="window_right" id="${prefix}window_right"></div>
+
+      </div>
+    `;
+  }
   batteryRow(style_class, prefix) {
 
     return `
@@ -106,12 +123,12 @@ class AtLcarsFloor extends Card {
       .${rc}_bg{
         z-index:0;
         background: black;
-        position: ${this._dc.absolute_fullscreen==false?"absolute":"fixed"};
+        position: ${this._dc.absolute_fullscreen == false ? "absolute" : "fixed"};
 
-        top:${this._dc.absolute_fullscreen==false?"var(--header-height)":"0px"};
+        top:${this._dc.absolute_fullscreen == false ? "var(--header-height)" : "0px"};
           width: 100%;
           height: 100% ;
-          max-height: ${this._dc.absolute_fullscreen==false?"calc(100vh - calc(var(--header-height) + 23px))":"100vh"};
+          max-height: ${this._dc.absolute_fullscreen == false ? "calc(100vh - calc(var(--header-height) + 23px))" : "100vh"};
       
  
         left: 0;
@@ -145,15 +162,15 @@ class AtLcarsFloor extends Card {
       .${rc}{
 
           z-index: 2;
-          position: ${this._dc.absolute_fullscreen==false?"absolute":"fixed"};
+          position: ${this._dc.absolute_fullscreen == false ? "absolute" : "fixed"};
 
           
           max-height: 100vh;
           left:0;
-          top:${this._dc.absolute_fullscreen==false?"var(--header-height)":"0px"};
+          top:${this._dc.absolute_fullscreen == false ? "var(--header-height)" : "0px"};
           width: 100%;
           height: 100% ;
-          max-height: ${this._dc.absolute_fullscreen==false?"calc(100vh - calc(var(--header-height) + 23px))":"100vh"};
+          max-height: ${this._dc.absolute_fullscreen == false ? "calc(100vh - calc(var(--header-height) + 23px))" : "100vh"};
           margin: 0px 0px 0px 0px;
           display: grid;
           display: grid; 
@@ -453,7 +470,13 @@ class AtLcarsFloor extends Card {
   _rooms() {
     var html = ""
     var rooms = this._config?.areas.map(a => {
-      return this.row("room_row", a.area_id);
+      if(this._dc.music_area && a.area_id==this._dc.music_area){
+
+        return this.musicrow("room_row", a.area_id);
+      }else{
+
+        return this.row("room_row", a.area_id);
+      }
     }
     ).join("");
     // //console.log("html",rooms);
@@ -468,7 +491,7 @@ class AtLcarsFloor extends Card {
     return rooms;
   }
 
-  _html(showBatteries,batteriesOnTop) {
+  _html(showBatteries, batteriesOnTop) {
     const tag = 'at-lcars-floor';
     const style_class = 'lcars_floor';
     return `
@@ -487,9 +510,9 @@ class AtLcarsFloor extends Card {
         <div class="alert"></div>
         <div class="nav"></div>
         <div class="content">
-        ${showBatteries&&batteriesOnTop==true?this.batteryRow("room_row battery_row","bat"):""}
+        ${showBatteries && batteriesOnTop == true ? this.batteryRow("room_row battery_row", "bat") : ""}
         ${this._rooms()}
-        ${showBatteries&&batteriesOnTop==false?this.batteryRow("room_row battery_row","bat"):""}
+        ${showBatteries && batteriesOnTop == false ? this.batteryRow("room_row battery_row", "bat") : ""}
         
         </div>
        
@@ -502,122 +525,152 @@ class AtLcarsFloor extends Card {
 
 
   _render() {
-    var batteryWarn=true
-    if(this._dc.show_battery_warn==false){
-      batteryWarn=false;
+    var batteryWarn = true
+    console.log("lcars-floor _dc", this._dc);
+    if (this._dc.show_battery_warn == false) {
+      batteryWarn = false;
     }
-    
-    let batteryStates=[];
+
+    const music_area = this._dc.music_area ? this._dc.music_area : "";
+
+
+    let batteryStates = [];
     if (batteryWarn) {
-      
-      var batteriesAll =this.em.entities.filter(e=>e.labels.map(l=>l.toLowerCase()).includes("battery"));
-      console.log("Batteries All",batteriesAll);
-      const minValBattery=this._dc?.show_battery_value?this._dc?.show_battery_value:30;
-      batteryStates =Object.values(this.em.hass.states || {}).filter(s=>batteriesAll.some(ba=>ba.entity_id==s.entity_id&&Number(s.state)<minValBattery));
+
+      var batteriesAll = this.em.entities.filter(e => e.labels.map(l => l.toLowerCase()).includes("battery"));
+      console.log("Batteries All", batteriesAll);
+      const minValBattery = this._dc?.show_battery_value ? this._dc?.show_battery_value : 30;
+      batteryStates = Object.values(this.em.hass.states || {}).filter(s => batteriesAll.some(ba => ba.entity_id == s.entity_id && Number(s.state) < minValBattery));
     }
     //console.log("lcars house rerender");
     this.innerHTML = `
         <style>
             ${this._styles()}
         </style>
-        ${this._html(batteryStates.length>0,!!this._dc.show_battery_on_top)}
+        ${this._html(batteryStates.length > 0, !!this._dc.show_battery_on_top)}
       `;
 
 
-    
-    
+
+
     if (batteryWarn) {
-      
-      batteryStates.map(bs=>bs.entity_id).forEach(e=>{
+
+      batteryStates.map(bs => bs.entity_id).forEach(e => {
         this._addCard(
           `#batbattery`,
           "bubble-card",
           `batbattery${e}`,
           lcars_bubble_battery(e, this._dc, this.em.color1, this.em.color3,),
           e);
-        });
-        if (batteryStates.length>0) {
-          this._addCard(`#batlink`, "bubble-card", `#batlink`, lcars_bubble_square_nav_window(null,"/history?label_id=battery" , "Batterien",{...this._dc,colorblind: false}, this.em.color1,"#cc0000",false,"55px","14px",35,this.em.color1,"mdi:battery-70"), null,false);
-          
-        }
-      }
+      });
+      if (batteryStates.length > 0) {
+        this._addCard(`#batlink`, "bubble-card", `#batlink`, lcars_bubble_square_nav_window(null, "/history?label_id=battery", "Batterien", { ...this._dc, colorblind: false }, this.em.color1, "#cc0000", false, "55px", "14px", 35, this.em.color1, "mdi:battery-70"), null, false);
 
-    
+      }
+    }
+
+
     console.log("Battery States", batteryStates);
-    this._addCard(".topleft", "bubble-card", "hl", lcars_bubble_elbow(this.em.redAlert,{ top_left: 0, top_right: 20, bottom_right: 0, bottom_left: 0 }, { top: 8, right: 31, bottom: 0, left: 0 },"#cc0000",this.em.color2), this.em.redAlert);
-    this._addCard(".topright", "bubble-card", "hr", lcars_bubble_elbow(this.em.redAlert,{ top_left: 30, top_right: 0, bottom_right: 0, bottom_left: 0 }, { top: 20, right: 0, bottom: 0, left: 63 },"#cc0000",this.em.color2), this.em.redAlert);
+    this._addCard(".topleft", "bubble-card", "hl", lcars_bubble_elbow(this.em.redAlert, { top_left: 0, top_right: 20, bottom_right: 0, bottom_left: 0 }, { top: 8, right: 31, bottom: 0, left: 0 }, "#cc0000", this.em.color2), this.em.redAlert);
+    this._addCard(".topright", "bubble-card", "hr", lcars_bubble_elbow(this.em.redAlert, { top_left: 30, top_right: 0, bottom_right: 0, bottom_left: 0 }, { top: 20, right: 0, bottom: 0, left: 63 }, "#cc0000", this.em.color2), this.em.redAlert);
 
     this._areasWithEntities.forEach(a => {
       // console.log(a);
 
-      if(a.window_entity_id){
+      if (a.area_id == music_area) {
+        this._addCard(`#${a.area_id}link`, "bubble-card", `#${a.area_id}link`, lcars_bubble_square_nav_window(a.window_entity_id, this._config.basepath + "/" + a.area_id+'-music', a.area_id, { ...this._dc, colorblind: false }, this._dc?.monochrome == true ? a.color3 : a.color1, "#cc0000", false, "55px", "14px", 35, this._dc?.monochrome == true ? a.color3 : a.color1, a.icon), a.window_entity_id);
+        console.log("music a", a);
+        [
+          ...a.entities.filter(e=>e.labels.map(l=>l.toLowerCase()).includes("lcars_music_prev")),
+          ...a.entities.filter(e=>e.labels.map(l=>l.toLowerCase()).includes("lcars_music_play")),
+          ...a.entities.filter(e=>e.labels.map(l=>l.toLowerCase()).includes("lcars_music_next")),
+          ...a.entities.filter(e=>e.labels.map(l=>l.toLowerCase()).includes("lcars_music_voldown")),
+          ...a.entities.filter(e=>e.labels.map(l=>l.toLowerCase()).includes("lcars_music_volup")),
+          ...a.entities.filter(e=>e.labels.map(l=>l.toLowerCase()).includes("lcars_music_target"))
+        ].forEach(e => {
+          this._addCard(
+            `#${a.area_id}btns`,
+            "bubble-card",
+            `${a.area_id}lights${e.entity_id}`,
+            lcars_bubble_lozenge(e.entity_id, this._dc, a.color3, a.color1, false, "45px", "14px"),
+            e.entity_id);
 
-        this._addCard(`#${a.area_id}window_left`, "bubble-card", `#${a.area_id}window_left`, lcars_bubble_elbow(a.window_entity_id,{ top_left: 20, top_right: 0, bottom_right: 0, bottom_left: 20 }, { top: 0, right: 20, bottom: 0, left: 0 },"#cc0000","black"), a.window_entity_id);
-        this._addCard(`#${a.area_id}window_right`, "bubble-card", `#${a.area_id}window_right`, lcars_bubble_elbow(a.window_entity_id,{ top_left: 0, top_right: 20, bottom_right: 20, bottom_left: 0 }, { top: 0, right: 20, bottom: 0, left: 0 },"#cc0000","black"), a.window_entity_id);
+        });
+               
       }
-      // else{
+      else {
 
-      //   this._addCard(`#${a.area_id}window_left`, "bubble-card", `#${a.area_id}window_left`, lcars_bubble_elbow(null,{ top_left: 20, top_right: 0, bottom_right: 0, bottom_left: 20 }, { top: 0, right: 20, bottom: 0, left: 0 },"#cc0000","grey"), null,false);
-      //   this._addCard(`#${a.area_id}window_right`, "bubble-card", `#${a.area_id}window_right`, lcars_bubble_elbow(null,{ top_left: 0, top_right: 20, bottom_right: 20, bottom_left: 0 }, { top: 0, right: 20, bottom: 0, left: 0 },"#cc0000","grey"), null,false);
-      // }
-      
-      this._addCard(`#${a.area_id}link`, "bubble-card", `#${a.area_id}link`, lcars_bubble_square_nav_window(a.window_entity_id,this._config.basepath +"/"+ a.area_id , a.area_id,{...this._dc,colorblind: false}, this._dc?.monochrome==true?a.color3:a.color1,"#cc0000",false,"55px","14px",35,this._dc?.monochrome==true?a.color3:a.color1,a.icon), a.window_entity_id);
-      // this._addCard(".buttons", 'bubble-card', "buttonb", lcars_bubble_square(this.em.yellowAlert, this.em.color2, this.em.yellowAlertColor), this.em.yellowAlert);
-      
-      if(!!a.temperature_entity_id){
-        this._addCard(`#${a.area_id}info`, 'bubble-card', `#${a.area_id}info_temp`, lcars_bubble_info(a.entities.find(e=>e.entity_id==a.temperature_entity_id), "white", "#e0e0e0ff",false,true,20), a.temperature_entity_id);
+
+
+        if (a.window_entity_id) {
+
+          this._addCard(`#${a.area_id}window_left`, "bubble-card", `#${a.area_id}window_left`, lcars_bubble_elbow(a.window_entity_id, { top_left: 20, top_right: 0, bottom_right: 0, bottom_left: 20 }, { top: 0, right: 20, bottom: 0, left: 0 }, "#cc0000", "black"), a.window_entity_id);
+          this._addCard(`#${a.area_id}window_right`, "bubble-card", `#${a.area_id}window_right`, lcars_bubble_elbow(a.window_entity_id, { top_left: 0, top_right: 20, bottom_right: 20, bottom_left: 0 }, { top: 0, right: 20, bottom: 0, left: 0 }, "#cc0000", "black"), a.window_entity_id);
+        }
+        // else{
+
+        //   this._addCard(`#${a.area_id}window_left`, "bubble-card", `#${a.area_id}window_left`, lcars_bubble_elbow(null,{ top_left: 20, top_right: 0, bottom_right: 0, bottom_left: 20 }, { top: 0, right: 20, bottom: 0, left: 0 },"#cc0000","grey"), null,false);
+        //   this._addCard(`#${a.area_id}window_right`, "bubble-card", `#${a.area_id}window_right`, lcars_bubble_elbow(null,{ top_left: 0, top_right: 20, bottom_right: 20, bottom_left: 0 }, { top: 0, right: 20, bottom: 0, left: 0 },"#cc0000","grey"), null,false);
+        // }
+
+        this._addCard(`#${a.area_id}link`, "bubble-card", `#${a.area_id}link`, lcars_bubble_square_nav_window(a.window_entity_id, this._config.basepath + "/" + a.area_id, a.area_id, { ...this._dc, colorblind: false }, this._dc?.monochrome == true ? a.color3 : a.color1, "#cc0000", false, "55px", "14px", 35, this._dc?.monochrome == true ? a.color3 : a.color1, a.icon), a.window_entity_id);
+        // this._addCard(".buttons", 'bubble-card', "buttonb", lcars_bubble_square(this.em.yellowAlert, this.em.color2, this.em.yellowAlertColor), this.em.yellowAlert);
+
+        if (!!a.temperature_entity_id) {
+          this._addCard(`#${a.area_id}info`, 'bubble-card', `#${a.area_id}info_temp`, lcars_bubble_info(a.entities.find(e => e.entity_id == a.temperature_entity_id), "white", "#e0e0e0ff", false, true, 20), a.temperature_entity_id);
+        }
+        if (!!a.humidity_entity_id) {
+          this._addCard(`#${a.area_id}info`, 'bubble-card', `#${a.area_id}info_temp`, lcars_bubble_info(a.entities.find(e => e.entity_id == a.humidity_entity_id), "white", "#e0e0e0ff", false, true, 20), a.humidity_entity_id);
+        }
+        [
+          ...a.lights,
+          ...a.powerToggles
+        ].forEach(e => {
+          this._addCard(
+            `#${a.area_id}btns`,
+            "bubble-card",
+            `${a.area_id}lights${e}`,
+            lcars_bubble_lozenge(e, this._dc, a.color3, a.color1, false, "45px", "14px"),
+            e);
+
+        });
+        if (!!a.climate_entity_id) {
+
+          this._addCard(
+            `#${a.area_id}climate`,
+            "bubble-card",
+            `${a.area_id}climate${a.climate_entity_id}`,
+            lcars_climate_bubble(a.climate_entity_id, this._dc, a.color1, a.color3,),
+            a.climate_entity_id);
+        }
+        a.covers.forEach(e => {
+
+          this._addCard(
+            `#${a.area_id}cover`,
+            "bubble-card",
+            `${a.area_id}cover${e}`,
+            lcars_cover_bubble(e, this._dc, a.color1, a.color3,),
+            e);
+        });
       }
-      if(!!a.humidity_entity_id){
-        this._addCard(`#${a.area_id}info`, 'bubble-card', `#${a.area_id}info_temp`, lcars_bubble_info(a.entities.find(e=>e.entity_id==a.humidity_entity_id), "white", "#e0e0e0ff",false,true,20), a.humidity_entity_id);
-      }
-      [
-        ...a.lights,
-        ...a.powerToggles
-      ].forEach(e => {
-        this._addCard(
-          `#${a.area_id}btns`,
-          "bubble-card",
-          `${a.area_id}lights${e}`,
-          lcars_bubble_lozenge(e,this._dc, a.color3, a.color1, false, "45px","14px"),
-          e);
-
-      });
-      if (!!a.climate_entity_id) {
-
-        this._addCard(
-          `#${a.area_id}climate`,
-          "bubble-card",
-          `${a.area_id}climate${a.climate_entity_id}`,
-          lcars_climate_bubble(a.climate_entity_id, this._dc, a.color1, a.color3,),
-          a.climate_entity_id);
-      }
-      a.covers.forEach(e => {
-
-        this._addCard(
-          `#${a.area_id}cover`,
-          "bubble-card",
-          `${a.area_id}cover${e}`,
-          lcars_cover_bubble(e, this._dc, a.color1, a.color3,),
-          e);
-      });
     });
-    this._addCard(".bottomright", "bubble-card", "fr", lcars_bubble_elbow(this.em.redAlert,{ top_left: 0, top_right: 0, bottom_right: 0, bottom_left: 20 }, { top: 0, right: 0, bottom: 8, left: 63 },"#cc0000",this.em.color2,{ top_left: null, top_right: null, bottom_right: null, bottom_left: 15 }), this.em.redAlert);
-    this._addCard(".bottomleft", "bubble-card", "fle", lcars_bubble_elbow(this.em.redAlert,{ top_left: 0, top_right: 0, bottom_right: 20, bottom_left: 0 }, { top: 0, right: 31, bottom: 8, left: 0 },"#cc0000",this.em.color2,{ top_left: null, top_right: null, bottom_right: 15, bottom_left: null }), this.em.redAlert);
-    
+    this._addCard(".bottomright", "bubble-card", "fr", lcars_bubble_elbow(this.em.redAlert, { top_left: 0, top_right: 0, bottom_right: 0, bottom_left: 20 }, { top: 0, right: 0, bottom: 8, left: 63 }, "#cc0000", this.em.color2, { top_left: null, top_right: null, bottom_right: null, bottom_left: 15 }), this.em.redAlert);
+    this._addCard(".bottomleft", "bubble-card", "fle", lcars_bubble_elbow(this.em.redAlert, { top_left: 0, top_right: 0, bottom_right: 20, bottom_left: 0 }, { top: 0, right: 31, bottom: 8, left: 0 }, "#cc0000", this.em.color2, { top_left: null, top_right: null, bottom_right: 15, bottom_left: null }), this.em.redAlert);
+
 
 
     const ausentemp = this.em.entities.filter(e => e.labels.includes("aussentemperatur"));
     [
       this.em.outsideShadow,
       this.em.outsideSun
-    ].filter(e=>!!e).forEach(e => {
-        
-        this._addCard(`.out-temp`, 'bubble-card', `out-temp${e.entity_id}`, lcars_bubble_info(e, "white", "#e0e0e0ff",false,true,25), e.entity_id);
+    ].filter(e => !!e).forEach(e => {
+
+      this._addCard(`.out-temp`, 'bubble-card', `out-temp${e.entity_id}`, lcars_bubble_info(e, "white", "#e0e0e0ff", false, true, 25), e.entity_id);
 
 
     });
     [
-      ...this.em.entities.filter(e => e.labels.map(l=>l.toLowerCase()).includes("quick")),
+      ...this.em.entities.filter(e => e.labels.map(l => l.toLowerCase()).includes("quick")),
       // ...this.em.entities.filter(e => e.labels.includes("protokoll")),
 
     ].forEach(e => {
@@ -625,27 +678,27 @@ class AtLcarsFloor extends Card {
         `.quick`,
         "bubble-card",
         `quick${e.entity_id}`,
-        lcars_bubble_lozenge(e.entity_id,this._dc, this.em.color3, this.em.color1, false, "35px", "13px"),
+        lcars_bubble_lozenge(e.entity_id, this._dc, this.em.color3, this.em.color1, false, "35px", "13px"),
         e.entity_id);
 
     });
 
 
     this._addCard(
-          `.alert`,
-          "bubble-card",
-          `navalert`,
-          lcars_bubble_square(this.em.redAlert,this._dc, this.em.color2, this.em.redAlertColor, false, "30px","14px",this.em.color2),
-          this.em.redAlert);
+      `.alert`,
+      "bubble-card",
+      `navalert`,
+      lcars_bubble_square(this.em.redAlert, this._dc, this.em.color2, this.em.redAlertColor, false, "30px", "14px", this.em.color2),
+      this.em.redAlert);
     [
 
       {
         label: "Home",
-        target: this._config.basepath+"/home"
+        target: this._config.basepath + "/home"
       },
     ].forEach(e => {
 
-      this._addCard(`.nav`, "bubble-card", `nav${e.label}`, lcars_bubble_square_nav(e.target , e.label,{...this._dc,colorblind: false}, this.em.color3), null,false);
+      this._addCard(`.nav`, "bubble-card", `nav${e.label}`, lcars_bubble_square_nav(e.target, e.label, { ...this._dc, colorblind: false }, this.em.color3), null, false);
 
     });
 

@@ -73,6 +73,7 @@ class AtLcarsDashboardStrategy {
         // ...floors.filter(f=>f.level===null).map(f=>{return {notHiddenAreas.filter(a=>a.floor_id===f.floor_id)};})
         // ...floors.filter(f=>f.level===null).map(f=>{return {floor_id: f.floor_id,name: f.name, level: f.level, areas: notHiddenAreas.filter(a=>a.floor_id===f.floor_id)};})
       ],
+      
       inside: floors.filter(f => f.level !== null).map(f => { return { floor_id: f.floor_id, name: f.name, level: f.level, areas: notHiddenAreas.filter(a => a.floor_id === f.floor_id) }; })
     };
 
@@ -220,6 +221,16 @@ class AtLcarsDashboardStrategy {
           const area = f.areas.find(a => a.area_id == o);
           if (area) {
             areas.push(area);
+          }else{
+
+            if(config.music_area && config.music_area==o){
+              const music_area = area_struct.other.find(a => a.area_id == o);
+              console.log("music area",music_area);
+              if (music_area) {
+                areas.push(music_area);
+                area_struct.other = area_struct.other.filter(o=>o.area_id!=music_area.area_id);
+              }
+            }
           }
         });
         areas = [
@@ -275,24 +286,30 @@ class AtLcarsDashboardStrategy {
       console.error("Error adding font",error);
     }
 
+    let flatend = area_struct.inside.map(f => f.areas).flat();
+    let music = flatend.filter(a=>a.area_id == config.music_area);
+     flatend = flatend.filter(a=>a.area_id != config.music_area);
     const roomViews = createAreaViews([
       ...area_struct.other,
-      ...area_struct.inside.map(f => f.areas).flat()
+      ...flatend
     ], devices, entities, showRoomViews, config.areas_options || {}, config, base, "control");
     const roomConfigViews = createAreaViews([
       ...area_struct.other,
-      ...area_struct.inside.map(f => f.areas).flat()
+      ...flatend
     ], devices, entities, showRoomViews, config.areas_options || {}, config, base, "config");
 
     const roomAllViews = createAreaViews([
       ...area_struct.other,
-      ...area_struct.inside.map(f => f.areas).flat()
+      ...flatend
     ], devices, entities, showRoomViews, config.areas_options || {}, config, base, "all");
 
     const roomStatsViews = createAreaViews([
       ...area_struct.other,
-      ...area_struct.inside.map(f => f.areas).flat()
+      ...flatend
     ], devices, entities, showRoomViews, config.areas_options || {}, config, base, "stats");
+    const roomMusicViews = createAreaViews([
+      ...music
+    ], devices, entities, showRoomViews, config.areas_options || {}, config, base, "music");
 
     // Erstelle alle Views mit areas_options und config
     const views = [
@@ -301,7 +318,8 @@ class AtLcarsDashboardStrategy {
       ...roomViews,
       ...roomConfigViews,
       ...roomAllViews,
-      ...roomStatsViews
+      ...roomStatsViews,
+      ...roomMusicViews
       // ...createUtilityViews(entities, showSummaryViews, config),
 
     ];

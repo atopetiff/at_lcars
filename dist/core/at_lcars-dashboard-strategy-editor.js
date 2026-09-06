@@ -182,6 +182,9 @@ class at_lcarsDashboardStrategyEditor extends HTMLElement {
         case "color":
           attachNumberListener(this,lo.name, (val) => this._numberChanged(lo.name,val,lo.default))
           break;
+        case "text":
+          attachNumberListener(this,lo.name, (val) => this._numberChanged(lo.name,val,lo.default))
+          break;
       
         default:
           break;

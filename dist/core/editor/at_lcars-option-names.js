@@ -122,4 +122,34 @@ export const LcarsOptions = [
         ],
         depsFailValue: true
     },
+    {
+        name: "include_music_assistant",
+        title: "Music Assistant einbinden",
+        description: "Wenn aktiviert wird der Music Assistant im unten definierten Raum als ifram eingebunden",
+        typ: "checkbox",
+        default: false,
+        dependencies: [
+        ],
+        depsFailValue: false
+    },
+    {
+        name: "music_area",
+        title: "Bereich in dem Musiksteuerungen abgelegt werden",
+        description: "in diesen bereich wir der music assistant eingebunden. in der Übersicht, werden die mit den labels lcars_music_prev lcars_music_play lcars_music_next lcars_music_voldown lcars_music_volup lcars_music_target lcars_music_fill_left lcars_music_fill_right",
+        typ: "text",
+        default: "music",
+        dependencies: [
+        ],
+        depsFailValue: false
+    },
+    {
+        name: "music_assistant_path",
+        title: "path zu music assistant",
+        description: "bsp.: /d5369777_music_assistant",
+        typ: "text",
+        default: "",
+        dependencies: [
+        ],
+        depsFailValue: false
+    },
 ];

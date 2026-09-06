@@ -99,7 +99,7 @@ export class RoomCard extends Card {
         }
         .grid{
           align-content: space-between;
-          ${showGraph==false?"margin-top: -16px;":""}
+          ${showGraph == false ? "margin-top: -16px;" : ""}
         }
         .graph{
           margin-top: -33px;
@@ -119,13 +119,13 @@ export class RoomCard extends Card {
     .room {
         height: 100%;
         width: 100%;
-        max-height: ${this._dc.absolute_fullscreen==false?"calc(100vh - var(--header-height))":"100vh"};
+        max-height: ${this._dc.absolute_fullscreen == false ? "calc(100vh - var(--header-height))" : "100vh"};
         margin: 0px 0px 0px 0px;  
         background: black;
 
         /*testen ob es probleme verursacht!!*/
         /*position: fixed;*/
-        ${this._dc.absolute_fullscreen==false?"":"position: fixed;"}
+        ${this._dc.absolute_fullscreen == false ? "" : "position: fixed;"}
         padding: 0px 0px 0px calc(env(safe-area-inset-left) / 2);
 
         top:0px;
@@ -387,12 +387,12 @@ export class RoomCard extends Card {
     `;
   }
 
-  setupLayout(type="control") {
+  setupLayout(type = "control") {
     //------------------------------------------------------------------
     //rooms
     this._addCard(".rooms", 'bubble-card',
       "rooms",
-      lcars_bubble_square_nav(this._config.basepath + "/floor-" + this._config.floor_id, "Räume",{...this._dc,colorblind: false}, this.em.color3),
+      lcars_bubble_square_nav(this._config.basepath + "/floor-" + this._config.floor_id, "Räume", { ...this._dc, colorblind: false }, this.em.color3),
       null,
       false
     );
@@ -402,44 +402,63 @@ export class RoomCard extends Card {
 
     //------------------------------------------------------------------
 
-    this._addCard(".corner", "bubble-card", "corner", lcars_bubble_elbow(this.em.redAlert,{ top_left: 0, top_right: 0, bottom_right: 50, bottom_left: 0 }, { top: 0, right: 10, bottom: 30, left: 0 },"#cc0000",this.em.color2), this.em.redAlert);
-    
+    this._addCard(".corner", "bubble-card", "corner", lcars_bubble_elbow(this.em.redAlert, { top_left: 0, top_right: 0, bottom_right: 50, bottom_left: 0 }, { top: 0, right: 10, bottom: 30, left: 0 }, "#cc0000", this.em.color2), this.em.redAlert);
+
     //------------------------------------------------------------------
     //corner side
-    this._addCard(".side", "bubble-card", "side", lcars_bubble_elbow(this.em.redAlert,{ top_left: 0, top_right: 0, bottom_right: 0, bottom_left: 0 }, { top: 0, right: 10, bottom: 0, left: 0 },"#cc0000",this.em.color2), this.em.redAlert);
+    this._addCard(".side", "bubble-card", "side", lcars_bubble_elbow(this.em.redAlert, { top_left: 0, top_right: 0, bottom_right: 0, bottom_left: 0 }, { top: 0, right: 10, bottom: 0, left: 0 }, "#cc0000", this.em.color2), this.em.redAlert);
 
     //------------------------------------------------------------------
     //alert buttons
-    this._addCard(".buttons", 'bubble-card', "buttonb", lcars_bubble_square(this.em.yellowAlert,this._dc, this.em.color2, this.em.yellowAlertColor,false,"30px","12px",this.em.color2), this.em.yellowAlert);
-    this._addCard(".buttons", 'bubble-card', "buttona", lcars_bubble_square(this.em.redAlert,this._dc, this.em.color2, this.em.redAlertColor,false,"30px","12px",this.em.color2), this.em.redAlert);
+    this._addCard(".buttons", 'bubble-card', "buttonb", lcars_bubble_square(this.em.yellowAlert, this._dc, this.em.color2, this.em.yellowAlertColor, false, "30px", "12px", this.em.color2), this.em.yellowAlert);
+    this._addCard(".buttons", 'bubble-card', "buttona", lcars_bubble_square(this.em.redAlert, this._dc, this.em.color2, this.em.redAlertColor, false, "30px", "12px", this.em.color2), this.em.redAlert);
 
 
     //------------------------------------------------------------------
     //Navigation
 
-    [
-      {
-        label: "Control",
-        target: this._config.basepath + "/" + this._config.area_id,
-        color: type=="control"?this.em.color1:this.em.color3
-      },
-      {
-        label: "Config",
-        target: this._config.basepath + "/" + this._config.area_id + "-config",
-        color: type=="config"?this.em.color1:this.em.color3
-      },
-      {
-        label: "Statistik",
-        target: this._config.basepath + "/" + this._config.area_id + "-stats",
-        color: type=="stats"?this.em.color1:this.em.color3
-      },
-      {
-        label: "All",
-        target: this._config.basepath + "/" + this._config.area_id + "-all",
-        color: type=="all"?this.em.color1:this.em.color3
-      },
-    ].forEach(e => {
-      this._addCard(".actionborder", 'bubble-card', `actionborder${e.label}`, lcars_bubble_square_nav(e.target, e.label,{...this._dc,colorblind: false}, e.color), null, false);
+    let navElements = [];
+
+    if (type.startsWith("music")) {
+      navElements =[
+        {
+          label: "Library",
+          target: this._config.basepath + "/" + this._config.area_id+"-music",
+          color: type == "music_ma" ? this.em.color1 : this.em.color3
+        },
+        {
+          label: "Open",
+          target: this._config.basepath + "/" + this._config.area_id+"-open",
+          color: type == "music_open" ? this.em.color1 : this.em.color3
+        },
+      ]
+    } else {
+      navElements = [
+        {
+          label: "Control",
+          target: this._config.basepath + "/" + this._config.area_id,
+          color: type == "control" ? this.em.color1 : this.em.color3
+        },
+        {
+          label: "Config",
+          target: this._config.basepath + "/" + this._config.area_id + "-config",
+          color: type == "config" ? this.em.color1 : this.em.color3
+        },
+        {
+          label: "Statistik",
+          target: this._config.basepath + "/" + this._config.area_id + "-stats",
+          color: type == "stats" ? this.em.color1 : this.em.color3
+        },
+        {
+          label: "All",
+          target: this._config.basepath + "/" + this._config.area_id + "-all",
+          color: type == "all" ? this.em.color1 : this.em.color3
+        },
+      ];
+    }
+
+    navElements.forEach(e => {
+      this._addCard(".actionborder", 'bubble-card', `actionborder${e.label}`, lcars_bubble_square_nav(e.target, e.label, { ...this._dc, colorblind: false }, e.color), null, false);
     });
 
 
