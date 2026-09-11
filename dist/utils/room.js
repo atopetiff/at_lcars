@@ -17,8 +17,9 @@ export class RoomCard extends Card {
       .room {
         
         grid-template-areas:
-          "infoborder   ${graph}     ${graph} ${graph}   grid   grid   grid   grid   .      side"
-          "infoborder   ${graph}     ${graph} ${graph}   grid   grid   grid   grid   .      side"
+          "infoborder   .            .        .          .      .      .      .       .      side"
+          "infoborder   ${graph}     ${graph} ${graph}   grid   grid   grid   grid    .      side"
+          "infoborder   ${graph}     ${graph} ${graph}   grid   grid   grid   grid    .      side"
           "footer       footer       footer   footer  .       .       .       .       .      side"
           "footer       footer       footer   footer  title   title   title   title   .      side"
           ".            .            .        .       title   title   title   title   .      side"
@@ -28,32 +29,36 @@ export class RoomCard extends Card {
           "rooms        rooms        .        .       .       .       corner  corner  corner corner"
           "rooms        rooms        .        buttons buttons .       corner  corner  corner corner";
       }
+      .grid{
+          align-content: space-between;
+          ${showGraph == false ? "margin-top: -16px;" : ""}
+          border-radius: 0px 0px 0px 0px;
+        }
     }
     @media (width > 550px){
       .room {
-        grid-template-columns:
-        ${leftWidth} 30px    4px      46px         4px    1fr     1fr     6px     24px    20px   4px     10px;
-      grid-template-rows: 20px 22px 1fr 1fr 30px 4px 26px 4px 30px;
+        grid-template-columns: calc(env(safe-area-inset-left) * 0.6) ${leftWidth} 30px    4px      46px         4px    1fr     1fr     6px     24px    20px   4px     10px;
+        grid-template-rows: 20px 22px 1fr 1fr 30px 4px 26px 4px 30px;
         grid-template-areas:
-          "footer    footer     .       header       header  header  title   title   title   title   .      side"
-          "footer    footer     .       header       header  header  .       .       .       .       .      side"
-          "${graph}  actionborder actionborder       actionborder .       content content content content content .      side"
-          "grid      actionborder actionborder       actionborder .       content content content content content .      side"
-          "grid      rooms        rooms       rooms        .       content content content content content .      side"
-          "grid      rooms        rooms       rooms        .       .       .       .       .       .       .      side"
-          "grid      rooms        rooms       rooms        .       .       .       .       corner  corner  corner corner"
-          "grid      .          .       .            .       .       .       .       corner  corner  corner corner"
-          "infoborder   infoborder  infoborder infoborder      . buttons buttons .       corner  corner  corner corner";
+          "footer     footer    footer     .       header       header  header  title   title   title   title   .      side"
+          "footer     footer    footer     .       header       header  header  .       .       .       .       .      side"
+          ".          ${graph}  actionborder actionborder       actionborder .       content content content content content .      side"
+          ".          grid      actionborder actionborder       actionborder .       content content content content content .      side"
+          ".          grid      rooms        rooms       rooms        .       content content content content content .      side"
+          ".          grid      rooms        rooms       rooms        .       .       .       .       .       .       .      side"
+          ".          grid      rooms        rooms       rooms        .       .       .       .       corner  corner  corner corner"
+          ".          grid      .          .       .            .       .       .       .       corner  corner  corner corner"
+          "infoborder infoborder   infoborder  infoborder infoborder      . buttons buttons .       corner  corner  corner corner";
       }
-          .graph {
-    --ha-border-radius-square: 0px 18px 0px 0px;
-   margin-bottom:0px;
-   padding-left: 0px;
-    margin-top: -18px;
-    padding-right: 4px;
-}
+      .graph {
+        --ha-border-radius-square: 0px 18px 0px 0px;
+        margin-bottom:0px;
+        padding-left: 0px;
+        margin-top: -18px;
+        padding-right: 4px;
+      }
       .actionborder{
-      border-top: none;
+        border-top: none;
       }
       .header:after{
         left: 46px;
@@ -70,13 +75,13 @@ export class RoomCard extends Card {
         top: 8px;
         border-radius: 0px;
         border-top-right-radius: 50px;
-    }
-        .infoborder{
-          position: relative;
-          border-bottom-right-radius: 50px;
-        }
-        .infoborder:after{
-          content: "";
+      }
+      .infoborder{
+        position: relative;
+        border-bottom-right-radius: 50px;
+      }
+      .infoborder:after{
+        content: "";
         background: black;
         position: absolute;
         width: calc(100% - 80px);
@@ -84,28 +89,35 @@ export class RoomCard extends Card {
         top: 0px;
         left: 0px;
         border-bottom-right-radius: 20px;
-        }
-        .buttons>*{
+      }
+      .buttons>*{
         order:2;
-        }
-        .buttons:before{
-          content: "";
-          height: 100%;
-          width: 20px;
-          background: ${color2};
-          order:1;
-          border-radius: 15px 0px 0px 15px;
-
-        }
-        .grid{
-          align-content: space-between;
-          ${showGraph == false ? "margin-top: -16px;" : ""}
-        }
-        .graph{
-          margin-top: -33px;
-          border-top-right-radius: 35px;
-        }
+      }
+      .buttons:before{
+        content: "";
+        height: 100%;
+        width: 20px;
+        background: ${color2};
+        order:1;
+        border-radius: 15px 0px 0px 15px;
+      }
+      .grid{
+        align-content: space-between;
+        ${showGraph == false ? "margin-top: -16px;" : ""}
+        border-radius: 0px 0px 25px 0px;
+      }
+      .graph{
+        margin-top: -33px;
+        border-top-right-radius: 35px;
+      }
     }
+    @media (width > 870px) {
+      .room{  
+        grid-template-columns: calc(calc(env(safe-area-inset-left) * 0.6) + 56px) ${leftWidth} 30px    4px      46px         4px    1fr     1fr     6px     24px    20px   4px     10px;
+        
+       }
+       
+      }
     `;
   }
 
@@ -126,7 +138,7 @@ export class RoomCard extends Card {
         /*testen ob es probleme verursacht!!*/
         /*position: fixed;*/
         ${this._dc.absolute_fullscreen == false ? "" : "position: fixed;"}
-        padding: 0px 0px 0px calc(env(safe-area-inset-left) / 2);
+        padding: 0px 0px 0px 0px;
 
         top:0px;
         
@@ -136,10 +148,11 @@ export class RoomCard extends Card {
       overflow: hidden;
       grid-template-columns:
         30px          50px         6px    1fr     1fr     6px     24px    20px   4px     10px;
-      grid-template-rows: 0.7fr 0.3fr 22px 8px 4px 8px 22px ${contentHeigth} 30px 30px;
+      grid-template-rows: calc(env(safe-area-inset-top) * 0.6) 0.7fr 0.3fr 22px 8px 4px 8px 22px ${contentHeigth} 30px 30px;
       gap: 0px 0px;
       grid-auto-flow: row;
       grid-template-areas:
+        "infoborder   .            .         .          .          .          .          .          .      side"
         "infoborder   ${graph}     ${graph}  ${graph}   ${graph}   ${graph}   ${graph}   ${graph}   .      side"
         "infoborder   grid         grid      grid       grid       grid       grid       grid       .      side"
         "footer       footer       footer    footer     .          .          .          .          .      side"
@@ -187,7 +200,7 @@ export class RoomCard extends Card {
       padding: 4px;
       overflow: scroll;
       margin-bottom: -18px;
-      
+      border-radius: 0px 0px 0px 25px;
     }
     .grid>*{
       flex-basis: 120px;

@@ -1,4 +1,4 @@
-export function lcars_bubble_seperator(name,color="green", border=true, icon=false, height=25){
+export function lcars_bubble_seperator(name,color="green", border=true, icon=false, height=25, clickUrl=""){
 
 let borderWidth = "15px";
 if (border==false) {
@@ -12,6 +12,19 @@ if (border==false) {
   "button_type": "name",
   "name": name,
   "styles": `
+  /*ha-card{
+      height: 100%;
+      position: relative;
+  }
+  ha-card>.card-content{
+    bottom: 0px;
+    position: absolute;
+    width: 100%;
+  }*/
+ :host{
+    margin-top: 1rem;
+ height: ${height}px !important;
+ }
   *{
   
     --stated-color: ${color};
@@ -81,6 +94,12 @@ if (border==false) {
     "main": [],
     "bottom": []
   },
-  "show_icon": icon
+  "show_icon": icon,
+  "button_action": clickUrl==""?{}:{
+    "tap_action":{
+    action: "navigate",
+    navigation_path: clickUrl
+  }
+  }
 };
 }

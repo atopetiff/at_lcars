@@ -123,6 +123,16 @@ export const LcarsOptions = [
         depsFailValue: true
     },
     {
+        name: "notch_offset",
+        title: "Offset für Notch",
+        description: "mittlerweile haben die meisten geräte sone depperte notch, da die homeassistant app aber bis nach ausen rendert...",
+        typ: "number",
+        default: 0,
+        dependencies: [
+        ],
+        depsFailValue: true
+    },
+    {
         name: "include_music_assistant",
         title: "Music Assistant einbinden",
         description: "Wenn aktiviert wird der Music Assistant im unten definierten Raum als ifram eingebunden",
@@ -152,4 +162,56 @@ export const LcarsOptions = [
         ],
         depsFailValue: false
     },
+    {
+        name: "config_room",
+        title: "Raum in dem globale Konfiguration passiert. ",
+        description: "wird wenn nicht deaktiviert in jeder etage angezeigt um schnellzugriff zu ermöglichen",
+        typ: "text",
+        default: "",
+        dependencies: [
+        ],
+        depsFailValue: false
+    },
+    {
+        name: "floor_hide_config_room",
+        title: "zeigt config room an",
+        description: "zeigt config room",
+        typ: "checkbox",
+        default: false,
+        dependencies: [
+        ],
+        depsFailValue: false
+    },
+    {
+        name: "hide_climate",
+        title: "zeigt climate an",
+        description: "zeigt config room",
+        typ: "checkbox",
+        default: false,
+        dependencies: [
+        ],
+        depsFailValue: false
+    },
+    {
+        name: "hide_cover",
+        title: "zeigt climate an",
+        description: "zeigt config room",
+        typ: "checkbox",
+        default: false,
+        dependencies: [
+        ],
+        depsFailValue: false
+    },
+    {
+        name: "room_hide_config",
+        title: "zeigt climate an",
+        description: "zeigt config room",
+        typ: "checkbox",
+        default: false,
+        dependencies: [
+        ],
+        depsFailValue: false
+    },
+
+
 ];

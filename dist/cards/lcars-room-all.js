@@ -3,6 +3,7 @@ import { Card, EntityManager } from "../utils/entity-manager.js";
 import { lcars_bubble_lozenge, lcars_bubble_lozenge_button } from "../utils/lcars-buttons-bubble.js";
 import { RoomCard } from "../utils/room.js";
 import { font, scrollbar } from "../utils/scrollbar.js";
+import { lcars_bubble_seperator } from "../utils/at_lcars_bubble_seperator.js";
 class AtLcarsRoomAll extends RoomCard {
   constructor() {
     super();
@@ -18,7 +19,7 @@ class AtLcarsRoomAll extends RoomCard {
     // //console.log("needs render", { has: !this._hass, config: !this._config });
     if (!this.em && !!this._config) {
       //console.log("inital render room");
-      this.em = new EntityManager(hass,this.config);
+      this.em = new EntityManager(hass, this.config);
       this.em.fillRoom(this._config.area_id)
 
       this._render();
@@ -94,7 +95,7 @@ class AtLcarsRoomAll extends RoomCard {
     `;
   }
 
-    get css_addon(){
+  get css_addon() {
     return `
     .devices,.direct{
       display: flex;
@@ -132,8 +133,8 @@ class AtLcarsRoomAll extends RoomCard {
         <style>
             ${font()}
             ${scrollbar(this.em.color1, this.em.color2, this.em.color3, this.em.color4)}
-            ${this.css_mobile_new(this.em.color1, this.em.color2, this.em.color3, this.em.color4,"2fr",false)}
-            ${this.css_tablet(this.em.color1, this.em.color2, this.em.color3, this.em.color4,"300px", false)}
+            ${this.css_mobile_new(this.em.color1, this.em.color2, this.em.color3, this.em.color4, "2fr", false)}
+            ${this.css_tablet(this.em.color1, this.em.color2, this.em.color3, this.em.color4, "300px", false)}
             ${this.css_addon}
         </style>
         ${this.html_new}
@@ -141,19 +142,19 @@ class AtLcarsRoomAll extends RoomCard {
 
     this.setupLayout('all');
 
-    
+
 
     //------------------------------------------------------------------
     //Buttons
     [
-      ...this.em.roomEntities.filter(e=>e.labels.includes("config")).map(e=>e.entity_id)
+      ...this.em.roomEntities.filter(e => e.labels.includes("config")).map(e => e.entity_id)
     ].forEach(e => {
       this._addCard(".config", 'bubble-card', `config${e}`,
-        lcars_bubble_lozenge_button(e,this._dc, this.em.color3, this.em.color1, false, "45px", "14px",true),
+        lcars_bubble_lozenge_button(e, this._dc, this.em.color3, this.em.color1, false, "45px", "14px", true),
         e
       );
     });
-    
+
     //------------------------------------------------------------------
     //corner side
     // const graph = this.querySelector(".graph");
@@ -162,56 +163,113 @@ class AtLcarsRoomAll extends RoomCard {
     // graph.appendChild(graphCard);
     // graphCard.hass = this._hass;
 
-    this.em.roomDevices.forEach(rd=>{
-      const device = this.em.devices.find(d=>d.id==rd);
-      
-      
-      const card = this.querySelector(".devices");
-      card.appendChild(document.createTextNode(device.name));
-      this.em.entities.filter(e=>e.device_id==rd).forEach(e=>{
-        var targets =[];
-       [
-          {label: "config", target:".config"},
-          {label: "battery", target:".batteries"},
-          {label: "info", target:".info"},
-          {label: "powertoggle", target:".powerToggles"},
-          {label: "licht", target:".light"},
-          {label: "heizung", target:".trvs"},
-          {label: "thermostat", target:".climates"},
-          {label: "fenster", target:".windows"},
-          {label: "button", target:".button"},
-        ].forEach(c=>{
+    this.em.roomDevices.forEach(rd => {
+      const device = this.em.devices.find(d => d.id == rd);
+
+
+      // const card = this.querySelector(".devices");
+
+      // card.appendChild(document.createElement(device.name));
+      console.log("DEVICE: " + device.name, device);
+      const deviceUrl = "/config/devices/device/" + device.id;
+      this._addCard(".devices", 'bubble-card', `configtext`,
+        lcars_bubble_seperator(device.name, this.em.color3, true, false, 20, deviceUrl),
+        null, false
+      );
+      this.em.entities.filter(e => e.device_id == rd).forEach(e => {
+        var targets = [];
+        [
+          { label: "config", target: ".config" },
+          { label: "battery", target: ".batteries" },
+          { label: "info", target: ".info" },
+          { label: "powertoggle", target: ".powerToggles" },
+          { label: "licht", target: ".light" },
+          { label: "heizung", target: ".trvs" },
+          { label: "thermostat", target: ".climates" },
+          { label: "fenster", target: ".windows" },
+          { label: "button", target: ".button" },
+        ].forEach(c => {
           if (e.labels.includes(c.label)) {
             targets.push(c.target);
           }
         });
-        if (targets.length==0) {
+        if (targets.length == 0) {
           targets.push(".devices");
         }
-        targets.forEach(t=>{
+        targets.forEach(t => {
 
           this._addCard(t, 'bubble-card', `${t}${rd}${e.entity_id}`,
-            lcars_bubble_lozenge_button(e.entity_id,this._dc, this.em.color3, this.em.color4, false, "45px", "14px",true),
+            lcars_bubble_lozenge_button(e.entity_id, this._dc, this.em.color3, this.em.color4, false, "45px", "14px", true),
             e.entity_id
           );
         });
       })
-      console.log("device",this.em.devices.find(d=>d.id==rd),this.em.entities.filter(e=>e.device_id==rd));
+      console.log("device", this.em.devices.find(d => d.id == rd), this.em.entities.filter(e => e.device_id == rd));
 
     });
-    
 
-      const card = this.querySelector(".direct");
-      card.appendChild(document.createTextNode("helpers / automations ..."));
-      this.em.roomEntities.filter(e=>e.area_id!=null && e.labels.includes("config")==false).forEach(e=>{
+    // const card = this.querySelector(".direct");
+
+    // const details = document.createElement("details");
+    // details.id = "mein-details";
+
+    // const summary = document.createElement("summary");
+    // summary.id = "mein-summary";
+    // //summary.textContent = "Details anzeigen";
+
+    // details.appendChild(summary);
+
+    // document.body.appendChild(details);
+
+    // card.appendChild(details);
+    this._addCard(".direct", 'bubble-card', `directtext`,
+      lcars_bubble_seperator("Helpers", this.em.color3, true, false, 25,"/config/helpers"),
+      null, false
+    );
+
+    let configs = this.em.roomEntities.filter(e => e.area_id != null && e.labels.map(l => l.toLowerCase()).some(l => l == "config") == false);
+    let automations = configs.filter(e => e.platform == "automation");
+    let scripts = configs.filter(e => e.platform == "script");
+    configs = configs.filter(e => [...automations, ...scripts].some(a => a.entity_id == e.entity_id) == false);
+
+
+    configs.forEach(e => {
       this._addCard(".direct", 'bubble-card', `dev${e.entity_id}`,
-        lcars_bubble_lozenge_button(e.entity_id,this._dc, this.em.color3, this.em.color4, false, "45px", "14px",true),
+        lcars_bubble_lozenge_button(e.entity_id, this._dc, this.em.color3, this.em.color4, false, "45px", "14px", true),
         e.entity_id
       );
-      });
-     
-    
-  
+    });
+
+    //-------scripts
+
+    this._addCard(".direct", 'bubble-card', `scripttext`,
+      lcars_bubble_seperator("Scripts", this.em.color3, true, false, 25,"/config/script/dashboard"),
+      null, false
+    );
+
+    scripts.forEach(e => {
+      this._addCard(".direct", 'bubble-card', `dev${e.entity_id}`,
+        lcars_bubble_lozenge_button(e.entity_id, this._dc, this.em.color3, this.em.color4, false, "45px", "14px", true),
+        e.entity_id
+      );
+    });
+
+    //------automations
+
+    this._addCard(".direct", 'bubble-card', `automationstext`,
+      lcars_bubble_seperator("Automations", this.em.color3, true, false, 25,"/config/automation/dashboard"),
+      null, false
+    );
+
+    automations.forEach(e => {
+      this._addCard(".direct", 'bubble-card', `dev${e.entity_id}`,
+        lcars_bubble_lozenge_button(e.entity_id, this._dc, this.em.color3, this.em.color4, false, "45px", "14px", true),
+        e.entity_id
+      );
+    });
+
+
+
 
   }
 

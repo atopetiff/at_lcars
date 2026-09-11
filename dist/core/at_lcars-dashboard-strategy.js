@@ -66,15 +66,20 @@ class AtLcarsDashboardStrategy {
     const notHiddenAreas = areas.filter(a => a.labels.includes("hidden") === false);
     const noLevelFloor = floors.filter(f => f.level === null).map(f => f.floor_id);
     //console.log({noLevelFloor});
+
+    const specialAreas = [config.music_area, config.config_room].filter(area => area != null);
+
+    console.log("special_areas",specialAreas);
+
     let area_struct = {
       other: [
-        ...notHiddenAreas.filter(a => a.floor_id === null || noLevelFloor.includes(a.floor_id)),
+        ...notHiddenAreas.filter(a => (a.floor_id === null || noLevelFloor.includes(a.floor_id)&&specialAreas.includes(a.area_id)==false)),
         // ...notHiddenAreas.filter(a=>floors.filter(f=>f.floor_id===a.floor_id&&f.level===null)),
         // ...floors.filter(f=>f.level===null).map(f=>{return {notHiddenAreas.filter(a=>a.floor_id===f.floor_id)};})
         // ...floors.filter(f=>f.level===null).map(f=>{return {floor_id: f.floor_id,name: f.name, level: f.level, areas: notHiddenAreas.filter(a=>a.floor_id===f.floor_id)};})
       ],
       
-      inside: floors.filter(f => f.level !== null).map(f => { return { floor_id: f.floor_id, name: f.name, level: f.level, areas: notHiddenAreas.filter(a => a.floor_id === f.floor_id) }; })
+      inside: floors.filter(f => f.level !== null).map(f => { return { floor_id: f.floor_id, name: f.name, level: f.level, areas: notHiddenAreas.filter(a => a.floor_id === f.floor_id || specialAreas.includes(a.area_id) ) }; })
     };
 
 
@@ -220,19 +225,21 @@ class AtLcarsDashboardStrategy {
         config.areas_display.order.forEach(o => {
           const area = f.areas.find(a => a.area_id == o);
           if (area) {
-            areas.push(area);
-          }else{
-
-            if(config.music_area && config.music_area==o){
-              const music_area = area_struct.other.find(a => a.area_id == o);
-              console.log("music area",music_area);
-              if (music_area) {
-                areas.push(music_area);
-                area_struct.other = area_struct.other.filter(o=>o.area_id!=music_area.area_id);
-              }
-            }
+            areas.push({...area, floor_id: f.floor_id});
           }
+          // else{
+
+          //   if(config.music_area && config.music_area==o){
+          //     const music_area = area_struct.other.find(a => a.area_id == o);
+          //     console.log("music area",music_area);
+          //     if (music_area) {
+          //       areas.push(music_area);
+          //       area_struct.other = area_struct.other.filter(o=>o.area_id!=music_area.area_id);
+          //     }
+          //   }
+          // }
         });
+        console.error("areas", areas);
         areas = [
           ...areas,
           ...f.areas.filter(ua => areas.some(a => a.area_id == ua.area_id) == false)
