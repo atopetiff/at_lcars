@@ -37,6 +37,7 @@ import './cards/lcars-room-config.js';
 import './cards/lcars-room-all.js'; 
 import './cards/lcars-room-stats.js'; 
 import './cards/lcars-room-music-library.js'; 
+import './cards/lcars-room-music-control.js'; 
 
 // Lade Core-Module
 import './core/at_lcars-dashboard-strategy.js';

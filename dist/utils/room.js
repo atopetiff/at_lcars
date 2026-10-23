@@ -282,6 +282,7 @@ export class RoomCard extends Card {
     .content>.power,
     .content>.config,
     .content>.automations,
+    .content>.scenes,
     .content>.scripts,
     .content>.everyroomconfig,
     .content>.color,
@@ -301,6 +302,7 @@ export class RoomCard extends Card {
     }
     .content>.config>*,
     .content>.automations>*,
+    .content>.scenes>*,
     .content>.scripts>*,
     .content>.everyroomconfig>*,
     .content>.color>*,
@@ -443,9 +445,19 @@ export class RoomCard extends Card {
     if (type.startsWith("music")) {
       navElements =[
         {
+          label: "Control",
+          target: this._config.basepath + "/" + this._config.area_id+"-music-control",
+          color: type == "music-control" ? this.em.color1 : this.em.color3
+        },
+        {
           label: "Library",
           target: this._config.basepath + "/" + this._config.area_id+"-music",
           color: type == "music_ma" ? this.em.color1 : this.em.color3
+        },
+        {
+          label: "Config",
+          target: this._config.basepath + "/" + this._config.area_id+"-config",
+          color: type == "music-config" ? this.em.color1 : this.em.color3
         },
         {
           label: "Open",

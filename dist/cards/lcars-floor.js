@@ -661,15 +661,16 @@ class AtLcarsFloor extends Card {
       // console.log(a);
       switch (true) {
         case a.area_id == music_area:
-          this._addCard(`#${a.area_id}link`, "bubble-card", `#${a.area_id}link`, lcars_bubble_square_nav_window(a.window_entity_id, this._config.basepath + "/" + a.area_id + '-music', a.area_id, { ...this._dc, colorblind: false }, this._dc?.monochrome == true ? a.color3 : a.color1, "#cc0000", false, "55px", "14px", 35, this._dc?.monochrome == true ? a.color3 : a.color1, a.icon), a.window_entity_id);
-          [
+          this._addCard(`#${a.area_id}link`, "bubble-card", `#${a.area_id}link`, lcars_bubble_square_nav_window(a.window_entity_id, this._config.basepath + "/" + a.area_id + '-music-control', a.area_id, { ...this._dc, colorblind: false }, this._dc?.monochrome == true ? a.color3 : a.color1, "#cc0000", false, "55px", "14px", 35, this._dc?.monochrome == true ? a.color3 : a.color1, a.icon), a.window_entity_id);
+          Array.from(new Set([
           //   ...a.entities.filter(e=>e.labels.map(l=>l.toLowerCase()).includes("lcars_music_prev")),
           //   ...a.entities.filter(e=>e.labels.map(l=>l.toLowerCase()).includes("lcars_music_play")),
           //   ...a.entities.filter(e=>e.labels.map(l=>l.toLowerCase()).includes("lcars_music_next")),
           //   ...a.entities.filter(e=>e.labels.map(l=>l.toLowerCase()).includes("lcars_music_voldown")),
           //   ...a.entities.filter(e=>e.labels.map(l=>l.toLowerCase()).includes("lcars_music_volup")),
-            ...a.entities.filter(e=>e.labels.map(l=>l.toLowerCase()).includes("lcars_music_target"))
-          ].forEach(e => {
+            ...a.entities.filter(e=>e.labels.map(l=>l.toLowerCase()).includes("lcars_music_target")),
+            ...a.entities.filter(e=>e.labels.map(l=>l.toLowerCase()).includes("lcars_floor_view"))
+          ])).forEach(e => {
             this._addCard(
               `#${a.area_id}btns`,
               "bubble-card",

@@ -64,6 +64,12 @@ class AtLcarsRoomAll extends RoomCard {
         <div class="button">
           <h2>Buttons</h2>
         </div>
+        <div class="floorview">
+          <h2>Floor View</h2>
+        </div>
+        <div class="roomcontrol">
+          <h2>Room Control</h2>
+        </div>
         
         <div class="windows">
           <h2>Fenster</h2>
@@ -141,7 +147,7 @@ class AtLcarsRoomAll extends RoomCard {
       `;
     var type = this.em.area.area_id == this._dc.music_area ? 'music_all' : 'all'
 
-    this.setupLayout(type);
+    this.setupLayout(type,this._dc?.music_assistant_path);
 
 
 
@@ -189,6 +195,8 @@ class AtLcarsRoomAll extends RoomCard {
           { label: "thermostat", target: ".climates" },
           { label: "fenster", target: ".windows" },
           { label: "button", target: ".button" },
+          { label: "floorview", target: ".floorview" },
+          { label: "roomcontrol", target: ".roomcontrol" },
         ].forEach(c => {
           if (e.labels.includes(c.label)) {
             targets.push(c.target);
@@ -230,9 +238,15 @@ class AtLcarsRoomAll extends RoomCard {
 
     let configs = this.em.roomEntities.filter(e => e.area_id != null && e.labels.map(l => l.toLowerCase()).some(l => l == "config") == false);
     let automations = configs.filter(e => e.platform == "automation");
-    let scripts = configs.filter(e => e.platform == "script");
-    configs = configs.filter(e => [...automations, ...scripts].some(a => a.entity_id == e.entity_id) == false);
 
+    let scenes = configs.filter(e=>e.entity_id.startsWith("scene."));
+    let scripts = configs.filter(e => e.platform == "script");
+    configs = configs.filter(e => [
+      ...automations,
+      ...scripts,
+      ...scenes
+    ].some(a => a.entity_id == e.entity_id) == false);
+    
 
     configs.forEach(e => {
       this._addCard(".direct", 'bubble-card', `dev${e.entity_id}`,
@@ -243,6 +257,16 @@ class AtLcarsRoomAll extends RoomCard {
 
     //-------scripts
 
+    this._addCard(".direct", 'bubble-card', `scripttext`,
+      lcars_bubble_seperator("Scenes", this.em.color3, true, false, 25,"/config/scene/dashboard"),
+      null, false
+    );
+    scenes.forEach(e => {
+      this._addCard(".direct", 'bubble-card', `dev${e.entity_id}`,
+        lcars_bubble_lozenge_button(e.entity_id, this._dc, this.em.color3, this.em.color4, false, "45px", "14px", true),
+        e.entity_id
+      );
+    });
     this._addCard(".direct", 'bubble-card', `scripttext`,
       lcars_bubble_seperator("Scripts", this.em.color3, true, false, 25,"/config/script/dashboard"),
       null, false

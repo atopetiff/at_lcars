@@ -298,7 +298,7 @@ class AtLcarsDashboardStrategy {
      flatend = flatend.filter(a=>a.area_id != config.music_area);
     const roomViews = createAreaViews([
       ...area_struct.other,
-      ...flatend
+      ...flatend,
     ], devices, entities, showRoomViews, config.areas_options || {}, config, base, "control");
     const roomConfigViews = createAreaViews([
       ...area_struct.other,
@@ -315,6 +315,9 @@ class AtLcarsDashboardStrategy {
       ...area_struct.other,
       ...flatend
     ], devices, entities, showRoomViews, config.areas_options || {}, config, base, "stats");
+    const roomMusicControlViews = createAreaViews([
+      ...music
+    ], devices, entities, showRoomViews, config.areas_options || {}, config, base, "musiccontrol");
     const roomMusicViews = createAreaViews([
       ...music
     ], devices, entities, showRoomViews, config.areas_options || {}, config, base, "music");
@@ -327,6 +330,7 @@ class AtLcarsDashboardStrategy {
       ...roomConfigViews,
       ...roomAllViews,
       ...roomStatsViews,
+      ...roomMusicControlViews,
       ...roomMusicViews
       // ...createUtilityViews(entities, showSummaryViews, config),
 

@@ -18,28 +18,28 @@ export function createOverviewView(sections) {
 }
 
 
-export function createFloorStrat(name, path, areas, dashboardConfig = {},basepath="/") {
-  var pathSuffix="";
-  
+export function createFloorStrat(name, path, areas, dashboardConfig = {}, basepath = "/") {
+  var pathSuffix = "";
 
-    return {
-      title: name,
-      
-      path: path,
-      icon: "mdi:floor-plan",
-      subview: false,
-      config: dashboardConfig,
-      // theme: "LCARS Breen",
-      strategy: {
-        type: "custom:at-lcars-view-floor",
-        groups_options: {},
-        dashboardConfig, // Übergebe vollständige Dashboard-Config für Raum-Pins
-        basepath: basepath,
-        areas: areas,
-        test: "bla",
-        cardtype: "custom:at-lcars-floor"
-      }
-    };
+
+  return {
+    title: name,
+
+    path: path,
+    icon: "mdi:floor-plan",
+    subview: false,
+    config: dashboardConfig,
+    // theme: "LCARS Breen",
+    strategy: {
+      type: "custom:at-lcars-view-floor",
+      groups_options: {},
+      dashboardConfig, // Übergebe vollständige Dashboard-Config für Raum-Pins
+      basepath: basepath,
+      areas: areas,
+      test: "bla",
+      cardtype: "custom:at-lcars-floor"
+    }
+  };
 
 
 }
@@ -118,33 +118,42 @@ export function createUtilityViews(entities, showSummaryViews = false, config = 
 /**
  * Erstellt Views für jeden sichtbaren Bereich
  */
-export function createAreaViews(visibleAreas, devices, entities, showRoomViews = false, areasOptions = {}, dashboardConfig = {},basepath="/", type="control") {
-  var pathSuffix="";
+export function createAreaViews(visibleAreas, devices, entities, showRoomViews = false, areasOptions = {}, dashboardConfig = {}, basepath = "/", type = "control") {
+  var pathSuffix = "";
+  var typeSuffix = "";
 
   switch (type) {
     case "config":
-      pathSuffix="-config"
+      pathSuffix = "-config"
+      typeSuffix = pathSuffix;
       break;
     case "all":
-      pathSuffix="-all"
+      pathSuffix = "-all"
+      typeSuffix = pathSuffix;
       break;
     case "stats":
-      pathSuffix="-stats"
+      pathSuffix = "-stats"
+      typeSuffix = pathSuffix;
       break;
     case "music":
-      pathSuffix="-music"
+      pathSuffix = "-music"
+      typeSuffix = pathSuffix;
       break;
-  
+      case "musiccontrol":
+        pathSuffix = "-music-control"
+        typeSuffix = pathSuffix;
+      break;
+
     default:
       break;
   }
-  
+
   return visibleAreas.map(area => {
     const areaOptions = areasOptions[area.area_id] || {};
     return {
       title: area.name,
-      
-      path: area.area_id+pathSuffix,
+
+      path: area.area_id + pathSuffix,
       icon: area.icon || "mdi:floor-plan",
       subview: false,
       config: dashboardConfig,
@@ -158,17 +167,17 @@ export function createAreaViews(visibleAreas, devices, entities, showRoomViews =
         dashboardConfig, // Übergebe vollständige Dashboard-Config für Raum-Pins
         basepath: basepath,
         test: "bla",
-        cardtype: "custom:at-lcars-room"+pathSuffix
+        cardtype: "custom:at-lcars-room" + pathSuffix
       }
     };
 
   });
 }
-export function createAreaConfigViews(visibleAreas, devices, entities, showRoomViews = false, areasOptions = {}, dashboardConfig = {}, basepath="") {
+export function createAreaConfigViews(visibleAreas, devices, entities, showRoomViews = false, areasOptions = {}, dashboardConfig = {}, basepath = "") {
   return visibleAreas.map(area => {
-  
+
     const areaOptions = areasOptions[area.area_id] || {};
-    
+
     return {
       title: area.name,
       path: `${area.area_id}-config`,
@@ -187,10 +196,10 @@ export function createAreaConfigViews(visibleAreas, devices, entities, showRoomV
     };
   });
 }
-export function createAreaAllViews(visibleAreas, devices, entities, showRoomViews = false, areasOptions = {}, dashboardConfig = {}, basepath="") {
+export function createAreaAllViews(visibleAreas, devices, entities, showRoomViews = false, areasOptions = {}, dashboardConfig = {}, basepath = "") {
   return visibleAreas.map(area => {
     const areaOptions = areasOptions[area.area_id] || {};
-    
+
     return {
       title: area.name,
       path: `${area.area_id}-all`,
