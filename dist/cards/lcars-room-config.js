@@ -18,9 +18,9 @@ class AtLcarsRoomConfig extends RoomCard {
   set hass(hass) {
 
     // Erstes Mal: nur speichern und initial rendern
-    // //console.log("needs render", { has: !this._hass, config: !this._config });
+
     if (!this.em && !!this._config) {
-      //console.log("inital render room");
+
       this.em = new EntityManager(hass,this.config);
       this.em.fillRoom(this._config.area_id)
 
@@ -98,7 +98,6 @@ class AtLcarsRoomConfig extends RoomCard {
   }
 
   _render() {
-    //console.log("lcars room rerender");
 
     this.innerHTML = `
         <style>
@@ -111,8 +110,7 @@ class AtLcarsRoomConfig extends RoomCard {
         ${this.html_new}
       `;
 
-    console.log("em",this.em);
-    console.log("_dc",this._dc);
+
     this.setupLayout(this.em.area.area_id==this._dc.music_area?'music-config':'config',this._dc?.music_assistant_path);
 
 
@@ -133,7 +131,7 @@ class AtLcarsRoomConfig extends RoomCard {
       );
     });
     
-    console.log("room configs", configs);
+
     let automations =  configs.filter(e=>e.platform=="automation");
     let scripts =  configs.filter(e=>e.platform=="script");
     let scenes = configs.filter(e=>e.entity_id.startsWith("scene."));
@@ -246,7 +244,7 @@ class AtLcarsRoomConfig extends RoomCard {
       );
     });
 
-    console.log("roominfos", this.em.roomInfos);
+
     let addedInfos = [];
     [
       ...this.em.roomInfos

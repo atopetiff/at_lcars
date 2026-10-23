@@ -18,9 +18,9 @@ class AtLcarsRoomMusic extends RoomCard {
   set hass(hass) {
     this._hass = hass;
     // Erstes Mal: nur speichern und initial rendern
-    // //console.log("needs render", { has: !this._hass, config: !this._config });
+
     if (!this.em && !!this._config) {
-      //console.log("inital render room");
+
       this.em = new EntityManager(hass,this.config);
       this.em.fillRoom(this._config.area_id)
 
@@ -129,7 +129,7 @@ class AtLcarsRoomMusic extends RoomCard {
   }
 
   _render() {
-    //console.log("lcars room rerender");
+
 
     
     this.innerHTML = `

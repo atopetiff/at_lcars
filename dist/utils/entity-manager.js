@@ -41,7 +41,7 @@ export class EntityManager {
   }
 
   getColors(area_id = undefined) {
-    console.log("setColors",this.dashboardConfig?.monochrome);
+    // console.log("setColors",this.dashboardConfig?.monochrome);
     if (this.dashboardConfig?.monochrome==true) {
   
       return {
@@ -66,7 +66,7 @@ export class EntityManager {
       }
     }
 
-    //console.log({color4});
+   
     if (!color1 || !color2 || !color3 || !color4) {
       //abbrechen wenn kein komplettes Design vorliegt
       return { color1: this.color1, color2: this.color2, color3: this.color3, color4: this.color4 };
@@ -86,7 +86,6 @@ export class EntityManager {
   setColors(area_id = undefined) {
     
       const colors = this.getColors(area_id);
-      //console.log({colors});
       this.color1 = colors.color1;
       this.color2 = colors.color2;
       this.color3 = colors.color3;
@@ -121,7 +120,6 @@ export class EntityManager {
       this.changeDetection();
       this.lastStates = {};
       const ids = this._trackedEntityIds();
-      //console.log(ids, hass);
       for (const id of ids) {
         this.lastStates[id] = this.hass.states[id];
       }
@@ -129,14 +127,13 @@ export class EntityManager {
   }
   hasRelevantChange(newHass) {
     const ids = this._trackedEntityIds();
-    //console.log("ids", ids)
     if (ids.includes('*')) {
       return true;
     }
     for (const id of ids) {
       const oldState = this.lastStates[id];
       const newState = newHass.states[id];
-      ////console.log("states", { old: oldState, new: newState });
+
       if (!oldState && newState) return true;
       if (oldState && !newState) return true;
       if (!oldState && !newState) continue;
@@ -158,7 +155,7 @@ export class EntityManager {
   updateHass(hass) {
     const needsRender = this.hasRelevantChange(hass);
 
-    //console.log("needs render", { needsRender: needsRender, config: !this._config });
+
     if (needsRender) {
 
       this.updateTrackedStates(hass);
@@ -264,7 +261,7 @@ export class EntityManager {
     if (area_id == null) {
       
       const roomDevices = this.devices.filter(d => d.area_id === area_id ).map(d => d.id);
-      console.log("roomDevices",roomDevices);
+
       const roomEntities = this.entities.filter(e =>
         e.area_id && e.area_id === area_id
         || (e.device_id && roomDevices.includes(e.device_id))
@@ -306,7 +303,7 @@ export class EntityManager {
       };
     } else {
 
-      console.log("area",this.hass.areas[area_id]);
+
       const roomDevices = this.devices.filter(d => d.area_id === area_id).map(d => d.id);
       const roomEntities = this.entities.filter(e =>
         e.area_id && e.area_id === area_id
@@ -387,7 +384,7 @@ export class Card extends HTMLElement {
     // if (!config.entity) {
     //   throw new Error("You need to define an entity");
     // }
-    console.log(config);
+
     this._config = config;
 
     this.config = config;

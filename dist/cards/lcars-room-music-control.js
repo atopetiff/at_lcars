@@ -14,11 +14,11 @@ class AtLcarsRoomMusicControl extends RoomCard {
 
 
   set hass(hass) {
-    // console.log(hass);
+
     // Erstes Mal: nur speichern und initial rendern
-    // //console.log("needs render", { has: !this._hass, config: !this._config });
+
     if (!this.em && !!this._config) {
-      //console.log("inital render room");
+
       this.em = new EntityManager(hass, this.config);
       this.em.fillRoom(this._config.area_id)
 
@@ -65,7 +65,7 @@ class AtLcarsRoomMusicControl extends RoomCard {
   }
 
   _render() {
-    //console.log("lcars room rerender");
+
 
     this.innerHTML = `
         <style>
@@ -93,7 +93,7 @@ class AtLcarsRoomMusicControl extends RoomCard {
           e
         );
       } catch (error) {
-        console.log("error adding switch", e, error);
+        console.warn("error adding switch", e, error);
       }
     });
     //------------------------------------------------------------------
@@ -194,7 +194,7 @@ class AtLcarsRoomMusicControl extends RoomCard {
         }
       }
     }
-    console.log("roominfos", this.em.roomInfos);
+
     let addedInfos = [];
     [
       ...this.em.roomInfos
@@ -207,7 +207,7 @@ class AtLcarsRoomMusicControl extends RoomCard {
         }
 
       } catch (error) {
-        console.error("error adding info", e, error)
+        console.warn("error adding info", e, error)
       }
     });
 

@@ -41,7 +41,6 @@ class AtLcarsDashboardStrategy {
     const entities = Object.values(hass.entities || {});
     const floors = Object.values(hass.floors || {});
 
-    console.log(config);
 
     const floorWithGroup = floors.map(f => {
       var labelArea = areas.filter(a => a.name == f.name);
@@ -57,19 +56,18 @@ class AtLcarsDashboardStrategy {
       return { ...f, group: group }
     });
 
-    // console.log({floorWithGroup});
+
     var groups = Object.groupBy(floorWithGroup, ({ group }) => group);
-    // console.log({groups});
+
     const protocols = entities.filter(e => e.labels.includes("protokoll")).map(e => { return e.entity_id });
-    //console.log(protocols);
+
 
     const notHiddenAreas = areas.filter(a => a.labels.includes("hidden") === false);
     const noLevelFloor = floors.filter(f => f.level === null).map(f => f.floor_id);
-    //console.log({noLevelFloor});
 
     const specialAreas = [config.music_area, config.config_room].filter(area => area != null);
 
-    console.log("special_areas",specialAreas);
+
 
     let area_struct = {
       other: [
@@ -83,11 +81,6 @@ class AtLcarsDashboardStrategy {
     };
 
 
-
-
-    // //console.log("areas",{areas:areas, floors:floors,struct: area_struct})
-
-    // //console.log("RE",{"areas": areas});
 
     // Labels für Filterung von Entitäten
     const excludeLabels = entities
@@ -107,7 +100,7 @@ class AtLcarsDashboardStrategy {
     const someSensorId = findDummySensor(hass, excludeLabels, config);
 
 
-    //console.log("RE", coversOpen);
+
     // Erstelle Person-Badges (KORRIGIERT: mit hass Parameter)
     const personBadges = createPersonBadges(persons, hass);
 
@@ -131,12 +124,12 @@ class AtLcarsDashboardStrategy {
 
     const pathname = document.location.pathname;
     const split = pathname.split("/");
-    // console.log(split);
+
     var base = "/"
     if (split.length >= 2) {
       base = `/${split[1]}`
     }
-    // console.log(base);
+
 
     // Erstelle Sections für den Haupt-View
     const overviewSections = [
@@ -168,9 +161,6 @@ class AtLcarsDashboardStrategy {
       //   : [])
     ];
 
-    // console.log("area_struct",area_struct);
-
-    // console.log("seperte views",!!config.group_by_floors);
     if (!config.group_by_floors) {
       let rooms = [];
       area_struct.inside.forEach(floor => {
@@ -203,8 +193,7 @@ class AtLcarsDashboardStrategy {
       ];
 
     }
-    console.log("area_struct NEW", area_struct);
-
+    
 
     // const floorViews = area_struct.inside.map(f=>{
     //   return createFloorView([{
@@ -227,19 +216,8 @@ class AtLcarsDashboardStrategy {
           if (area) {
             areas.push({...area, floor_id: f.floor_id});
           }
-          // else{
-
-          //   if(config.music_area && config.music_area==o){
-          //     const music_area = area_struct.other.find(a => a.area_id == o);
-          //     console.log("music area",music_area);
-          //     if (music_area) {
-          //       areas.push(music_area);
-          //       area_struct.other = area_struct.other.filter(o=>o.area_id!=music_area.area_id);
-          //     }
-          //   }
-          // }
         });
-        console.error("areas", areas);
+
         areas = [
           ...areas,
           ...f.areas.filter(ua => areas.some(a => a.area_id == ua.area_id) == false)
@@ -267,7 +245,7 @@ class AtLcarsDashboardStrategy {
 
     try {
       const fontUrl = new URL("./Antonio.woff2", import.meta.url).href;
-      console.log(fontUrl)
+
       let link = document.createElement("link");
       link.setAttribute('type', 'font/woff2');
       link.setAttribute('rel', 'preload');
@@ -348,7 +326,7 @@ class AtLcarsDashboardStrategy {
 
   // Füge die Methode hinzu, um den Config-Editor zu laden
   static async getConfigElement() {
-    console.log("getconfigelement");
+
     // Der Editor sollte schon geladen sein, da er im Loader ist
     // Warte kurz, falls er noch lädt
     await import('./at_lcars-dashboard-strategy-editor.js');

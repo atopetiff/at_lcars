@@ -16,9 +16,9 @@ class AtLcarsRoomAll extends RoomCard {
   set hass(hass) {
 
     // Erstes Mal: nur speichern und initial rendern
-    // //console.log("needs render", { has: !this._hass, config: !this._config });
+
     if (!this.em && !!this._config) {
-      //console.log("inital render room");
+
       this.em = new EntityManager(hass, this.config);
       this.em.fillRoom(this._config.area_id)
 
@@ -134,7 +134,7 @@ class AtLcarsRoomAll extends RoomCard {
   }
 
   _render() {
-    //console.log("lcars room rerender");
+
     this.innerHTML = `
         <style>
             ${font()}
@@ -177,7 +177,7 @@ class AtLcarsRoomAll extends RoomCard {
       // const card = this.querySelector(".devices");
 
       // card.appendChild(document.createElement(device.name));
-      console.log("DEVICE: " + device.name, device);
+
       const deviceUrl = "/config/devices/device/" + device.id;
       this._addCard(".devices", 'bubble-card', `configtext`,
         lcars_bubble_seperator(device.name, this.em.color3, true, false, 20, deviceUrl),
@@ -213,7 +213,7 @@ class AtLcarsRoomAll extends RoomCard {
           );
         });
       })
-      console.log("device", this.em.devices.find(d => d.id == rd), this.em.entities.filter(e => e.device_id == rd));
+
 
     });
 
