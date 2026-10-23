@@ -57,6 +57,7 @@ function lcars_bubble(entity, config = {}, color_active = "#00e1ff", color_inact
         
         *{
         --bubble-button-main-background-color: transparent;
+        
             --primary-text-color: white;
         }
             .bubble-range-fill{
@@ -85,7 +86,8 @@ function lcars_bubble(entity, config = {}, color_active = "#00e1ff", color_inact
   }
   .bubble-range-fill{
     /*border-right: 4px solid black;*/
-    box-shadow: 4px 0px 0px 0px black
+    box-shadow: 4px 0px 0px 0px black;
+--bubble-slider-fill-color: ${color_active} !important;
   }
   ${extraModeCss}
 
@@ -157,7 +159,7 @@ export function lcars_slider_bubble(entity, config = {}, color_active = "#00e1ff
   const slider = lcars_bubble(entity, config, color_active, color_inactive)
   return {
     ...slider,
-    attribute: "current_temperature",
+    //attribute: "current_temperature",
     sub_button: [
       // {
         

@@ -111,13 +111,13 @@ export class RoomCard extends Card {
         border-top-right-radius: 35px;
       }
     }
-    @media (width > 870px) {
+    /*@media (width > 870px) {
       .room{  
         grid-template-columns: calc(calc(env(safe-area-inset-left) * 0.6) + 56px) ${leftWidth} 30px    4px      46px         4px    1fr     1fr     6px     24px    20px   4px     10px;
         
        }
        
-      }
+      }*/
     `;
   }
 
@@ -198,7 +198,8 @@ export class RoomCard extends Card {
       gap: 5px;
       align-content: flex-end;
       padding: 4px;
-      overflow: scroll;
+      overflow-x: hidden;
+      overflow-y: auton;
       margin-bottom: -18px;
       border-radius: 0px 0px 0px 25px;
     }
@@ -242,7 +243,8 @@ export class RoomCard extends Card {
         order: 1;
         /* border-right: 10px solid #009999; */
         border-bottom-right-radius: 25px;
-        overflow: scroll;
+        overflow-x: hidden;
+        overflow-y:auto;
         /* border-bottom: 10px solid #009999; */
         flex-grow: 0;
         /*margin-bottom: -18px;*/
@@ -280,8 +282,10 @@ export class RoomCard extends Card {
     .content>.power,
     .content>.config,
     .content>.automations,
+    .content>.scripts,
     .content>.everyroomconfig,
     .content>.color,
+    .content>.mediaplayer,
     .content>.hiddenbtn{
         display:flex;
         flex-wrap: wrap;
@@ -297,34 +301,39 @@ export class RoomCard extends Card {
     }
     .content>.config>*,
     .content>.automations>*,
+    .content>.scripts>*,
     .content>.everyroomconfig>*,
     .content>.color>*,
     .content>.hiddenbtn>*{
-        flex-basis: 175px;
+        flex-basis: 200px;
       flex-grow: 1;
       flex-shrink: 1;
       height: 45px !important;
       
     }
 
-    .content>.climate{
+    .content>.climate,
+    .content>.mediaplayer{
       display: flex;
       flex-direction: column;
       overflow: visible;
       gap: 4px;
-
-    }
-    .content>.climate>*{
-      overflow: visible;
-      --slider-color: red;
-      --ha-card-background: rgba(0,0,0,0.6);
-      --ha-card-border-radius: 50px;
-
-
+      
       }
-    .content>.climate>*:not(:first-child){
-      pointer-events: none !important;
-    }
+      .content>.climate>*{
+        overflow: visible;
+        --slider-color: red;
+        --ha-card-background: rgba(0,0,0,0.6);
+        --ha-card-border-radius: 50px;
+        
+        
+        }
+        // .content>.climate>*:not(:first-child){
+        //   pointer-events: none !important;
+        //   }
+          .content>.mediaplayer>*{
+            flex-basis: 45px;
+          }
       /*.content>.actions>.climate>*:first-child{
       --ha-card-border-radius: 25px 25px 0px 0px;
       }
@@ -431,7 +440,6 @@ export class RoomCard extends Card {
     //Navigation
 
     let navElements = [];
-
     if (type.startsWith("music")) {
       navElements =[
         {
@@ -443,6 +451,11 @@ export class RoomCard extends Card {
           label: "Open",
           target: music_assistant_path,
           color: type == "music_open" ? this.em.color1 : this.em.color3
+        },
+        {
+          label: "All",
+          target: this._config.basepath + "/" + this._config.area_id + "-all",
+          color: type == "music_all" ? this.em.color1 : this.em.color3
         },
       ]
     } else {

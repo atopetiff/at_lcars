@@ -139,8 +139,9 @@ class AtLcarsRoomAll extends RoomCard {
         </style>
         ${this.html_new}
       `;
+    var type = this.em.area.area_id == this._dc.music_area ? 'music_all' : 'all'
 
-    this.setupLayout('all');
+    this.setupLayout(type);
 
 
 

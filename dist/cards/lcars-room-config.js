@@ -63,6 +63,8 @@ class AtLcarsRoomConfig extends RoomCard {
       <div class="everyroomconfig"></div>
           <div class="configheader textheader"></div>
           <div class="config"></div>
+          <div class="scriptsheader textheader"></div>
+          <div class="scripts"></div>
           <div class="automationsheader textheader"></div>
           <div class="automations"></div>
           <div class="climate"></div>
@@ -129,13 +131,14 @@ class AtLcarsRoomConfig extends RoomCard {
     
     console.log("room configs", configs);
     let automations =  configs.filter(e=>e.platform=="automation");
+    let scripts =  configs.filter(e=>e.platform=="script");
     let color = configs.filter(e=>e.labels.map(l => l.toLowerCase()).some(l => l == "lcars_color"));
     let hiddenbuttons = configs.filter(e=>e.labels.map(l => l.toLowerCase()).some(l => l == "hiddenbutton"));
     this._addCard(".configheader", 'bubble-card', `configtext`,
       lcars_bubble_seperator("Config", this.em.color3,  true, false, 25),
       null,false
     );
-    configs = configs.filter(e=>[...automations, ...color,...hiddenbuttons].some(a=>a.entity_id==e.entity_id)==false);
+    configs = configs.filter(e=>[...automations, ...color,...hiddenbuttons,...scripts].some(a=>a.entity_id==e.entity_id)==false);
     [
       ...configs
     ].forEach(e => {
@@ -154,6 +157,19 @@ class AtLcarsRoomConfig extends RoomCard {
       }
     });
  
+  this._addCard(".scriptsheader", 'bubble-card', `scriptsstext`,
+      lcars_bubble_seperator("Scripts", this.em.color3,  true, false, 25),
+      null,false
+    );
+    [
+      ...scripts.map(e=>e.entity_id)
+    ].forEach(e => {
+      this._addCard(".scripts", 'bubble-card', `scripts${e}`,
+        lcars_bubble_lozenge_button(e, this._dc, this.em.color3, this.em.color1, false, "45px", "14px", true),
+        e
+      );
+    });
+    
   this._addCard(".automationsheader", 'bubble-card', `automationstext`,
       lcars_bubble_seperator("Automations", this.em.color3,  true, false, 25),
       null,false

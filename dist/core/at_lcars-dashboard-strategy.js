@@ -307,7 +307,8 @@ class AtLcarsDashboardStrategy {
 
     const roomAllViews = createAreaViews([
       ...area_struct.other,
-      ...flatend
+      ...flatend,
+      ...music
     ], devices, entities, showRoomViews, config.areas_options || {}, config, base, "all");
 
     const roomStatsViews = createAreaViews([

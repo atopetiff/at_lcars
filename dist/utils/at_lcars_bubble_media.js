@@ -160,6 +160,7 @@ export function lcars_bubble_media_base(entity, config={}, color = "coral", colo
     .bubble-buttons-container .bubble-play-pause-button{
         border-top-left-radius: 0px;
         border-bottom-left-radius: 0px;
+        width: 55px !important;
     }
 
     .bubble-media-button-icon {

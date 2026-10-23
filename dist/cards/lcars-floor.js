@@ -7,6 +7,7 @@ import { lcars_bubble_base, lcars_bubble_lozenge, lcars_bubble_square, lcars_bub
 import { lcars_climate_bubble, lcars_cover_bubble, lcars_bubble_battery, lcars_slider_bubble } from "../utils/at_lcars_bubble_climate.js";
 import { scrollbar } from "../utils/scrollbar.js";
 import { lcars_bubble_lozenge_media } from "../utils/at_lcars_bubble_media.js";
+import { lcars_bubble_select } from "../utils/at_lcars_bubble_select.js";
 
 class AtLcarsFloor extends Card {
   constructor() {
@@ -92,6 +93,7 @@ class AtLcarsFloor extends Card {
         <div class="buttons">
           <div class="music_btns" id="${prefix}btns"></div>
         </div>
+        <div class="media" id="${prefix}media"></div>
         <div class="window_right" id="${prefix}window_right"></div>
 
       </div>
@@ -223,9 +225,9 @@ class AtLcarsFloor extends Card {
        }
        
       }
-      @media (width > 870px) {
+      /*@media (width > 870px) {
        .${rc}_bg, .${rc}{
-         /* top:${this._dc.absolute_fullscreen == false ? "var(--header-height)" : "0px"};*/
+         
           left:0px;
         
           height: 100%;
@@ -234,7 +236,7 @@ class AtLcarsFloor extends Card {
           
        }
        
-      }
+      }*/
       .${rc}>.outside{
         grid-area: outside;
         display: flex;
@@ -522,7 +524,14 @@ class AtLcarsFloor extends Card {
           flex-basis: calc(50% - 4px);
           flex-grow:1;
           flex-shrink: 0;
-          min-widht: unset;
+          min-width: unset;
+          
+        } 
+          .${rc}>.content>.room_row>.buttons>.music_btns>*{
+          flex-basis: 300px:
+          flex-grow:1;
+          flex-shrink: 1;
+          min-width: unset;
           
         } 
         .${rc}>.content>.room_row>.buttons>.climate,.${rc}>.content>.room_row>.buttons>.cover{
@@ -653,27 +662,27 @@ class AtLcarsFloor extends Card {
       switch (true) {
         case a.area_id == music_area:
           this._addCard(`#${a.area_id}link`, "bubble-card", `#${a.area_id}link`, lcars_bubble_square_nav_window(a.window_entity_id, this._config.basepath + "/" + a.area_id + '-music', a.area_id, { ...this._dc, colorblind: false }, this._dc?.monochrome == true ? a.color3 : a.color1, "#cc0000", false, "55px", "14px", 35, this._dc?.monochrome == true ? a.color3 : a.color1, a.icon), a.window_entity_id);
-          // [
+          [
           //   ...a.entities.filter(e=>e.labels.map(l=>l.toLowerCase()).includes("lcars_music_prev")),
           //   ...a.entities.filter(e=>e.labels.map(l=>l.toLowerCase()).includes("lcars_music_play")),
           //   ...a.entities.filter(e=>e.labels.map(l=>l.toLowerCase()).includes("lcars_music_next")),
           //   ...a.entities.filter(e=>e.labels.map(l=>l.toLowerCase()).includes("lcars_music_voldown")),
           //   ...a.entities.filter(e=>e.labels.map(l=>l.toLowerCase()).includes("lcars_music_volup")),
-          //   ...a.entities.filter(e=>e.labels.map(l=>l.toLowerCase()).includes("lcars_music_target"))
-          // ].forEach(e => {
-          //   this._addCard(
-          //     `#${a.area_id}btns`,
-          //     "bubble-card",
-          //     `${a.area_id}lights${e.entity_id}`,
-          //     lcars_bubble_lozenge(e.entity_id, this._dc, a.color3, a.color1, false, "45px", "14px"),
-          //     e.entity_id);
+            ...a.entities.filter(e=>e.labels.map(l=>l.toLowerCase()).includes("lcars_music_target"))
+          ].forEach(e => {
+            this._addCard(
+              `#${a.area_id}btns`,
+              "bubble-card",
+              `${a.area_id}lights${e.entity_id}`,
+              lcars_bubble_lozenge(e.entity_id, this._dc, a.color3, a.color1, false, "45px", "14px"),
+              e.entity_id);
 
-          // });
+          });
           [
             ...a.entities.filter(e => e.labels.map(l => l.toLowerCase()).includes("mediaplayer"))
           ].forEach(e => {
             this._addCard(
-              `#${a.area_id}btns`,
+              `#${a.area_id}media`,
               "bubble-card",
               `${a.area_id}lights${e.entity_id}`,
               lcars_bubble_lozenge_media(e.entity_id, this._dc, a.color3, a.color1, false, "45px", "14px", true),
@@ -771,10 +780,12 @@ class AtLcarsFloor extends Card {
           if (!!a.humidity_entity_id) {
             this._addCard(`#${a.area_id}info`, 'bubble-card', `#${a.area_id}info_temp`, lcars_bubble_info(a.entities.find(e => e.entity_id == a.humidity_entity_id), "white", "#e0e0e0ff", false, true, 20), a.humidity_entity_id);
           }
-          [
+          
+          Array.from(new Set([
             ...a.lights,
-            ...a.powerToggles
-          ].forEach(e => {
+            ...a.powerToggles,
+            ...a.entities.filter(e=>e.labels.map(l=>l.toLowerCase()).includes("lcars_floor_view")).map(e=>e.entity_id)
+          ])).forEach(e => {
             this._addCard(
               `#${a.area_id}btns`,
               "bubble-card",

@@ -39,7 +39,7 @@ class AtLcarsRoomMusic extends RoomCard {
       @media (width > 550px){
       .room {
         grid-template-columns:
-       calc(calc(env(safe-area-inset-left) * 0.6) + 56px) 0px 30px    4px      46px         4px    1fr     1fr     8px     24px    20px   4px     10px;
+       calc(env(safe-area-inset-left) * 0.6) 0px 30px    4px      46px         4px    1fr     1fr     8px     24px    20px   4px     10px;
        
   }
        .content>*{
